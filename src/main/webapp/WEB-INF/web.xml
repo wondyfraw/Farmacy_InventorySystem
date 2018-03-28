@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://java.sun.com/xml/ns/javaee"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+	id="WebApp_ID" version="3.0">
+	<display-name>Test</display-name>
+	<welcome-file-list>
+		<welcome-file>index.xhtml</welcome-file>
+	</welcome-file-list>
+   
+    <context-param>
+		<param-name>javax.faces.INTERPRET_EMPTY_STRING_SUBMITTED_VALUES_AS_NULL</param-name>
+		<param-value>true</param-value>
+	</context-param> 
+	
+	<context-param>
+		<param-name>javax.faces.DEFAULT_SUFFIX</param-name>
+		<param-value>.xhtml</param-value>
+	</context-param>
+   
+	<!-- Login filter -->
+	<filter>
+		<filter-name>LoginFilter</filter-name>
+		<filter-class>org.farm.fms.entity.ejb.LoginFilter</filter-class>
+	</filter>
+	<!-- Set the login filter to secure all the pages in the /secured/* path of the application -->
+	<filter-mapping>
+		<filter-name>LoginFilter</filter-name>
+		<url-pattern>/secure/*</url-pattern>
+	</filter-mapping>
+
+	<filter-mapping>
+		<filter-name>LoginFilter</filter-name>
+		<url-pattern>/faces/secure/*</url-pattern>
+	</filter-mapping>
+
+      <error-page>
+		<error-code>404</error-code>
+		<location>/WEB-INF/errorpages/404.xhtml</location>
+	</error-page>
+	<error-page>
+		<error-code>403</error-code>
+		<location>/WEB-INF/errorpages/403.xhtml</location>
+	</error-page>
+	<error-page>
+		<error-code>500</error-code>
+		<location>/WEB-INF/errorpages/500.xhtml</location>
+	</error-page>
+	<error-page>
+		<exception-type>javax.faces.application.ViewExpiredException</exception-type>
+		<location>/WEB-INF/errorpages/expired.xhtml</location>
+	</error-page>
+
+	<!-- By default go to secured welcome page -->
+	<!-- <welcome-file-list>
+		<welcome-file>secure/welcome.xhtml</welcome-file>
+	</welcome-file-list> -->
+
+	<!-- Staring JSF -->
+	<servlet>
+		<servlet-name>Faces Servlet</servlet-name>
+		<servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+
+	<!-- JSF URL mapping -->
+	<servlet-mapping>
+		<servlet-name>Faces Servlet</servlet-name>
+		<url-pattern>/faces/*</url-pattern>
+	</servlet-mapping>
+
+	<!-- JSF URL mapping -->
+	<servlet-mapping>
+		<servlet-name>Faces Servlet</servlet-name>
+		<url-pattern>*.xhtml</url-pattern>
+	</servlet-mapping>
+
+	<filter>
+		<filter-name>primeFacesFileUploadFilter</filter-name>
+		<filter-class>org.primefaces.webapp.filter.FileUploadFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>primeFacesFileUploadFilter</filter-name>
+		<servlet-name>facesServlet</servlet-name>
+	</filter-mapping>
+
+</web-app>

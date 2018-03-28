@@ -1,0 +1,54 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui" xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets"
+	template="/templates/main.xhtml">
+
+	<!-- <h:body styleClass="login"> -->
+	<ui:define name="content">
+		<div class="main-login col-xs-10 col-xs-offset-1 col-sm-8 col-sm-offset-2 col-md-4 col-md-offset-4">
+			<div class="logo margin-top-30">
+				<h2>User Login</h2>
+			</div>
+
+			<div class="box-login">
+				<h:form styleClass="form-login">
+					<fieldset>
+						<legend> Sign in to your account </legend>
+						<p>Please enter your name and password to log in.</p>
+
+						<div class="form-group">
+							<span class="input-icon"> <p:inputText styleClass="form-control" id="username"
+									placeholder="Username/Email" value="#{loginAuthenticationBean.email}" /> <i class="fa fa-user"></i>
+							</span>
+						</div>
+						<div class="form-group form-actions">
+							<span class="input-icon"> <p:password styleClass="form-control password" id="password"
+									placeholder="Password" value="#{loginAuthenticationBean.password}" /><i class="fa fa-lock"></i>
+							</span>
+						</div>
+						<div class="form-actions">
+							<p:commandButton id="login" value="Login" actionListener="#{loginAuthenticationBean.doLogin}"  process="@this">
+								<i class="fa fa-arrow-circle-right"></i>
+							</p:commandButton>
+							<!-- <button type="submit" class="btn btn-primary pull-right" name="submit">
+								Login <i class="fa fa-arrow-circle-right"></i> 
+							</button>-->
+						</div>
+						<div id="ajaxStatus_container">
+							<div id="ajaxStatus">
+								<p:ajaxStatus id="ajaxStatusPanel" widgetVar="ajaxStatusVar">
+									<f:facet name="start">
+										<p:graphicImage  value="/resource/images/loader.gif" alt="loader" />
+									</f:facet>
+									<f:facet name="complete">
+										<h:outputText value="" />
+									</f:facet>
+								</p:ajaxStatus>
+							</div>
+							</div>
+					</fieldset>
+				</h:form>
+			</div>
+		</div>
+	</ui:define>
+
+</ui:composition>

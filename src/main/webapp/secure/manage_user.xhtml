@@ -1,0 +1,64 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui" xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets"
+	template="/templates/main.xhtml">
+	<link rel="stylesheet" href="../resource/common/assets/css/themes/theme-1.css"/>
+   <script src="../resource/common/vendor/bootstrap/js/bootstrap.min.js"/>
+
+    <ui:define name="content">
+      <div id="app">
+        <ui:include src="/secure/sidebar.xhtml" /> 
+        <div class="app-content">
+         <ui:include src="/secure/admin/include/header.xhtml" /> 
+         
+         <div class="main-content">
+            <h:form>
+             <h:panelGrid columns="2" class="form">
+              <p:dataTable var="user" value="#{userRegistrationBean.userList}" id="usertable" emptyMessage="There is no registered user in the database" style="width:90%;font-size:15px;font-family: PT Sans, sans-serif ; padding:4px;color:#515151;" styleClass="customcenter,customcenter,,,,customcenter notSortable"
+                           paginator="true" rows="10" paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}" rowKey="#{user.usersId}">
+                <f:facet name="header">
+                   User List
+                </f:facet>
+                <p:column selectionMode="multiple" style="width:60px;text-align:center"/>
+                <p:column headerText="Full Name">
+                  <h:outputText value="#{user.fullName}"/>
+                </p:column>
+               <p:column headerText="Address">
+                 <h:outputText value="#{user.address}"/>
+               </p:column> 
+               <p:column headerText="Email">
+                <h:outputText value="#{user.email}"/>
+               </p:column>
+               <p:column headerText="Password">
+                 <h:outputText value="#{user.password}"/>
+               </p:column>
+               <p:column headerText="UserType">
+                <h:outputText value="#{user.userType}"/>
+               </p:column>
+               <p:column headerText="Action">
+                <p:button style="width:30px; height:20px"  icon="ui-icon ui-icon-pencil fix_icon" title="Edit" outcome="edit_users">
+                   <f:param name="idUser" value="#{user.usersId}"></f:param>
+                </p:button>
+                <p:commandButton id="deleteButton" update="usertable" process="@this" style="width:30px; height:20px"
+                                 actionListener="#{userRegistrationBean.deleteUser}" icon="ui-icon-trash" title="Delete"
+                                 oncomplete="$('.ui-datatable-data tr').find('span.ui-icon-close').each(function(){this.click()})">
+                       <p:confirm header="Attension!" message="Are you sure you want to delete the user?" icon="ui-icon-alert"/>  
+                       <f:param name="id" value="#{user.usersId}"></f:param>         
+                </p:commandButton>
+                <div style="top:70%; left:50% ;padding-left: 50px" >
+                 <p:confirmDialog global="true" showEffect="fade" hideEffect="fade"  styleClass="user_confDialog">
+                   <p:commandButton value="Yes" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" style="width:60px; height:20px;">
+                      <f:param name="id" value="#{user.usersId}"/>
+                   </p:commandButton>
+                   <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close"
+							style="width:60px;height:20px" />
+                 </p:confirmDialog></div>
+               </p:column>
+              </p:dataTable>
+             
+             </h:panelGrid>
+             </h:form>
+         </div>
+        </div>
+      </div>
+    </ui:define>
+   </ui:composition>

@@ -1,0 +1,56 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui" xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets"
+	template="/templates/main.xhtml">
+
+	<ui:define name="content">
+		<div class="main-login col-xs-10 col-xs-offset-1 col-sm-8 col-sm-offset-2 col-md-4 col-md-offset-4">
+			<div class="logo margin-top-30">
+				<h2>User Login</h2>
+			</div>
+			<div class="box-login">
+				<h:form styleClass="form-login">
+					<fieldset>
+						<legend> Sign in to your account </legend>
+						<p>Please enter your name and password to log in.</p>
+
+						<div class="form-group">
+							<span class="input-icon"> <p:inputText id="email" value="#{loginAuthenticationBean.email}"
+									placeholder="Username/Email" required="true" requiredMessage="Inser username /eamil"  styleClass="form-control">
+									<p:ajax event="blur" update="emailMessage" />
+								</p:inputText> <i class="fa fa-user"></i> <p:message id="emailMessage" for="email" />
+							</span>
+						</div>
+						<div class="form-group form-actions">
+							<span class="input-icon"> <p:password id="password" value="#{loginAuthenticationBean.password}"
+									placeholder="Password" required="true" requiredMessage="Insert password to login" styleClass="form-control password">
+									<p:ajax event="blur" update="passwordMessage" />
+								</p:password> <i class="fa fa-lock"></i> <p:message id="passwordMessage" for="password" />
+							</span>
+						</div>
+						<div class="form-actions">
+						<p:commandButton value="Login" actionListener="#{loginAuthenticationBean.doLogin}">
+						 <i class="fa fa-arrow-circle-right"></i>
+						</p:commandButton>
+                      </div>
+						<div id="ajaxStatus_container">
+							<div id="ajaxStatus">
+								<p:ajaxStatus id="ajaxStatusPanel" widgetVar="ajaxStatusVar">
+									<f:facet name="start">
+										<p:graphicImage value="/resource/images/loader.gif" alt="loader" />
+									</f:facet>
+									<f:facet name="complete">
+										<h:outputText value="" />
+									</f:facet>
+								</p:ajaxStatus>
+							</div>
+						</div>
+					</fieldset>
+				</h:form>
+			</div>
+			
+			<div class="copyright">
+						<h:outputText value="&amp;copy;" escape="false"/> <span class="current-year"></span><span class="text-bold text-uppercase"> FMS</span>. <span>All rights reserved</span>
+					</div>
+		</div>
+	</ui:define>
+</ui:composition>

@@ -1,0 +1,3 @@
+header .navbar-collapse .navbar-right > li > a:hover, header .navbar-collapse .navbar-right > li > a:focus, header .navbar-collapse .navbar-right > li > a:active {
+    background: #ebebeb !important;
+}

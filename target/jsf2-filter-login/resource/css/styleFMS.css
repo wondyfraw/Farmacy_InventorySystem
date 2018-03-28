@@ -1,0 +1,13 @@
+@CHARSET "ISO-8859-1";
+
+.user_confDialog {
+	top: 50%;
+    left: 50%;
+    width: auto;
+    height: auto;
+    z-index: 1012;
+    display: none;
+}
+.ui-icon-alert{
+	color :red;
+}

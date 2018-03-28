@@ -1,0 +1,330 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui" xmlns:cc="http://java.sun.com/jsf/composite/components">
+
+<ui:composition template="/templates/main.xhtml">
+	<ui:define name="content">
+		<div id="app">
+			<ui:include src="/secure/sidebar.xhtml" />
+			<ui:include src="/secure/admin/include/header.xhtml" />
+			<div class="main-content">
+				<div class="container-fluid container-fullw bg-white">
+					<fieldset id="adddrugs" style="border: 2px solid green;">
+						<legend>Medicin Registration Form</legend>
+						<div class="row">
+							<div class="col-12">
+								<h:form id="myform">
+									<fieldset style="border:2px solid #B61601">
+										<div class="panel panel-primary">
+											<!-- <div class="panel-heading" style="background-color: #4CAF50"> -->
+											<div class="panel-heading" style="background-color: #003576;">
+												<p:outputLabel styleClass="header_color">Enter Medicin details</p:outputLabel>
+											</div>
+											<div class="panel-body" style="background-color: #EDEDED">
+												<!-- <h:form id="myform"> -->
+												<div class="col-md-6 col-sm-12 col-lg-6">
+													<p:panelGrid styleClass="ui-noborder">
+														<p:row styleClass="ui-noborder">
+															<div class="form-group">
+																<p:column>
+																	<p:outputLabel value="Name" for="name" />
+																</p:column>
+																<p:column styleClass="ui-noborder">
+																	<p:inputText id="name" value="#{medicineRegistrationBean.store.drugName}" required="true"
+																		requiredMessage="Name field can not be null" size="40" maxlength="255">
+																		<p:ajax event="blur" update="nameMessage"></p:ajax>
+																	</p:inputText>
+																	<p:message for="name" id="nameMessage"></p:message>
+																</p:column>
+															</div>
+														</p:row>
+														<p:row styleClass="ui-noborder">
+															<div class="form-group">
+																<p:column styleClass="ui-noborder">
+																	<p:outputLabel value="Batch Number" for="batchNumber" />
+																</p:column>
+																<p:column styleClass="ui-noborder">
+																	<p:inputText id="batchNumber" value="#{medicineRegistrationBean.store.bathcNumber}" required="true"
+																		requiredMessage="Batch field can be null" maxlength="255" size="40" label="Batch Number">
+																		<p:ajax event="blur" update="batchMessage" />
+																	</p:inputText>
+																	<p:message for="batchNumber" id="batchMessage" />
+																</p:column>
+															</div>
+														</p:row>
+														<p:row styleClass="ui-noborder">
+															<div class="form-group">
+																<p:column styleClass="ui-noborder">
+																	<p:outputLabel value="Brand" for="brand" />
+																</p:column>
+																<p:column styleClass="ui-noborder">
+																	<p:inputText id="brand" value="#{medicineRegistrationBean.store.brand}" required="true"
+																		requiredMessage="Bran can be null" maxlength="255" size="40" label="Brand">
+																		<p:ajax event="blur" update="brandMessage" />
+																	</p:inputText>
+																	<p:message for="brand" id="brandMessage" />
+																</p:column>
+															</div>
+														</p:row>
+													</p:panelGrid>
+												</div>
+												<div class="col-md-6 col-sm-12 col-lg-6">
+													<p:panelGrid styleClass="ui-noborder">
+														<p:row styleClass="ui-noborder">
+															<div class="form-group">
+																<p:column styleClass="ui-noborder">
+																	<p:outputLabel value="Manufactury Date" for="manufacturyDate" styleClass="manufactury_padding" />
+																</p:column>
+																<p:column styleClass="ui-noborder">
+																	<p:calendar id="manufacturyDate" value="#{medicineRegistrationBean.store.manufacturingDate}"
+																		required="true" requiredMessage="Manufactury Date can not be null" label="Manufactury Date"
+																		showOn="button" pattern="dd/MM/yyyy" navigator="true">
+																		<p:ajax event="dateSelect" update="manufacturyDateMessage"></p:ajax>
+																		<f:convertDateTime type="date" pattern="#{ui['shared.dateFormat']}"></f:convertDateTime>
+																		<!-- <f:validator validatorId="dateNotFutureValidator" for="function" /> -->
+																	</p:calendar>
+																	<p:message id="manufacturyDateMessage" for="manufacturyDate"></p:message>
+																</p:column>
+															</div>
+														</p:row>	
+																								
+													<p:row styleClass="ui-noborder">
+															<div class="form-group">
+																<p:column styleClass="ui-noborder">
+																	<p:outputLabel value="Expire Date" for="expireDate" styleClass="manufactury_padding" />
+																</p:column>
+																<p:column styleClass="ui-noborder">
+																	<p:calendar id="expireDate" value="#{medicineRegistrationBean.store.expireDate}"
+																		required="true" requiredMessage="Expire Date can not be null" label="Expire Date"
+																		showOn="button" pattern="dd/MM/yyyy" navigator="true">
+																		<p:ajax event="dateSelect" update="expireDateMessage"></p:ajax>
+																		<f:convertDateTime type="date" pattern="#{ui['shared.dateFormat']}"></f:convertDateTime>
+																		<f:attribute name="manDate" value="#{medicineRegistrationBean.store.manufacturingDate}"></f:attribute>
+																		<f:validator validatorId="expireDateValidator"></f:validator>
+																		<!-- <f:validator validatorId="dateNotFutureValidator" for="function" /> -->
+																	</p:calendar>
+																	<p:message id="expireDateMessage" for="expireDate"></p:message>
+																</p:column>
+															</div>
+														</p:row>
+													</p:panelGrid>
+												</div>
+											</div>
+											<div class="panel-body" style="background-color: #EDEDED">
+												<div class="col-md-6 col-sm-12 col-6">
+													<fieldset style="background-color: #EDEDED">
+														<div class="panel-heading" style="background-color: #003576;">
+															<p:outputLabel styleClass="header_color">Enter Medicin Quantity Information</p:outputLabel>
+														</div>
+														<!-- Quantity details -->
+													 <p:panelGrid styleClass="ui-noborder" id="quantityG">
+														<p:row styleClass="ui-noborder">
+																 <div class="form-group">
+																   <p:column styleClass="ui-noborder">
+																     <p:outputLabel value="Pack Type" for="packType"></p:outputLabel>
+																   </p:column>
+																   <p:column styleClass="ui-noborder">
+																     <h:selectOneMenu id="packType" required="true" requiredMessage="Must select the pack type" widgetVar="packTypeWV"
+																                      converter="packTypeConvertor" value="#{medicineRegistrationBean.store.packType}" style="width: 270px;">
+																       <f:selectItem itemLabel="Select pack type" itemValue="" noSelectionOption="true"></f:selectItem>
+																       <f:selectItem itemLabel="Box" itemValue="Box"></f:selectItem>
+																       <f:selectItem itemLabel="Cup" itemValue="Cup"></f:selectItem>
+																       <f:selectItem itemLabel="Packed" itemValue="Packed"></f:selectItem>
+																       <p:ajax event="change" process="@this" update="packTypeMessage"></p:ajax>
+																     </h:selectOneMenu>
+																     <p:message id="packTypeMessage" for="packType"></p:message>
+																   </p:column>
+																   </div>
+																</p:row>														
+																<p:row style="ui-noborder">
+																 <div class="form-group">
+																   <p:column styleClass="ui-noborder">
+																     <p:outputLabel value="Pack Unit"></p:outputLabel>
+																   </p:column>
+																   <p:column styleClass="ui-noborder">
+																   
+																     <p:selectOneMenu id="packUnit" required="true" requiredMessage="Must select packaging type" style="width:270px" 
+																                        value="#{medicineRegistrationBean.unitPack}">
+																            <p:ajax  event="change"></p:ajax>           
+																            <f:selectItem itemLabel="Select pack unit" itemValue="" noSelectionOption="true"></f:selectItem>
+																            <f:selectItems value="#{medicineRegistrationBean.packUnit}"></f:selectItems>																                       
+																     </p:selectOneMenu>
+																   </p:column>
+																 </div>
+																</p:row>  
+																<p:row styleClass="ui-noborder">
+																<p:column styleClass="ui-noborder">
+																	<p:outputLabel value="Unit" for="unit" />
+																</p:column>
+																<p:column styleClass="ui-noborder">
+																
+																	<p:selectOneMenu id="unit" value="#{medicineRegistrationBean.store.unit}" required="true"
+																		requiredMessage="Unit can not be null" label="Unit" style="width: 270px">
+																		<f:selectItem itemLabel="Select unit" itemValue="" noSelectionOption="true"></f:selectItem>
+																		<f:selectItems value="#{medicineRegistrationBean.units}"></f:selectItems>
+																		<p:ajax event="blur" update="unitMessage" />
+																	</p:selectOneMenu>
+																	<p:message for="unit" id="unitMessage" />
+																</p:column>
+															</p:row>
+													
+															<p:row styleClass="ui-noborder">
+																<div class="form-group">
+																	<p:column styleClass="ui-noborder">
+																		<p:outputLabel for="quantity" value="Quantity" style="padding-top:10px" />
+																	</p:column>
+																	<p:column styleClass="ui-noborder">
+																		<p:inputNumber id="quantity" value="#{medicineRegistrationBean.store.quantityInBox}" required="true"
+																			requiredMessage="Quantity can not be null" label="Quantity" size="30" maxlength="10"
+																			decimalPlaces="2">
+																			<p:ajax event="blur" update="quantityMessage" />
+																		</p:inputNumber>
+																		<p:message id="quantityMessage" for="quantity" />
+																	</p:column>
+																</div>
+															</p:row>
+															<p:row styleClass="ui-noborder">
+																<p:column styleClass="ui-noborder">
+																	<p:outputLabel value="Quantity per Pack" for="quantityperPack" />
+																</p:column>
+																<p:column styleClass="ui-noborder">
+																	<p:inputNumber id="quantityperPack" value="#{medicineRegistrationBean.store.quantityperBoxperUnit}"
+																		required="true" requiredMessage="Quantity per pack can not be null" label="Quantity per pack"
+																		size="30" maxlength="10">
+																		<p:ajax event="blur" update="quantityperMessage" />
+																	</p:inputNumber>
+																	<p:message id="quantityperMessage" for="quantityperPack" />
+																</p:column>
+															</p:row>
+														    <h:panelGroup id="inputPanel"> <!-- <h:panelGroup rendered="#{medicineRegistrationBean.store.packType eq 'Box'}"> -->
+															  <p:row styleClass="ui-noborder">
+																	<div class="form-group">
+																		<p:column styleClass="ui-noborder">
+																			<p:outputLabel value="Quantity per pack pre unit" for="quantityperpackUnit" id="stripQuantity"/>
+																		</p:column>
+																		<p:column styleClass="ui-noborder">
+																			<p:inputNumber id="quantityperpackUnit" widgetVar="quantityperpackUnitWV"
+																				value="#{medicineRegistrationBean.store.quantityperUnitperTab}" decimalPlaces="2" 
+																				 size="30" maxlength="10">
+																				<!-- <p:ajax event="blur" process="@this" update="quantityperpackUnitMessage" /> -->
+																			</p:inputNumber>
+																			<!-- <p:message for="quantityperpackUnit" id="quantityperpackUnitMessage" /> -->
+																		</p:column>
+																	</div>
+																</p:row></h:panelGroup>
+																<script>
+
+															     /*$(function() {
+															            PF('selectWV').jq.change(function() {
+															                if (PF('selectWV').isChecked()) {
+															                    PF('buttonWV').jq.show();
+															                } else {
+															                    PF('buttonWV').jq.hide();
+															                }
+															            })
+															        })
+																function changeBusinessType(){
+																	 if($('[id="#{p:component('packType')}"]').val=="Cup")
+																		 $('[id="#{p:component('inputPanel')}"]').hide();
+																	 //$('[id="#{p:component('quantityperpackUnit')}"]').hide();
+																		
+																	}*/
+																</script>														
+														</p:panelGrid>
+													</fieldset>
+												</div>
+
+												<!-- Price Detail -->
+												<div class="panel-body" style="background-color: #EDEDED;">
+													<div class="col-md-6 col-sm-12 col-lg-6">
+														<fieldset style="background-color: #EDEDED;">
+															<!-- <div class="panel panel-primary"> -->
+															<div class="panel-heading" style="background-color: #003576;">
+																<p:outputLabel styleClass="header_color">Enter Medicin Price Detail</p:outputLabel>
+															</div>
+
+															<p:panelGrid styleClass="ui-noborder">
+																<p:row styleClass="ui-noborder">
+																	<div class="form-group">
+																		<p:column styleClass="ui-noborder">
+																			<p:outputLabel value="Unit Price" for="unitPrice" />
+																		</p:column>
+																		<p:column styleClass="ui-noborder">
+																			<p:inputNumber id="unitPrice" value="#{medicineRegistrationBean.store.unitPrice}" required="true"
+																				requiredMessage="Unit price can not be null" size="30" decimalPlaces="2" maxlength="10">
+																				<p:ajax event="blur" update="unitpriceMessage" />
+																			</p:inputNumber>
+																			<p:message id="unitpriceMessage" for="unitPrice" />
+																		</p:column>
+																	</div>
+																</p:row>
+																<p:row styleClass="ui-noborder">
+																	<div class="form-group">
+																		<p:column styleClass="ui-noborder">
+																			<p:outputLabel value="Sales Price" for="salesPrice" />
+																		</p:column>
+																		<p:column styleClass="ui-noborder">
+																			<p:inputNumber id="salesPrice" value="#{medicineRegistrationBean.store.salesPrice}" required="true"
+																				requiredMessage="Sales rate can not be null" decimalPlaces="2" size="30" maxlength="10">
+																				<p:ajax event="blur" update="salespriceMessage" />
+																			</p:inputNumber>
+																			<p:message id="salespriceMessage" for="salesPrice" />
+																		</p:column>
+																	</div>
+																</p:row>
+																<p:row styleClass="ui-noborder">
+																	<div class="form-group">
+																		<p:column styleClass="ui-noborder">
+																			<p:outputLabel value="Total Price" for="totalPrice" />
+																		</p:column>
+																		<p:column styleClass="ui-noborder">
+																			<p:inputNumber id="totalPrice" value="#{medicineRegistrationBean.store.totalPrice}" required="true"
+																				requiredMessage="Sales rate can not be null" decimalPlaces="2" size="30" maxlength="10">
+																				<p:ajax event="blur" update="totalpriceMessage" />
+																			</p:inputNumber>
+																			<p:message id="totalpriceMessage" for="totalPrice" />
+																		</p:column>
+																	</div>
+																</p:row>
+																<p:row styleClass="ui-noborder">
+																<p:column styleClass="ui-noborder">
+																	<p:outputLabel value="Weight" for="weight" />
+																</p:column>
+																<p:column styleClass="ui-noborder">
+																	<p:inputNumber id="weight" value="#{medicineRegistrationBean.store.weight}" required="true"
+																		requiredMessage="Weight can not be null" size="30" maxlength="10">
+																		<p:ajax event="blur" update="weightMessage" />
+																	</p:inputNumber>
+																	<p:message id="weightMessage" for="weight" />
+																</p:column>
+															</p:row>															
+															</p:panelGrid>
+														</fieldset>
+													</div>
+												</div>
+												<p:panelGrid styleClass="ui-noborder">
+													<p:commandButton value="Submit" process="@this" update="@form" styleClass="myButton" immediate="true"
+														actionListener="#{medicineRegistrationBean.registerMedicin}"  icon="ui-icon ui-icon-check" rendered="#{not medicineRegistrationBean.showSaveButton}"/>
+												</p:panelGrid>
+												<p:panelGrid styleClass="ui-noborder">
+												 <p:commandButton value="Save" process="@this" update="@form" styleClass="myButton" actionListener="#{medicineRegistrationBean.saveEditDrug}" icon="ui-icon ui-icon-check"
+												                   rendered="#{medicineRegistrationBean.showSaveButton}"/>
+												</p:panelGrid>
+											</div>
+
+											<!-- </h:form> -->
+											<!-- </div> -->
+										</div>
+										<!-- commandButton -->
+									</fieldset>
+								</h:form>
+							</div>
+						</div>
+					</fieldset>
+				</div>
+			</div>
+		</div>
+	</ui:define>
+</ui:composition>
+</html>

@@ -1,0 +1,52 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui" xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets"
+	template="/templates/main.xhtml">
+	<link rel="stylesheet" href="../resource/common/assets/css/themes/theme-1.css" />
+
+	<script src="../resource/common/vendor/bootstrap/js/bootstrap.min.js" />
+
+	<ui:define name="content">
+		<div id="app">
+			<ui:include src="/secure/sidebar.xhtml" />
+			<div class="app-content">
+				<ui:include src="/secure/admin/include/header.xhtml" />
+				<div class="main-content">
+					<h:form id="edit_user">
+						<h:panelGrid columns="2">
+
+							<p:outputLabel value="Full Name" for="fullNameInput"></p:outputLabel>
+							<h:panelGroup>
+								<p:inputText value="#{userRegistrationBean.users.fullName}" id="fullNameInput" required="true"
+									requiredMessage="Full name is required" maxlength="255" size="50">
+									<p:ajax event="blur" update="fullNameMessage"></p:ajax>
+									<p:message id="fullNameMessage" for="fullNameInput"></p:message>
+								</p:inputText>
+							</h:panelGroup>
+							<p:outputLabel value="Address" for="addressInput"></p:outputLabel>
+							<h:panelGroup>
+								<p:inputText id="addressInput" required="true" requiredMessage="User Address is rwquired" maxlength="255"
+									size="50" value="#{userRegistrationBean.users.address}">
+									<p:ajax event="blur" update="addressMessage"></p:ajax>
+									<p:message id="addressMessage" for="addressInput"></p:message>
+								</p:inputText>
+							</h:panelGroup>
+
+							<p:outputLabel value="Email Address" for="emailAddressInput"></p:outputLabel>
+							<h:panelGroup>
+								<p:inputText id="emailAddressInput" required="true" maxlength="255" value="#{userRegistrationBean.users.email}"
+									requiredMessage="Email Address is required" size="50" validatorMessage="Invalid email format">
+									<!--  <f:vali validatorId="EmailValidator"/>  -->
+									<f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$"></f:validateRegex>
+									<p:ajax event="blur" update="emailAddressMessage" />
+								</p:inputText>
+								<p:message id="emailAddressMessage" for="emailAddressInput"></p:message>
+							</h:panelGroup>
+							
+						</h:panelGrid>
+
+					</h:form>
+				</div>
+			</div>
+		</div>
+	</ui:define>
+</ui:composition>

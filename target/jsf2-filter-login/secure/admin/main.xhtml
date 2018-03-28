@@ -1,0 +1,35 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui" xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets"
+	template="/templates/main.xhtml">
+   
+   <ui:define name="content">
+     <div id="app">
+       <ui:insert name= "sidebar"/>
+       <div class="app-content">
+          <ui:insert name="header"/>
+          
+         <!-- end: TOP NAVBAR -->
+         <div class="main-content">
+           <div class="wrap-content container" id="container" >
+             <!-- start: PAGE TITLE -->
+             <select id="page-title">
+               <div class="row">
+                 <div class="col-sm-8">
+                   <h1 class="mainTitle">Admin | Dashboard</h1>
+                   <ol class="breadcrumb">
+                      <li>
+                        <span>Admin</span>
+                      </li>
+                      <li class="active">
+                        <span>Dashboard</span>
+                      </li>
+                   </ol>
+                 </div>
+               </div>
+             </select>
+           </div>
+         </div>  
+       </div>
+     </div>
+   </ui:define>
+</ui:composition>	

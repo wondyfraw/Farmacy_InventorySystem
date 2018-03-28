@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<faces-config version="2.0" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xi="http://www.w3.org/2001/XInclude"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_0.xsd">
+
+  <!-- <render-kit>
+     <renderer>
+      <component-family>javax.faces.Output</component-family>
+      <renderer-type>javax.faces.Head</renderer-type>
+      <renderer-class>et.mega.farmacy.renderers.HeadRenderer</renderer-class>
+    </renderer> 
+  </render-kit> -->
+  <application>
+     <locale-config>
+        <default-locale>org</default-locale>
+     </locale-config>
+     <resource-bundle>
+      <base-name>org.farm.fms.resources.validation</base-name>
+      <var>validation</var>
+     </resource-bundle>
+     <resource-bundle>
+       <base-name>org.farm.fms.resources.ui</base-name>
+       <var>ui</var>
+     </resource-bundle>
+     <!-- overrride the default JSF messages -->
+     <message-bundle>
+       org.farm.fms.resources.Messages
+     </message-bundle>
+  </application>
+  
+  <navigation-rule>
+    <description>Navigazione utile per tornare alla pagina home dell'utente</description>
+		  <display-name>user_home</display-name>
+		<from-view-id>*</from-view-id>
+		<navigation-case>
+			<from-outcome>contact</from-outcome>
+			<to-view-id>/public/login.xhtml</to-view-id>
+		</navigation-case>  
+		
+		<!-- <navigation-case>
+			<from-outcome>userRegistration</from-outcome>
+			<if>#{loginAuthenticationBean.loggedIn != false}</if>
+			<to-view-id>/secure/registerUser.xhtml</to-view-id> 
+		</navigation-case> -->
+  </navigation-rule>	
+</faces-config>

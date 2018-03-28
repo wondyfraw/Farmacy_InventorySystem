@@ -1,0 +1,76 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets"
+            xmlns:h="http://java.sun.com/jsf/html"
+	             xmlns:p="http://primefaces.org/ui" 
+	             xmlns:f="http://java.sun.com/jsf/core" 	          
+	             xmlns:pretty="http://ocpsoft.com/prettyfaces">
+ <h:form>
+<header class="navbar navbar-default navbar-static-top" style="height: 0px">
+					<!-- start: NAVBAR HEADER -->
+					<div class="navbar-header">
+						<a href="#" class="sidebar-mobile-toggler pull-left hidden-md hidden-lg btn btn-navbar sidebar-toggle"  data-toggle-class="app-slide-off" data-toggle-target="#app" data-toggle-click-outside="#sidebar">
+							<i class="ti-align-justify"></i>
+						</a>
+						<a class="navbar-brand" href="#">
+							<h2 style="padding-top:2% ">PIMS</h2>
+						</a>
+						<a href="#" class="sidebar-toggler pull-right visible-md visible-lg" data-toggle-class="app-sidebar-closed" data-toggle-target="#app">
+							<i class="ti-align-justify"></i>
+						</a>
+						<a class="pull-right menu-toggler visible-xs-block" id="menu-toggler" data-toggle="collapse" href=".navbar-collapse">
+							<span class="sr-only">Toggle navigation</span>
+							<i class="ti-view-grid"></i>
+						</a>
+					</div>
+					<!-- end: NAVBAR HEADER -->
+					<!-- start: NAVBAR COLLAPSE -->
+					<div class="navbar-collapse collapse" >
+						<ul class="nav navbar-right" style="background-color: #003576">
+							<!-- start: MESSAGES DROPDOWN -->
+								<li  style="padding-top:2% ">
+								<h2 style="color:#fff">Pharmacy Inventory Management System</h2>
+							</li>
+						
+						
+							<li class="dropdown current-user">
+								<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+									<img src="/Test/resource/common/assets/images/avatar-1.jpg" alt="Peter"/> <!-- <span class="username"> -->
+
+
+			                        <!-- icon="fa fa-power-off" -->
+			                       <!-- <p:commandButton id="logoutButton" value="Logout"  styleClass="insertButton" icon="ui-icon-off"/> -->
+			                       
+			                       <p:commandButton id="logoutButton" value="Logout"   actionListener="#{loginAuthenticationBean.doLogout}"
+			                                      process="@this" update="@this" immediate="true" icon="fa fa-power-off"></p:commandButton>			
+			                     <!-- <span class="ui-button-icon-primary ui-icon ui-icon-off" style="margin-top:-1px"/> -->
+									<!-- <i class="ti-angle-down"></i></span> -->
+								</a>
+								<ul class="dropdown-menu dropdown-dark">
+									
+								
+									<li>
+										<a href="change-password.php">
+											Change Password
+										</a>
+									</li>
+									<li>
+										<a href="logout.php">
+											Log Out
+										</a>
+									</li>
+								</ul>
+							</li>
+							<!-- end: USER OPTIONS DROPDOWN -->
+						</ul>
+						<!-- start: MENU TOGGLER FOR MOBILE DEVICES -->
+						<div class="close-handle visible-xs-block menu-toggler" data-toggle="collapse" href=".navbar-collapse">
+							<div class="arrow-left"></div>
+							<div class="arrow-right"></div>
+						</div>
+						<!-- end: MENU TOGGLER FOR MOBILE DEVICES -->
+					</div>
+				
+					
+					<!-- end: NAVBAR COLLAPSE -->
+				</header>
+				</h:form>
+</html>

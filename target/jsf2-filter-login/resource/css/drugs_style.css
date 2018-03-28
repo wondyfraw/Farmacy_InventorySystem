@@ -1,0 +1,237 @@
+
+body {
+    font-family: "PT Sans", sans-serif;
+}
+
+.space{
+	margin-bottom: 30px;
+}
+.space1{
+	margin-bottom: 40px;
+}
+
+/** DialogBox Button styles*/
+.ui-confirmdialog-no{
+	width:60px; 
+	height:25px;
+}
+.ui-confirmdialog-yes{
+	width:60px; 
+	height:25px;
+	margin-left:60px;
+}
+#spaceOP{
+  color :#fff;	
+}
+.expireDate_Style{
+	padding-left:37px
+}
+.manufactury_padding{
+	padding-left:18px;
+}
+.ui-noborder{
+	border:#fff;
+}
+#header_info{
+	background-color: #fff;
+}
+.header_color{
+	color:#fff;
+}
+/*.ui-button, button.ui-button.ui-state-default, 
+.ui-button.ui-state-default.mycolor{
+	width:190px;
+	background: #B61601 !important;
+	color :#fff;margin-left:350px;
+}*/
+.myButton{
+	width:190px;
+	background: #B61601 !important;
+	color :#fff;margin-left:350px;
+}
+/*** ***/
+a.ui-button .ui-icon {
+	background-image: url("ui-icons_ffffff_256x240.png");
+}
+/*.ui-selectonemenu.form-control .ui-selectonemenu-trigger{
+	border-right: 0;
+    border-top: 0;
+    border-bottom: 0;
+    cursor: pointer;
+    width: 30px;
+    height: 100%;
+    position: absolute;
+    right: 0;
+    top: 0;
+    padding: 0 3px;
+}*/
+
+.ui-selectonemenu.form-control {
+    color: #555 !important;
+    display: block !important;
+    margin-bottom: 0 !important;
+    padding: 5px 10px !important;
+    background-color: #fff !important;
+    border: 1px solid #ccc !important;
+}
+
+.radius-none {
+    border-radius: 0 !important;
+}
+
+.ui-selectonemenu.form-control .ui-selectonemenu-trigger {
+    top: 0;
+    right: 0;
+    width: 30px;
+    height: 100%;
+    padding: 0 5px;
+    cursor: pointer;
+    position: absolute;
+    margin: 0 !important;
+    border: none !important;
+    margin-top: 5px !important;
+    background: transparent !important;
+}
+
+/** DATATABLE */
+/** Pagination **/
+.ui-datatable .ui-paginator, .ui-datatable .ui-paginator {
+	border-top: 0;
+	/**background: #eee;
+	background: #e78f08*/
+	background: #525252;
+	padding: 5px;
+	border: 1px solid #ddd;
+}
+
+.ui-paginator-first {
+	border-left: 1px solid #ccc;
+	border: 1px solid #ccc;
+	background: #eee;
+	cursor: pointer;
+}
+
+.ui-paginator-first:HOVER {
+	background: #eee;
+}
+
+.ui-paginator-first .ui-state-disabled {
+	cursor: default;
+	color: #ccc;
+}
+
+.ui-paginator-prev {
+	border-left: 1px solid #ccc;
+	border: 1px solid #ccc;
+	background: #eee;
+	cursor: pointer;
+}
+
+.ui-paginator-prev:HOVER {
+	background: #eee;
+}
+
+.ui-paginator-prev .ui-state-disabled {
+	cursor: default;
+	color: #ccc;
+}
+
+.ui-paginator-page {
+	border-left: 1px solid #ccc;
+	border: 1px solid #ccc;
+	background: #eee;
+	cursor: pointer;
+	color: #333;
+}
+
+.ui-paginator-page:HOVER {
+	background: #eee;
+}
+
+.ui-paginator-page .ui-state-disabled {
+	cursor: default;
+	color: #ccc;
+}
+
+.ui-paginator-next {
+	border-left: 1px solid #ccc;
+	border: 1px solid #ccc;
+	background: #eee;
+	cursor: pointer;
+	color: #333;
+}
+
+.ui-paginator-next:HOVER {
+	background: #eee;
+}
+
+.ui-paginator-next .ui-state-disabled {
+	cursor: default;
+	color: #ccc;
+}
+
+.ui-paginator-last {
+	border-left: 1px solid #ccc;
+	border: 1px solid #ccc;
+	background: #eee;
+	cursor: pointer;
+	color: #333;
+}
+
+.ui-paginator-last:HOVER {
+	background: #eee;
+}
+
+.ui-paginator-last .ui-state-disabled {
+	cursor: default;
+	color: #ccc;
+}
+
+.ui-paginator-rpp-options {
+	background: #eee;
+	color: #333;
+}
+
+.ui-paginator-page.ui-state-default.ui-corner-all {
+	background: #fff;
+	color: #515151;
+}
+
+.ui-paginator-next.ui-state-default.ui-corner-all, .ui-paginator-last.ui-state-default.ui-corner-all,
+	.ui-paginator-first.ui-state-default.ui-corner-all, .ui-paginator-prev.ui-state-default.ui-corner-all {
+	background: #fff;
+	color: #515151;
+}
+
+.ui-menubutton .ui-button {
+	background: #FFFFFF;
+	color: #515151;
+	border: 1px solid;
+}
+
+/** datatable **/
+.default-data-table th {
+	background: #515151;
+	color: #fff;
+	text-transform: uppercase;
+	font-size: 12px;
+}
+
+.default-data-table .ui-datatable-odd {
+	background: none repeat scroll 0 0 rgba(220, 220, 220, 0.26);
+}
+
+.default-data-table {
+	padding-top: 0px;
+	overflow-x: auto;
+}
+
+.default-data-table .ui-paginator-top {
+	z-index: 1;
+}
+.navbar .navbar-right > li.current-user > a span {
+  float: left;
+  line-height: 18px;
+  margin-top: 1px;
+}
+

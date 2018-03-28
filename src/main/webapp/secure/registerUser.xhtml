@@ -1,0 +1,145 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui" xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets"
+	template="/templates/main.xhtml" xmlns:o="http://omnifaces.org/ui">
+
+	<ui:define name="content">
+		<div id="app">
+		<ui:include src="/secure/sidebar.xhtml" />
+		<ui:include src="/secure/admin/include/header.xhtml" />
+			<div class="main-content">
+				<div class="wrap-content container" id="container">
+					<div class="col-md-8 col-sm-12 col-lg-8">
+						<fieldset>
+							<div class="panel panel-primary">
+								<div class="panel-heading" style="background-color: #003576;">
+									<!-- <legend>Sign Up</legend> -->
+									<p:outputLabel value="Enter your personal details below:" styleClass="header_color"/>
+								</div>
+								<div class="panel-body">
+									<h:form id="register">	
+									 <p:growl id="growl" showDetail="true" sticky="true" /> 							  									
+										<h:panelGrid columns="2" class="form" styleClass="ui-noborder">
+
+											<p:outputLabel value="Full Name" for="fullNameInput"></p:outputLabel>
+											<h:panelGroup styleClass="ui-noborder">
+												<p:inputText value="#{userRegistrationBean.users.fullName}" id="fullNameInput" required="true"
+													requiredMessage="Full name is required" maxlength="255" size="50" label="Full Name">
+												 <o:validator validatorId="javax.faces.RegularExpression" pattern="#{validation['pattern.alphanumeric']}"
+					                                          message="#{validation['message.alphanumeric']}"></o:validator>
+					                                 <f:validator validatorId="checkUserName"></f:validator>         	
+													<p:ajax event="blur" update="fullNameMessage"></p:ajax>
+													<p:message id="fullNameMessage" for="fullNameInput"></p:message>
+												</p:inputText>
+											</h:panelGroup>
+											<p:outputLabel value="Address" for="addressInput"></p:outputLabel>
+											<h:panelGroup>
+												<p:inputText id="addressInput" required="true" requiredMessage="User Address is rwquired" maxlength="255"
+													size="50" value="#{userRegistrationBean.users.address}" lable="Address">
+													<p:ajax event="blur" update="addressMessage"></p:ajax>
+													<p:message id="addressMessage" for="addressInput"></p:message>
+												</p:inputText>
+											</h:panelGroup>
+												
+											<p:outputLabel value="Email Address" for="emailAddressInput"></p:outputLabel>
+											<h:panelGroup>
+												<p:inputText id="emailAddressInput" required="true" maxlength="255"
+													value="#{userRegistrationBean.users.email}" requiredMessage="Email Address is required" size="50"
+													validatorMessage="Invalid email format" lable="Email Address">
+													<!--  <f:vali validatorId="EmailValidator"/>  -->
+													<o:validator validatorId="javax.faces.RegularExpression" pattern="#{validation['pattern.email']}"
+					                                              message="#{validation['message.email']}" />
+					                                <f:validator validatorId="uniqueUsernameValidator"></f:validator>
+					 								<!-- <f:validateRegex
+														pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$"></f:validateRegex> -->
+													<p:ajax event="blur" update="emailAddressMessage" />
+												</p:inputText>
+												<p:message id="emailAddressMessage" for="emailAddressInput"></p:message>
+											</h:panelGroup>										 											
+										 																	
+											<p:outputLabel for="password" value="Password" />
+											<h:panelGroup>
+											  <p:password id="password" value="#{userRegistrationBean.users.password}" required="true" requiredMessage="Password field is required"
+											               maxlength="50" label="Password" feedback="true" match="repeatPassword" binding="#{passwordComponent}">
+											               <f:validateRegex pattern="#{validation['pattern.password']}"></f:validateRegex>
+											               <f:ajax event="blur" update="passwordMessage"/>							               
+											        <!--  <o:validator validatorId="javax.faces.RegularExpression" pattern="#{validation['pattern.password']}" message="#{validation['message.password']}"></o:validator> -->      
+											  
+											  </p:password>
+											  <p:message id="passwordMessage" for="password"/>
+											</h:panelGroup>
+											
+											<p:outputLabel value="Repeat Password" for="repeatPassword"/>
+											  <h:panelGroup>
+											     <p:password id="repeatPassword" required="true" label="Repeat password" requiredMessage="Password is required" maxlength="50" value="#{userRegistrationBean.users.password}">
+											     <f:validateRegex pattern="#{validation['pattern.password']}"/>
+											      <!--  <o:validator validatorId="javax.faces.RegularExpression" pattern="#{validation['pattern.password']}" message="#{validation['message.password']}"></o:validator> -->
+											      <!--  <f:ajax event="blur" update="repeatMessage"/> -->
+											     </p:password>
+											     <p:message for="repeatPassword" id="repeatMessage"/>
+											  </h:panelGroup>
+											 
+											 <p:outputLabel value="User Type:" for="userType"/>
+											 <h:panelGroup>
+											 
+											    <p:selectOneMenu id="userType" value="#{userRegistrationBean.users.userType}" style="width:160px">
+											       <f:selectItem itemLabel="Select user Type" itemValue=""/>
+											       <f:selectItem itemLabel="User" itemValue="User"/>
+											       <f:selectItem itemLabel="Administrator" itemValue="Administrator"/>
+											    </p:selectOneMenu>
+											 </h:panelGroup>
+											<p:outputLabel value="Data repertorio" styleClass="block-label" for="repertorioInput" />
+												<h:panelGroup>													
+													<p:calendar id="repertorioInput" 
+														showOn="button" pattern="dd/MM/yyyy" required="true"
+														requiredMessage="La data di repertorio è obbligatoria"
+														mindate="#{fbConvenzioneEditBean.minDataRepertorio}" navigator="true">
+													</p:calendar>
+													<p:message for="repertorioInput" />
+												</h:panelGroup>
+											</h:panelGrid>
+											<p:commandButton value="Register" update="@form :register" process="@this"
+												actionListener="#{userRegistrationBean.registerUser}">
+												<p:confirm header="Confirmation" message="Are you sure you want to create the user" icon="ui-icon-alert"></p:confirm>
+											</p:commandButton>
+											<p:commandButton value="Logout" process="@this" actionListener="#{loginAuthenticationBean.doLogout}"/>
+											<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+												<p:commandButton value="Yes"  styleClass="ui-confirmdialog-yes" icon="ui-icon-check" actionListener="#{userRegistrationBean.successRegistrationMessage}" update="growl"/>
+												<p:commandButton value="No"  styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+											</p:confirmDialog>
+
+											<p:commandButton value="Dialog" process="@this" onclick="PF('dialogTestWD').show();"/>
+
+											<p:dialog id="dialog" widgetVar="dialogTestWD" header="Test Dialog" modal="true" width="400">
+												<p:commandButton value="Confirm" title="Confirmation" onclick="PF('dialogTestWD').hide();"></p:commandButton>
+											</p:dialog>
+										<!-- </h:panelGrid> -->
+                                                  
+									</h:form>
+								</div>
+							</div>
+						</fieldset>
+					</div>
+				</div>
+			</div>
+
+		</div>
+
+		<style>
+.palel-primary {
+	border-color: #bce8f1;
+}
+
+.panel-primary>.panel-heading {
+	background: #bce8f1;
+}
+
+.panel-primary>.panel-body {
+	background-color: #EDEDED;
+}
+
+.panel-heading {
+	padding: 10px
+}
+</style>
+	</ui:define>
+</ui:composition>
