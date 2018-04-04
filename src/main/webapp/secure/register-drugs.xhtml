@@ -305,7 +305,7 @@
 												</div>
 												<p:panelGrid styleClass="ui-noborder">
 													<p:commandButton value="Submit" process="@this" update="@form" styleClass="myButton" immediate="true"
-														actionListener="#{medicineRegistrationBean.registerMedicin}"  icon="ui-icon ui-icon-check" rendered="#{not medicineRegistrationBean.showSaveButton}"/>
+														actionListener="#{medicineRegistrationBean.registerMedicin}"  icon="ui-icon ui-icon-check" rendered="#{not medicineRegistrationBean.showSaveButton}" onsuccess="PF('saveDialogWV').show();"/>
 												</p:panelGrid>
 												<p:panelGrid styleClass="ui-noborder">
 												 <p:commandButton value="Save" process="@this" update="@form" styleClass="myButton" actionListener="#{medicineRegistrationBean.saveEditDrug}" icon="ui-icon ui-icon-check"
@@ -318,11 +318,19 @@
 										</div>
 										<!-- commandButton -->
 									</fieldset>
-								</h:form>
-							</div>
+								</h:form>							
+							</div>						
 						</div>
 					</fieldset>
 				</div>
+				
+				<!-- <p:dialog id="saveDialog" widgetVar="saveDialogWV" header="Send drug to dispensary" modal="true" width="500" height="300" showEffect="explode">			
+					  <p:outputLabel value="Successfully Save drugs" styleClass="okLabel" style="font-size: 24px;"/><br/> 
+					  <span class="fa fa-check-circle fa-5x text-success" style="margin-left: 190px;"/>
+					  <p:commandButton value="Ok" title="send drug" 
+					                   styleClass="okButton" onclick="PF('saveDialogWV').hide();"/>					              
+					</p:dialog> -->
+				
 			</div>
 		</div>
 	</ui:define>

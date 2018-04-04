@@ -21,6 +21,10 @@ public class StoreEJB extends AbstructHome<Store, Integer> {
 
 	}
 
+	public void updateStore(Store store) {
+		merge(store);
+	}
+
 	@Override
 	public Store findById(Integer id) {
 

@@ -49,6 +49,31 @@ body {
 	background: #B61601 !important;
 	color :#fff;margin-left:350px;
 }
+
+.dialogButton{
+	background: #B61601 !important;
+}
+.okButton{
+	margin-top: 60px;
+    margin-left: 10px;
+    width: -webkit-fill-available;
+}
+
+.margin-1eB{
+	margin-top: 50px;
+    margin-left: 12px;
+}
+.okLabel{
+	margin-top: 100px;
+    margin-left: 120px;
+    font-family: -webkit-body;   
+    }
+.deleteLebel{
+	margin-top: 100px;
+    margin-left: 12px;
+    font-family: -webkit-body; 
+}    
+    
 /*** ***/
 a.ui-button .ui-icon {
 	background-image: url("ui-icons_ffffff_256x240.png");

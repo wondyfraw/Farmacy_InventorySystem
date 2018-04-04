@@ -7,23 +7,24 @@
 	<welcome-file-list>
 		<welcome-file>index.xhtml</welcome-file>
 	</welcome-file-list>
-   
-    <context-param>
+
+	<context-param>
 		<param-name>javax.faces.INTERPRET_EMPTY_STRING_SUBMITTED_VALUES_AS_NULL</param-name>
 		<param-value>true</param-value>
-	</context-param> 
-	
+	</context-param>
+
 	<context-param>
 		<param-name>javax.faces.DEFAULT_SUFFIX</param-name>
 		<param-value>.xhtml</param-value>
 	</context-param>
-   
+
 	<!-- Login filter -->
 	<filter>
 		<filter-name>LoginFilter</filter-name>
 		<filter-class>org.farm.fms.entity.ejb.LoginFilter</filter-class>
 	</filter>
-	<!-- Set the login filter to secure all the pages in the /secured/* path of the application -->
+	<!-- Set the login filter to secure all the pages in the /secured/* path 
+		of the application -->
 	<filter-mapping>
 		<filter-name>LoginFilter</filter-name>
 		<url-pattern>/secure/*</url-pattern>
@@ -34,7 +35,7 @@
 		<url-pattern>/faces/secure/*</url-pattern>
 	</filter-mapping>
 
-      <error-page>
+	<error-page>
 		<error-code>404</error-code>
 		<location>/WEB-INF/errorpages/404.xhtml</location>
 	</error-page>
@@ -47,14 +48,17 @@
 		<location>/WEB-INF/errorpages/500.xhtml</location>
 	</error-page>
 	<error-page>
+	  <error-code>403</error-code>
+	  <location>/WEB-INF/errorpages/403.xhtml</location>
+	</error-page>
+	<error-page>
 		<exception-type>javax.faces.application.ViewExpiredException</exception-type>
 		<location>/WEB-INF/errorpages/expired.xhtml</location>
 	</error-page>
 
 	<!-- By default go to secured welcome page -->
-	<!-- <welcome-file-list>
-		<welcome-file>secure/welcome.xhtml</welcome-file>
-	</welcome-file-list> -->
+	<!-- <welcome-file-list> <welcome-file>secure/welcome.xhtml</welcome-file> 
+		</welcome-file-list> -->
 
 	<!-- Staring JSF -->
 	<servlet>
@@ -74,6 +78,44 @@
 		<servlet-name>Faces Servlet</servlet-name>
 		<url-pattern>*.xhtml</url-pattern>
 	</servlet-mapping>
+
+	<!-- logout -->
+
+	<filter>
+		<filter-name>CAS Single Sign Out Filter</filter-name>
+		<filter-class>org.jasig.cas.client.session.SingleSignOutFilter</filter-class>
+		<init-param>
+			<param-name>artifactParameterName</param-name>
+			<param-value>SAMLart</param-value>
+		</init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>CAS Single Sign Out Filter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+	<listener>
+		<listener-class>org.jasig.cas.client.session.SingleSignOutHttpSessionListener</listener-class>
+	</listener>
+
+	<!-- fine logout -->
+	
+	<filter>
+		<filter-name>CAS Authentication Filter</filter-name>
+		<filter-class>org.jasig.cas.client.authentication.Saml11AuthenticationFilter
+		</filter-class>
+		<init-param>
+			<param-name>tolerance</param-name>
+			<param-value>10000</param-value>
+		</init-param>
+		<init-param>
+			<param-name>casServerLoginUrl</param-name>
+			<param-value>http://localhost:20000/Test/public/login1.xhtml</param-value>
+		</init-param>
+		<init-param>
+			<param-name>serverName</param-name>
+			<param-value>http://localhost:20000</param-value>
+		</init-param>
+	</filter>
 
 	<filter>
 		<filter-name>primeFacesFileUploadFilter</filter-name>

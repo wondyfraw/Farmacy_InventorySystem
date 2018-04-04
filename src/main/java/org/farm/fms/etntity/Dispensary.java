@@ -25,18 +25,20 @@ public class Dispensary implements Serializable {
 
 	private Integer idDispensary;
 	private Store storeId;
-	private Integer quantityInBox;
-	private Integer quantityPerUnit;
-	private Integer quantityPerTab;
+	private Integer quantityInBox; // quantity_in_box
+	private Integer quantityPerUnit; // total drug quantity
+	private Integer quantityPerTab; // quantity_per_unit
+	private Integer quantityPerPack; // quantity_per_pack
 	private Date dispensaryDate;
+	private String adminName;
 
 	public Dispensary() {
 		// defualt constructor
 	}
 
 	@Id
-	@SequenceGenerator(name = "dispensary_id_dispensary_seq", sequenceName = "dispensary_id_dispensary_seq", allocationSize = 1)
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "dispensary_id_dispensary_seq")
+	@SequenceGenerator(name = "myfms.dispensary_id_dispensary_seq", sequenceName = "myfms.dispensary_id_dispensary_seq", allocationSize = 1)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "myfms.dispensary_id_dispensary_seq")
 	@Column(name = "id_dispensary", unique = true, nullable = false)
 	public Integer getIdDispensary() {
 		return idDispensary;
@@ -58,7 +60,7 @@ public class Dispensary implements Serializable {
 		return quantityPerUnit;
 	}
 
-	@Column(name = "quantity_per_tab")
+	@Column(name = "quantity_per_pack_unit")
 	public Integer getQuantityPerTab() {
 		return quantityPerTab;
 	}
@@ -67,6 +69,16 @@ public class Dispensary implements Serializable {
 	@Column(name = "dispensary_date")
 	public Date getDispensaryDate() {
 		return dispensaryDate;
+	}
+
+	@Column(name = "admin_name")
+	public String getAdminName() {
+		return adminName;
+	}
+
+	@Column(name = "quantity_per_pack")
+	public Integer getQuantityPerPack() {
+		return quantityPerPack;
 	}
 
 	public void setDispensaryDate(Date dispensaryDate) {
@@ -91,6 +103,14 @@ public class Dispensary implements Serializable {
 
 	public void setQuantityPerTab(Integer quantityPerTab) {
 		this.quantityPerTab = quantityPerTab;
+	}
+
+	public void setAdminName(String adminName) {
+		this.adminName = adminName;
+	}
+
+	public void setQuantityPerPack(Integer quantityPerPack) {
+		this.quantityPerPack = quantityPerPack;
 	}
 
 }

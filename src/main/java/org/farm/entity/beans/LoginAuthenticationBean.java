@@ -64,6 +64,7 @@ public class LoginAuthenticationBean {
 	 * @throws MyUserException
 	 */
 	public String doLogin() throws MyUserException {
+
 		// Get username and password from database :)
 		if (this.email != null) {
 			usersFromDb = userEJB.searchUserByEmail(this.email);
@@ -74,10 +75,17 @@ public class LoginAuthenticationBean {
 			// Successful login
 			if (usersFromDb.getEmail().equals(this.email)
 					&& (Utils.compareSHA1(this.password, usersFromDb.getPassword()))) {
-				// if (usersFromDb.getEmail().equals(this.email) && (usersFromDb.getPassword().equals(this.password))) {
+
 				loggedIn = true;
-				String completePath = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath()
-						+ "/secure/mainAdmin.xhtml?faces-redirect=true";
+				String completePath = null;
+				if (usersFromDb.getUserType().equals("Administrator"))
+					completePath = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath()
+							+ "/secure/mainAdmin.xhtml?faces-redirect=true";
+				else {
+					if (usersFromDb.getUserType().equals("User"))
+						completePath = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath()
+								+ "/secure/users/mainUser.xhtml?faces-redirect=true";
+				}
 				try {
 					FacesContext.getCurrentInstance().getExternalContext().redirect(completePath);
 				} catch (IOException e) {

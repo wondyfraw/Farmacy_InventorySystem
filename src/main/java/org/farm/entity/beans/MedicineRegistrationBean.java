@@ -20,13 +20,15 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.farm.fms.entity.ejb.DispensaryEJB;
 import org.farm.fms.entity.ejb.StoreEJB;
+import org.farm.fms.etntity.Dispensary;
 import org.farm.fms.etntity.Store;
 import org.farm.utils.ConstantsSingleton;
+import org.farm.utils.DispensaryPOJO;
 import org.farm.utils.ManageCart;
 
 @ManagedBean(name = "medicineRegistrationBean")
 @ViewScoped
-public class MedicineRegistrationBean {
+public class MedicineRegistrationBean extends AbstructSessionBean {
 
 	Log log = LogFactory.getLog(MedicineRegistrationBean.class);
 
@@ -44,11 +46,15 @@ public class MedicineRegistrationBean {
 	private boolean showSaveButton;
 	private boolean showDispensaryTable;
 	private Integer quantity;
+
 	private ManageCart manageCart;
+	private DispensaryPOJO dispensaryPOJO;
+	private Dispensary dispensary;
 
 	@EJB
 	private StoreEJB storeEJB;
 
+	@EJB
 	private DispensaryEJB dispensaryEJB;
 
 	@PostConstruct
@@ -60,6 +66,9 @@ public class MedicineRegistrationBean {
 		drugList = new ArrayList<Store>();
 		dispensary_drugList = new ArrayList<Store>();
 		manageCart = new ManageCart();
+		dispensaryPOJO = new DispensaryPOJO();
+		dispensary = new Dispensary();
+
 		drugList = storeEJB.findAll();
 
 		packUnit = ConstantsSingleton.packType();
@@ -160,10 +169,21 @@ public class MedicineRegistrationBean {
 			storeEJB.removeById(deleteDrug.getStoreId());
 	}
 
+	/**
+	 * delete drug from dispensary session
+	 */
 	public void deleteFromDispensaryCart() {
+
+		for (int i = 0; i < drugList.size(); i++) {
+			Store cartdrug = drugList.get(i);
+			if (cartdrug.getStoreId() != null && cartdrug.getStoreId().equals(dispensaryCart.getStoreId())) {
+				cartdrug.setQuantityInBox(dispensaryCart.getQuantityInBox() + cartdrug.getQuantityInBox());
+			}
+		}
 		dispensary_drugList.remove(dispensaryCart);
-		if (dispensaryCart.getStoreId() != null)
-			dispensaryEJB.removeById(dispensaryCart.getStoreId());
+		if (dispensary_drugList.size() < 1)
+			showDispensaryTable = false;
+
 	}
 
 	public void saveEditDrug() {
@@ -180,8 +200,42 @@ public class MedicineRegistrationBean {
 	}
 
 	/**
+	 * store selected drug in the dispensary cart session finally save to dispensary table and update store table
+	 */
+	public void saveDrugToDispensary() {
+
+		for (int i = 0; i < dispensary_drugList.size(); i++) {
+			Store element = dispensary_drugList.get(i);
+			String email = loginAuthenticationBean.getEmail();
+			dispensary = dispensaryPOJO.mapDispensaryPOJO(element, quantity, email);
+
+			if (dispensary != null) {
+				dispensaryEJB.persistEntity(dispensary);
+				for (int j = 0; j < drugList.size(); j++) {
+					Store drugUpdate = drugList.get(j); // update drug quantity in the store
+					if (drugUpdate != null && drugUpdate.getStoreId().equals(element.getStoreId()))
+						storeEJB.merge(drugUpdate);
+				}
+			}
+		}
+		showDispensaryTable = false;
+		dispensary_drugList.removeAll(dispensary_drugList);
+		log.info("---Successfully transfer Drugs from Store to Dispensary!! " + " Admin who make the transfer="
+				+ loginAuthenticationBean.getEmail());
+		/*
+		 * System.out.println(loginAuthenticationBean.getEmail()); if (dispensary_drugList.size() > 0) {
+		 * FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info",
+		 * "PrimeFaces Rocks.")); }
+		 */
+	}
+
+	/**
 	 * add drug to dispensary list
 	 */
+	public void info() {
+		FacesContext.getCurrentInstance().addMessage(null,
+				new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "PrimeFaces Rocks."));
+	}
 
 	public void addToDispensary() {
 

@@ -35,7 +35,7 @@
                 <h:outputText value="#{user.userType}"/>
                </p:column>
                <p:column headerText="Action">
-                <p:button style="width:30px; height:20px"  icon="ui-icon ui-icon-pencil fix_icon" title="Edit" outcome="edit_users">
+                <p:button style="width:30px; height:20px"  icon="ui-icon ui-icon-pencil fix_icon" title="Edit" outcome="registerUser">
                    <f:param name="idUser" value="#{user.usersId}"></f:param>
                 </p:button>
                 <p:commandButton id="deleteButton" update="usertable" process="@this" style="width:30px; height:20px"

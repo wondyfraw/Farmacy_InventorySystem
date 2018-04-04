@@ -1,0 +1,14 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:pretty="http://ocpsoft.com/prettyfaces">
+
+	<ui:composition template="/public/login1.xhtml">
+	<p class="text-center">
+			<i class="fa fa-lock fa-4 fa-errorRed"></i>
+		<div class="text-center">
+			<p class="uk-h3">#{ui['expired.desc']}</p>
+			<a onclick="history.back()" class="btn btn-primary btn-large">#{ui['shared.back']}</a>			
+		</div>
+		</p>
+	</ui:composition>
+</html>

@@ -32,6 +32,8 @@ public class UserRegistrationBean {
 	private String passwordConfirm;
 	private String userType;
 	private List<Users> userList;
+	private boolean showPassword;
+	private Integer userId;
 
 	@EJB
 	private UsersEJB usersEJB;
@@ -40,7 +42,16 @@ public class UserRegistrationBean {
 	public void init() {
 		users = new Users();
 		userList = new ArrayList<Users>();
+		showPassword = true;
 		userList = usersEJB.findAllUsers();
+
+		Map<String, String> map = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
+
+		if ((map.get("idUser")) != null) {
+			userId = Integer.parseInt(map.get("idUser"));
+			users = usersEJB.findById(userId);
+			showPassword = false;
+		}
 	}
 
 	public void registerUser() {
@@ -65,6 +76,29 @@ public class UserRegistrationBean {
 			}
 		}
 	}
+
+	/**
+	 * Save edited user info
+	 */
+
+	public void saveUserEdit() {
+		Date updateDate = Calendar.getInstance().getTime();
+		if (users != null) {
+			users.setUpdatedDate(updateDate);
+			usersEJB.merge(users);
+		}
+
+	}
+
+	/**
+	 * 
+	 * @param context
+	 * @param toValidate
+	 * @param value
+	 * @throws MyStoreException
+	 * 
+	 *             check password validation
+	 */
 
 	public void validateSamePassword(FacesContext context, UIComponent toValidate, Object value)
 			throws MyStoreException {
@@ -148,6 +182,22 @@ public class UserRegistrationBean {
 
 	public void setUserList(List<Users> userList) {
 		this.userList = userList;
+	}
+
+	public boolean isShowPassword() {
+		return showPassword;
+	}
+
+	public void setShowPassword(boolean showPassword) {
+		this.showPassword = showPassword;
+	}
+
+	public Integer getUserId() {
+		return userId;
+	}
+
+	public void setUserId(Integer userId) {
+		this.userId = userId;
 	}
 
 }

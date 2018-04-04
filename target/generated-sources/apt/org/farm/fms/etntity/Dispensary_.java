@@ -9,6 +9,8 @@ import javax.persistence.metamodel.StaticMetamodel;
 @StaticMetamodel(Dispensary.class)
 public abstract class Dispensary_ {
 
+	public static volatile SingularAttribute<Dispensary, String> adminName;
+	public static volatile SingularAttribute<Dispensary, Integer> quantityPerPack;
 	public static volatile SingularAttribute<Dispensary, Integer> quantityInBox;
 	public static volatile SingularAttribute<Dispensary, Integer> quantityPerTab;
 	public static volatile SingularAttribute<Dispensary, Integer> quantityPerUnit;

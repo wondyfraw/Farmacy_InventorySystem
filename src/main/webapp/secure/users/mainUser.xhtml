@@ -1,0 +1,36 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui" xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets"
+	template="/templates/main.xhtml">
+	<link rel="stylesheet" href="../../resource/common/assets/css/themes/theme-1.css"/>
+	
+   <script src="../../resource/common/vendor/bootstrap/js/bootstrap.min.js"/>
+   <ui:define name="content">
+     <div id="app">
+       <ui:include src="/secure/users/sidebar.xhtml"/>
+       <div class="app-content">
+         <!-- <ui:insert name="header"/> -->
+         <ui:include src="/secure/admin/include/header.xhtml" />
+         <!-- end: TOP NAVBAR -->
+         <div class="main-content">
+           <div class="wrap-content container" id="container">
+              <!-- start: PAGE TITLE -->
+              <section id="page-title" style="padding: 5px 0">
+               <div class="row">
+                 <div class="col-sm-8">
+                   <ol class="breadcrumb" style="margin: -11px 0 0 important!">
+                      <li>
+                        <span>User</span>
+                      </li>
+                      <li class="active">
+                         <span>Dashboard</span>
+                      </li>
+                   </ol>
+                 </div>
+               </div>
+              </section>
+           </div>
+         </div>
+       </div>
+     </div>
+   </ui:define>
+   </ui:composition>

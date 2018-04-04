@@ -56,10 +56,10 @@
 												<p:message id="emailAddressMessage" for="emailAddressInput"></p:message>
 											</h:panelGroup>										 											
 										 																	
-											<p:outputLabel for="password" value="Password" />
+											<p:outputLabel for="password" value="Password" rendered="#{userRegistrationBean.showPassword}"/>
 											<h:panelGroup>
 											  <p:password id="password" value="#{userRegistrationBean.users.password}" required="true" requiredMessage="Password field is required"
-											               maxlength="50" label="Password" feedback="true" match="repeatPassword" binding="#{passwordComponent}">
+											               maxlength="50" label="Password" feedback="true" match="repeatPassword" binding="#{passwordComponent}" rendered="#{userRegistrationBean.showPassword}">
 											               <f:validateRegex pattern="#{validation['pattern.password']}"></f:validateRegex>
 											               <f:ajax event="blur" update="passwordMessage"/>							               
 											        <!--  <o:validator validatorId="javax.faces.RegularExpression" pattern="#{validation['pattern.password']}" message="#{validation['message.password']}"></o:validator> -->      
@@ -68,16 +68,16 @@
 											  <p:message id="passwordMessage" for="password"/>
 											</h:panelGroup>
 											
-											<p:outputLabel value="Repeat Password" for="repeatPassword"/>
+											<p:outputLabel value="Repeat Password" for="repeatPassword" rendered="#{userRegistrationBean.showPassword}"/>
 											  <h:panelGroup>
-											     <p:password id="repeatPassword" required="true" label="Repeat password" requiredMessage="Password is required" maxlength="50" value="#{userRegistrationBean.users.password}">
+											     <p:password id="repeatPassword" required="true" label="Repeat password" requiredMessage="Password is required" maxlength="50" value="#{userRegistrationBean.users.password}"
+											                 rendered="#{userRegistrationBean.showPassword}">
 											     <f:validateRegex pattern="#{validation['pattern.password']}"/>
 											      <!--  <o:validator validatorId="javax.faces.RegularExpression" pattern="#{validation['pattern.password']}" message="#{validation['message.password']}"></o:validator> -->
 											      <!--  <f:ajax event="blur" update="repeatMessage"/> -->
 											     </p:password>
 											     <p:message for="repeatPassword" id="repeatMessage"/>
-											  </h:panelGroup>
-											 
+											  </h:panelGroup>				
 											 <p:outputLabel value="User Type:" for="userType"/>
 											 <h:panelGroup>
 											 
@@ -87,7 +87,7 @@
 											       <f:selectItem itemLabel="Administrator" itemValue="Administrator"/>
 											    </p:selectOneMenu>
 											 </h:panelGroup>
-											<p:outputLabel value="Data repertorio" styleClass="block-label" for="repertorioInput" />
+											<!-- <p:outputLabel value="Data repertorio" styleClass="block-label" for="repertorioInput" />
 												<h:panelGroup>													
 													<p:calendar id="repertorioInput" 
 														showOn="button" pattern="dd/MM/yyyy" required="true"
@@ -95,11 +95,16 @@
 														mindate="#{fbConvenzioneEditBean.minDataRepertorio}" navigator="true">
 													</p:calendar>
 													<p:message for="repertorioInput" />
-												</h:panelGroup>
-											</h:panelGrid>
-											<p:commandButton value="Register" update="@form :register" process="@this"
-												actionListener="#{userRegistrationBean.registerUser}">
-												<p:confirm header="Confirmation" message="Are you sure you want to create the user" icon="ui-icon-alert"></p:confirm>
+												</h:panelGroup> -->
+												
+											</h:panelGrid>      
+											<p:commandButton value="Register"  update="@form"
+												action="#{userRegistrationBean.registerUser}" onsuccess="PF('saveDialogWV').show();" rendered="#{userRegistrationBean.showPassword}">
+												  <p:confirm header="Confirmation" message="Are you sure you want to create the user" icon="ui-icon-alert"></p:confirm> 
+											</p:commandButton>
+											<p:commandButton value="Save" actionListener="#{userRegistrationBean.saveUserEdit}"  update="@form"
+												 onsuccess="PF('saveDialogWV').show();" rendered="#{not userRegistrationBean.showPassword}">  
+												  <p:confirm header="Confirmation" message="Are you sure you want to save the user" icon="ui-icon-alert"></p:confirm> 
 											</p:commandButton>
 											<p:commandButton value="Logout" process="@this" actionListener="#{loginAuthenticationBean.doLogout}"/>
 											<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
@@ -115,6 +120,11 @@
 										<!-- </h:panelGrid> -->
                                                   
 									</h:form>
+									<p:dialog id="saveDialog" widgetVar="saveDialogWV" header="Register User" modal="true" width="500" height="300" showEffect="explode">
+									    <p:outputLabel value="Successfully Save user" styleClass="okLabel" style="font-size: 24px;"/><br/>
+									    <span class="fa fa-check-circle fa-5x text-success" style="margin-left: 190px;"/>
+									    <p:commandButton value="Ok" title="Register User" update=":register" styleClass="okButton" onclick="PF('saveDialogWV').hide();"></p:commandButton>
+									</p:dialog>
 								</div>
 							</div>
 						</fieldset>
