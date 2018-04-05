@@ -35,8 +35,8 @@ public class Farmacist implements Serializable {
 	}
 
 	@Id
-	@SequenceGenerator(name = "farmacist_id_farmacist_seq", sequenceName = "farmacist_id_farmacist_seq", allocationSize = 1)
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "farmacist_id_farmacist_seq")
+	@SequenceGenerator(name = "myfms.farmacist_id_farmacist_seq", sequenceName = "myfms.farmacist_id_farmacist_seq", allocationSize = 1)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "myfms.farmacist_id_farmacist_seq")
 	@Column(name = "id_farmacist", unique = true, nullable = false)
 	public Integer getIdFarmacist() {
 		return idFarmacist;

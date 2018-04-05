@@ -22,8 +22,8 @@ import org.farm.fms.entity.ejb.DispensaryEJB;
 import org.farm.fms.entity.ejb.StoreEJB;
 import org.farm.fms.etntity.Dispensary;
 import org.farm.fms.etntity.Store;
+import org.farm.pojo.DispensaryPOJO;
 import org.farm.utils.ConstantsSingleton;
-import org.farm.utils.DispensaryPOJO;
 import org.farm.utils.ManageCart;
 
 @ManagedBean(name = "medicineRegistrationBean")

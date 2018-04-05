@@ -9,16 +9,18 @@ import javax.persistence.metamodel.StaticMetamodel;
 @StaticMetamodel(Sales.class)
 public abstract class Sales_ {
 
+	public static volatile SingularAttribute<Sales, Dispensary> dispensary;
 	public static volatile SingularAttribute<Sales, Double> unitPrice;
-	public static volatile SingularAttribute<Sales, String> unit;
 	public static volatile SingularAttribute<Sales, Integer> idSales;
 	public static volatile SingularAttribute<Sales, Integer> quantity;
 	public static volatile SingularAttribute<Sales, Double> totalPrice;
-	public static volatile SingularAttribute<Sales, String> drugName;
 	public static volatile SingularAttribute<Sales, String> weight;
 	public static volatile SingularAttribute<Sales, Date> registrationdate;
+	public static volatile SingularAttribute<Sales, Integer> dose;
+	public static volatile SingularAttribute<Sales, String> unit;
+	public static volatile SingularAttribute<Sales, String> drugName;
+	public static volatile SingularAttribute<Sales, String> salesPerson;
 	public static volatile SingularAttribute<Sales, String> brand;
-	public static volatile SingularAttribute<Sales, Dispensary> idDispensary;
 	public static volatile SingularAttribute<Sales, String> batchNumber;
 
 }

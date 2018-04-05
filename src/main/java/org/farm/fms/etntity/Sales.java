@@ -18,12 +18,15 @@ import javax.persistence.TemporalType;
 
 @Entity
 @Table(name = "sales", schema = "myfms")
+// @NamedQueries(value = {
+// @NamedQuery(name = "findListofDrugs", query = "select dis FROM Store drug,Dispensary dis WHERE drug.storeId =
+// dip.store.storeId ORDER BY drug.expireDate") })
 public class Sales implements Serializable {
 
 	private static final long serialVersionUID = 966903096023682335L;
 
 	private Integer idSales;
-	private Dispensary idDispensary;
+	private Dispensary dispensary;
 	private String drugName;
 	private Integer quantity;
 	private String weight;
@@ -33,14 +36,16 @@ public class Sales implements Serializable {
 	private Date registrationdate;
 	private Double unitPrice;
 	private Double totalPrice;
+	private Integer dose;
+	private String salesPerson;
 
 	public Sales() {
 		// defuale constructor
 	}
 
 	@Id
-	@SequenceGenerator(name = "sales_id_sales_seq", sequenceName = "sales_id_sales_seq", allocationSize = 1)
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sales_id_sales_seq")
+	@SequenceGenerator(name = "myfms.sales_id_sales_seq", sequenceName = "myfms.sales_id_sales_seq", allocationSize = 1)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "myfms.sales_id_sales_seq")
 	@Column(name = "id_sales", unique = true, nullable = false)
 	public Integer getIdSales() {
 		return idSales;
@@ -48,8 +53,8 @@ public class Sales implements Serializable {
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "id_dispensary")
-	public Dispensary getIdDispensary() {
-		return idDispensary;
+	public Dispensary getDispensary() {
+		return dispensary;
 	}
 
 	@Column(name = "drug_name", nullable = false, length = 255)
@@ -93,12 +98,22 @@ public class Sales implements Serializable {
 		return totalPrice;
 	}
 
+	@Column(name = "dose")
+	public Integer getDose() {
+		return dose;
+	}
+
+	@Column(name = "sales_person")
+	public String getSalesPerson() {
+		return salesPerson;
+	}
+
 	public void setIdSales(Integer idSales) {
 		this.idSales = idSales;
 	}
 
-	public void setIdDispensary(Dispensary idDispensary) {
-		this.idDispensary = idDispensary;
+	public void setDispensary(Dispensary idDispensary) {
+		this.dispensary = idDispensary;
 	}
 
 	public void setDrugName(String drugName) {
@@ -139,6 +154,14 @@ public class Sales implements Serializable {
 
 	public void setTotalPrice(Double totalPrice) {
 		this.totalPrice = totalPrice;
+	}
+
+	public void setDose(Integer dose) {
+		this.dose = dose;
+	}
+
+	public void setSalesPerson(String salesPerson) {
+		this.salesPerson = salesPerson;
 	}
 
 }

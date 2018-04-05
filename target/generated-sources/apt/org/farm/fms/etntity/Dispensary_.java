@@ -13,8 +13,8 @@ public abstract class Dispensary_ {
 	public static volatile SingularAttribute<Dispensary, Integer> quantityPerPack;
 	public static volatile SingularAttribute<Dispensary, Integer> quantityInBox;
 	public static volatile SingularAttribute<Dispensary, Integer> quantityPerTab;
+	public static volatile SingularAttribute<Dispensary, Store> store;
 	public static volatile SingularAttribute<Dispensary, Integer> quantityPerUnit;
-	public static volatile SingularAttribute<Dispensary, Store> storeId;
 	public static volatile SingularAttribute<Dispensary, Date> dispensaryDate;
 	public static volatile SingularAttribute<Dispensary, Integer> idDispensary;
 

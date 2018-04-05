@@ -24,7 +24,7 @@ public class Dispensary implements Serializable {
 	private static final long serialVersionUID = -6235475466960061883L;
 
 	private Integer idDispensary;
-	private Store storeId;
+	private Store store;
 	private Integer quantityInBox; // quantity_in_box
 	private Integer quantityPerUnit; // total drug quantity
 	private Integer quantityPerTab; // quantity_per_unit
@@ -46,8 +46,8 @@ public class Dispensary implements Serializable {
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "id_store")
-	public Store getStoreId() {
-		return storeId;
+	public Store getStore() {
+		return store;
 	}
 
 	@Column(name = "quantity_in_box")
@@ -89,8 +89,8 @@ public class Dispensary implements Serializable {
 		this.idDispensary = idDispensary;
 	}
 
-	public void setStoreId(Store storeId) {
-		this.storeId = storeId;
+	public void setStore(Store storeId) {
+		this.store = storeId;
 	}
 
 	public void setQuantityInBox(Integer quantityInBox) {
