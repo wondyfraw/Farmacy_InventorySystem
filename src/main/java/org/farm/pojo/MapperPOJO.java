@@ -1,9 +1,14 @@
 package org.farm.pojo;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class MapperPOJO {
+public class MapperPOJO implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -3267350695461307045L;
 	// from store
 	private Integer storeId;
 	private String drugName;
@@ -16,13 +21,15 @@ public class MapperPOJO {
 	private Date registrationDate;
 	private Double salesPrice;
 	private String packUnit;
+	private String packType;
 
 	// from dispensary
 	private Integer dispensaryId;
 	private Integer quantityInBox; // quantity_in_box
 	private Integer quantityPerUnit; // total drug quantity
-	private Integer quantityPerTab; // quantity_per_unit
+	private Integer quantityPerUnitPack; // quantity_per_unit
 	private Integer quantityPerPack; // quantity_per_pack
+	private Integer totalUnitPack;
 
 	// from inputbox
 	private Integer dose;
@@ -135,12 +142,12 @@ public class MapperPOJO {
 		this.quantityPerUnit = quantityPerUnit;
 	}
 
-	public Integer getQuantityPerTab() {
-		return quantityPerTab;
+	public Integer getQuantityPerUnitPack() {
+		return quantityPerUnitPack;
 	}
 
-	public void setQuantityPerTab(Integer quantityPerTab) {
-		this.quantityPerTab = quantityPerTab;
+	public void setQuantityPerUnitPack(Integer quantityPerUnitPack) {
+		this.quantityPerUnitPack = quantityPerUnitPack;
 	}
 
 	public Integer getQuantityPerPack() {
@@ -165,6 +172,22 @@ public class MapperPOJO {
 
 	public void setDose(Integer dose) {
 		this.dose = dose;
+	}
+
+	public String getPackType() {
+		return packType;
+	}
+
+	public void setPackType(String packType) {
+		this.packType = packType;
+	}
+
+	public Integer getTotalUnitPack() {
+		return totalUnitPack;
+	}
+
+	public void setTotalUnitPack(Integer totalUnitPack) {
+		this.totalUnitPack = totalUnitPack;
 	}
 
 }

@@ -14,6 +14,8 @@ public class ConstantsSingleton {
 
 	public static final String DATE_FORMAT_AFTER_CONVERSION = "EEE MMM dd HH:mm:ss zzz yyyy";
 
+	public static final String BASE_DOMIAN = "http://localhost:20000/";
+	public static final String CONTENT_APP = "Test";
 	/**
 	 *
 	 * Define date formate in primefaces
@@ -73,5 +75,55 @@ public class ConstantsSingleton {
 		packUnit.add("Piece");
 		packUnit.add("Cup");
 		return packUnit;
+	}
+
+	public static List<String> boxPackElement(String pack) {
+		List<String> boxPackContant = new ArrayList<String>();
+		if (pack != null) {
+			if (pack.equals("Box")) {
+				boxPackContant.add("Strip");
+				boxPackContant.add("Piece");
+				boxPackContant.add("Cup");
+				boxPackContant.add("Bottle");
+			}
+			if (pack.equals("Cup")) {
+				boxPackContant.add("Cup");
+			}
+
+			if (pack.equals("Packed")) {
+				boxPackContant.add("Piece");
+			}
+		}
+		return boxPackContant;
+	}
+
+	public static List<String> drugPackType(String drugPack) {
+		List<String> drugPackList = new ArrayList<String>();
+		if (drugPack != null) {
+			if (drugPack.equals("Strip")) {
+				drugPackList.add("Tablet");
+				drugPackList.add("Capsule");
+				drugPackList.add("Ampule");
+			}
+			if (drugPack.equals("Cup")) {
+				drugPackList.add("Tablet");
+				drugPackList.add("Capsule");
+			}
+			if (drugPack.equals("Piece")) {
+				drugPackList.add("Glove");
+				drugPackList.add("Tooth soap");
+				drugPackList.add("Condom");
+				drugPackList.add("Cream");
+				drugPackList.add("IV Fload");
+				drugPackList.add("IV Set");
+				drugPackList.add("Injection needle");
+				drugPackList.add("Butterfly needle");
+				drugPackList.add("Powder");
+				drugPackList.add("Modis");
+				drugPackList.add("Baby diaper");
+				drugPackList.add("Tooth Brash");
+			}
+		}
+		return drugPackList;
 	}
 }

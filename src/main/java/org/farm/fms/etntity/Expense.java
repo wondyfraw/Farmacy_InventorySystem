@@ -22,6 +22,7 @@ public class Expense implements Serializable {
 	private String description;
 	private Double amount;
 	private String userName;
+	private String invoiceNumber;
 
 	public Expense() {
 		// required by JPA
@@ -55,6 +56,11 @@ public class Expense implements Serializable {
 		return userName;
 	}
 
+	@Column(name = "invoive_number")
+	public String getInvoiceNumber() {
+		return invoiceNumber;
+	}
+
 	public void setExpenseCode(Integer expenseCode) {
 		this.expenseCode = expenseCode;
 	}
@@ -73,6 +79,10 @@ public class Expense implements Serializable {
 
 	public void setUserName(String userName) {
 		this.userName = userName;
+	}
+
+	public void setInvoiceNumber(String invoiceNumber) {
+		this.invoiceNumber = invoiceNumber;
 	}
 
 }

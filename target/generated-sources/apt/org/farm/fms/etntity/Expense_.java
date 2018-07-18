@@ -10,6 +10,7 @@ import javax.persistence.metamodel.StaticMetamodel;
 public abstract class Expense_ {
 
 	public static volatile SingularAttribute<Expense, Double> amount;
+	public static volatile SingularAttribute<Expense, String> invoiceNumber;
 	public static volatile SingularAttribute<Expense, String> description;
 	public static volatile SingularAttribute<Expense, String> userName;
 	public static volatile SingularAttribute<Expense, Integer> expenseCode;

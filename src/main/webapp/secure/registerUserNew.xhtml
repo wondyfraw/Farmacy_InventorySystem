@@ -1,0 +1,151 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui" xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets"
+	template="/templates/main.xhtml" xmlns:o="http://omnifaces.org/ui">
+
+	<ui:define name="content">
+		<div id="app">
+			<ui:include src="/secure/sidebar.xhtml" />
+			<ui:include src="/secure/admin/include/header.xhtml" />
+			<div class="main-content">
+				<div class="wrap-content container" id="container">
+					<div class="col-md-8 col-sm-12 col-lg-8">
+						<fieldset>
+							<div class="panel panel-primary">
+								<div class="panel-heading" style="background-color: #003576;">
+									<!-- <legend>Sign Up</legend> -->
+									<p:outputLabel value="Enter your personal details below:" styleClass="header_color" />
+								</div>
+								<div class="panel-body" >
+								   <h:form id="register">	
+									<!--  <p:growl id="growl" showDetail="true" sticky="true" />  -->							  									
+										<h:panelGrid columns="2" class="form" styleClass="ui-noborder">
+
+											<p:outputLabel value="Full Name" for="fullNameInput"></p:outputLabel>
+											<h:panelGroup styleClass="ui-noborder">
+												<p:inputText value="#{userRegistrationBean.users.fullName}" id="fullNameInput" required="true"
+													requiredMessage="Full name is required" maxlength="255" size="50" label="Full Name">
+												 <o:validator validatorId="javax.faces.RegularExpression" pattern="#{validation['pattern.alphanumeric']}"
+					                                          message="#{validation['message.alphanumeric']}"></o:validator>
+					                                 <f:validator validatorId="checkUserName"></f:validator>         	
+													<p:ajax event="blur" update="fullNameMessage"></p:ajax>
+													<p:message id="fullNameMessage" for="fullNameInput"></p:message>
+												</p:inputText>
+											</h:panelGroup>
+											<p:outputLabel value="Address" for="addressInput"/>
+											<h:panelGroup>
+											   <p:inputText id="addressInput" title="Address" size="50" value="#{userRegistrationBean.users.address}" lable="Address"
+											                required="true" requiredMessage="Address is required" maxlength="255">
+											      <p:ajax event="blur" update="addressMessage"/>
+											   </p:inputText>
+											   <p:message for="addressInput" id="addressMessage"/>
+											</h:panelGroup>
+											
+											<p:outputLabel value="Email" for="emailAddressInput"/>
+											<h:panelGroup>
+											  <p:inputText id="emailAddressInput" required="true" requiredMessage="Email is required" size="50" title="Emial"
+											               maxlength="255" value="#{userRegistrationBean.users.email}" validatorMessage="Invalid email format">
+											        <o:validator validatorId="javax.faces.RegularExpression" pattern="#{validation['pattern.email']}"
+					                                              message="#{validation['message.email']}" />
+					                               <f:validator validatorId="uniqueUsernameValidator"></f:validator>
+											       <p:ajax event="blur" update="emailAddressMessage"/>
+											  </p:inputText>
+											  <p:message for="emailAddressInput" id="emailAddressMessage"/>
+											</h:panelGroup>
+											
+											<p:outputLabel for="password" value="Password" rendered="#{userRegistrationBean.showPassword}"/>
+											<h:panelGroup>
+											  <p:password id="password" value="#{userRegistrationBean.users.password}" required="true" requiredMessage="Password field is required"
+											               maxlength="50" label="Password" feedback="true"  rendered="#{userRegistrationBean.showPassword}" validatorMessage="Invalid password format">
+											               <f:validateRegex pattern="#{validation['pattern.password']}"></f:validateRegex>
+											               <p:ajax event="blur" update="passwordMessage"/>							               											       
+											  
+											  </p:password>
+											  <p:message id="passwordMessage" for="password"/>
+											</h:panelGroup>
+											
+											<p:outputLabel value="Repeat Password" for="repeatPassword" rendered="#{userRegistrationBean.showPassword}"/>
+											  <h:panelGroup>
+											     <p:password id="repeatPassword" required="true" label="Repeat password" requiredMessage="Password is required" maxlength="50" value="#{userRegistrationBean.passwordConfirm}"
+											                 rendered="#{userRegistrationBean.showPassword}" validatorMessage="Invalid password format" validator="#{userRegistrationBean.validateSamePassword}">
+											    <!--  <o:validator validatorId="javax.faces.RegularExpression" pattern="#{validation['pattern.password']}"
+											                   message="#{validation[message.password]}"/> -->
+											       <f:validateRegex pattern="#{validation['pattern.password']}"></f:validateRegex>
+											     <p:ajax event="blur" update="repeatMessage"/>
+											     </p:password>
+											     <p:message for="repeatPassword" id="repeatMessage"/>
+											  </h:panelGroup>
+											  
+											   
+											  <p:outputLabel value="User Type:" for="userType"/>											  
+											 <h:panelGroup>	
+											 <ui:fragment>																				
+											    <p:selectOneMenu id="userType" value="#{userRegistrationBean.users.userType}" style="width:160px" appendTo="@this" required="true" requiredMessage="User type can not be null">
+											       <f:selectItem itemLabel="Select user Type" itemValue=""/>
+											       <f:selectItem itemLabel="User" itemValue="User"/>
+											       <f:selectItem itemLabel="Administrator" itemValue="Administrator"/>
+											    </p:selectOneMenu>
+											    </ui:fragment>
+											 </h:panelGroup>												 
+											</h:panelGrid><br/>
+											<center>
+											    <p:commandButton value="Register"  rendered="#{userRegistrationBean.showPassword}" actionListener="#{userRegistrationBean.registerUserNew}"
+											                 update="@form" process="@form" oncomplete="onCompletRegister(args)" styleClass="myButton"/>
+											    <p:commandButton value="Save" process="@this" update="@form" styleClass="myButton" actionListener="#{userRegistrationBean.registerUserNew}" icon="ui-icon ui-icon-check"
+												                   rendered="#{not userRegistrationBean.showPassword}"/>
+											   </center>  
+											   <p:button value="Back to List" styleClass="myBackButton" outcome="manage_user"/>              
+											    <ui:fragment rendered ="#{userRegistrationBean.showMessage}">
+											       <p:messages id="messages" globalOnly="true" closable="true"></p:messages>
+											    </ui:fragment>             
+								    </h:form>
+								    
+								    <p:dialog id="registerUser" widgetVar="registerUserWV" header="Register User" modal="true" width="400" height="200" showEffect="explode">
+								      <br/><p:outputLabel value="Please Confirm user registration!!"  style="font-size: 18px;"/><br/>
+								      <center>
+								      <p:commandButton value="Confirm" styleClass="ui-confirm-button" icon="ui-icon-check" oncomplete="onCompletRegister(args)"
+								                        update=":register"/>
+								      <p:commandButton value="Cancel"  styleClass="ui-confirm-button" icon="ui-icon-close" onclick="PF('registerUserWV').hide();"/>   
+								      </center>            
+								    </p:dialog>
+								    
+								    <p:dialog id="saveDialog" widgetVar="saveDialogWV" header="Register User" modal="true" width="400" height="200" showEffect="explode"><br/>
+								    <center>
+								    <span class="fa fa-check-circle fa-5x text-success"/><br/>	
+									    <p:outputLabel value="Successfully Save user" styleClass="okLabel" style="font-size: 20px;"/>
+									    </center>								    
+									    <p:commandButton value="Ok" title="Register User"   styleClass="okButton" onclick="PF('saveDialogWV').hide();"></p:commandButton>
+									</p:dialog>
+								</div>
+							</div>
+						</fieldset>
+					</div>
+				</div>
+				<script>
+                function onCompletRegister(args) {
+					 if(args.success){
+                          //PF('registerUserWV').hide();
+                          PF('saveDialogWV').show();
+						 }
+				}
+				</script>
+			</div>
+		</div>
+		<style>
+.palel-primary {
+	border-color: #bce8f1;
+}
+
+.panel-primary>.panel-heading {
+	background: #bce8f1;
+}
+
+.panel-primary>.panel-body {
+	background-color: #EDEDED;
+}
+
+.panel-heading {
+	padding: 10px
+}
+</style>
+	</ui:define>
+</ui:composition>

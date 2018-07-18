@@ -18,7 +18,8 @@ import javax.persistence.TemporalType;
 @Entity
 @Table(name = "store", schema = "myfms")
 @NamedQueries(value = {
-		@NamedQuery(name = "storeSearchByDrugName", query = "select drug from Store drug WHERE drug.drugName = :drugName ORDER BY drug.expireDate desc") })
+		@NamedQuery(name = "storeSearchByDrugName", query = "select drug from Store drug WHERE drug.drugName = :drugName ORDER BY drug.expireDate desc"),
+		@NamedQuery(name = "findExpiredDrugFromStore", query = "select drug from Store drug WHERE drug.expireDate < :today") })
 public class Store implements Serializable {
 
 	private static final long serialVersionUID = 6867314894042660887L;

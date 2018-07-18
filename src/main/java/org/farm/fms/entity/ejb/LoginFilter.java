@@ -47,26 +47,30 @@ public class LoginFilter implements Filter {
 		boolean isUserLoggedIn = false;
 		try {
 			ic = new InitialContext();
+			if (session != null) {
+				LoginAuthenticationBean loginAuthenticationBean = null;
+				// if (((HttpServletRequest) req).getSession().getAttribute("loginAuthenticationBean") != null) {
+				if (session.getAttribute("loginAuthenticationBean") != null) {
+					loginAuthenticationBean = (LoginAuthenticationBean) session.getAttribute("loginAuthenticationBean");
+					isUserLoggedIn = loginAuthenticationBean.isLoggedIn();
+				}
+				/*
+				 * else { loginAuthenticationBean = new LoginAuthenticationBean(username);
+				 * session.setAttribute("loginAuthenticationBean", loginAuthenticationBean); isUserLoggedIn =
+				 * loginAuthenticationBean.isLoggedIn();
+				 * 
+				 * }
+				 */
 
-			LoginAuthenticationBean loginAuthenticationBean = null;
-			// if (((HttpServletRequest) req).getSession().getAttribute("loginAuthenticationBean") != null) {
-			if (session.getAttribute("loginAuthenticationBean") != null) {
-				loginAuthenticationBean = (LoginAuthenticationBean) session.getAttribute("loginAuthenticationBean");
-				isUserLoggedIn = loginAuthenticationBean.isLoggedIn();
-			}
-			/*
-			 * else { loginAuthenticationBean = new LoginAuthenticationBean(username);
-			 * session.setAttribute("loginAuthenticationBean", loginAuthenticationBean); isUserLoggedIn =
-			 * loginAuthenticationBean.isLoggedIn();
-			 * 
-			 * }
-			 */
-
-			if (loginAuthenticationBean == null || !isUserLoggedIn) {
+				if (loginAuthenticationBean == null || !isUserLoggedIn) {
+					String contextPath = request.getContextPath();
+					response.sendRedirect(contextPath + "/public/login1.xhtml");
+				}
+				chain.doFilter(request, response);
+			} else {
 				String contextPath = request.getContextPath();
 				response.sendRedirect(contextPath + "/public/login1.xhtml");
 			}
-			chain.doFilter(request, response);
 		} catch (NamingException e) {
 			log.error(e.getMessage());
 		}

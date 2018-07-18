@@ -1,5 +1,7 @@
 package org.farm.entity.beans;
 
+import java.io.InputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -14,17 +16,28 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ValueChangeEvent;
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.farm.fms.entity.ejb.DispensaryEJB;
+import org.farm.fms.entity.ejb.SalesEJB;
 import org.farm.fms.entity.ejb.StoreEJB;
 import org.farm.fms.etntity.Dispensary;
+import org.farm.fms.etntity.Sales;
 import org.farm.fms.etntity.Store;
 import org.farm.pojo.DispensaryPOJO;
+import org.farm.pojo.Mapper;
+import org.farm.pojo.MapperPOJO;
+import org.farm.pojo.SalesFilterPOJO;
+import org.farm.pojo.SalesPOJO;
 import org.farm.utils.ConstantsSingleton;
 import org.farm.utils.ManageCart;
+import org.primefaces.model.DefaultStreamedContent;
+import org.primefaces.model.StreamedContent;
 
 @ManagedBean(name = "medicineRegistrationBean")
 @ViewScoped
@@ -40,6 +53,7 @@ public class MedicineRegistrationBean extends AbstructSessionBean {
 	private List<String> units;
 	private Map<String, List<String>> data;
 	private String unitPack;
+	private String boxPack;
 	private List<Store> drugList;
 	private List<Store> dispensary_drugList;
 	private boolean showQuantityperStrip;
@@ -51,11 +65,41 @@ public class MedicineRegistrationBean extends AbstructSessionBean {
 	private DispensaryPOJO dispensaryPOJO;
 	private Dispensary dispensary;
 
+	private List<MapperPOJO> session_drugList;
+	private List<MapperPOJO> mapperPOJOList;
+	private Mapper mapper;
+	private MapperPOJO salesPOJO;
+	private String salesQuantity;
+	private String dose;
+	private MapperPOJO sessionCart;
+	private SalesPOJO salesMaperPOJO;
+	private Sales sales;
+	private List<MapperPOJO> filteredDrugs;
+	private List<Sales> salesList;
+	private String filter;
+	private List<Sales> filteredSalesDrugs;
+	private boolean showMessagePanel;
+	private boolean showTabQuantityInStrip;
+	private SalesFilterPOJO searchParmes;
+	private List<Sales> searchSalesList;
+	private FacesContext context = FacesContext.getCurrentInstance();
+	private HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
+	private HttpSession httpSession = request.getSession(false);
+	private Sales voidSalesDrug;
+
+	private Date reportDate;
+	private List<Sales> reportList;
+	private String sampleDate;
+	private String userType;
+
 	@EJB
 	private StoreEJB storeEJB;
 
 	@EJB
 	private DispensaryEJB dispensaryEJB;
+
+	@EJB
+	private SalesEJB salesEJB;
 
 	@PostConstruct
 	public void init() {
@@ -74,31 +118,17 @@ public class MedicineRegistrationBean extends AbstructSessionBean {
 		packUnit = ConstantsSingleton.packType();
 		units = ConstantsSingleton.packUnit();
 
-		List<String> unit = new ArrayList<String>();
-		unit.add("Tablet");
-		unit.add("Capsule");
-		unit.add("Ampule");
-		data.put("Strip", unit);
-
-		unit = new ArrayList<String>();
-		unit.add("Tablet");
-		unit.add("Capsule");
-		data.put("Cup", unit);
-
-		unit = new ArrayList<String>();
-		unit.add("Glove");
-		unit.add("Tooth soap");
-		unit.add("Condom");
-		unit.add("Cream");
-		unit.add("IV Fload");
-		unit.add("IV Set");
-		unit.add("Injection needle");
-		unit.add("Butterfly needle");
-		unit.add("Powder");
-		unit.add("Modis");
-		unit.add("Baby diaper");
-		unit.add("Tooth Brash");
-		data.put("Piece", unit);
+		/*
+		 * List<String> unit = new ArrayList<String>(); unit.add("Tablet"); unit.add("Capsule"); unit.add("Ampule");
+		 * data.put("Strip", unit);
+		 * 
+		 * unit = new ArrayList<String>(); unit.add("Tablet"); unit.add("Capsule"); data.put("Cup", unit);
+		 * 
+		 * unit = new ArrayList<String>(); unit.add("Glove"); unit.add("Tooth soap"); unit.add("Condom");
+		 * unit.add("Cream"); unit.add("IV Fload"); unit.add("IV Set"); unit.add("Injection needle");
+		 * unit.add("Butterfly needle"); unit.add("Powder"); unit.add("Modis"); unit.add("Baby diaper");
+		 * unit.add("Tooth Brash"); data.put("Piece", unit);
+		 */
 
 		Map<String, String> map = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
 		if ((map.get("idDrug")) != null) {
@@ -115,6 +145,45 @@ public class MedicineRegistrationBean extends AbstructSessionBean {
 
 		}
 
+		//////////// Sales ====//////
+		session_drugList = new ArrayList<MapperPOJO>();
+		mapperPOJOList = new ArrayList<MapperPOJO>();
+		mapper = new Mapper();
+		salesMaperPOJO = new SalesPOJO();
+		sales = new Sales();
+		salesList = new ArrayList<Sales>();
+		filteredSalesDrugs = new ArrayList<Sales>();
+
+		searchParmes = (SalesFilterPOJO) httpSession.getAttribute("searchParmes");
+
+		if (searchParmes != null) {
+			reportList = salesEJB.filterDrugsByCriteria(searchParmes);
+		}
+		if (searchParmes == null)
+			searchParmes = new SalesFilterPOJO();
+
+		reportDate = Calendar.getInstance().getTime();
+		sampleDate = "20/06/2018";
+
+		// dispensaryDrug = new MapperPOJO();
+
+		// dispensaryList = dispensaryEJB.findAll();
+
+		/*
+		 * for (int i = 0; i < dispensaryList.size(); i++) { Dispensary dispensary = new Dispensary(); dispensary =
+		 * dispensaryList.get(i); if (dispensary.getStore() != null) { Mapper mapper = new Mapper(); Store store = new
+		 * Store(); MapperPOJO mapperPOJO = new MapperPOJO(); store =
+		 * storeEJB.findById(dispensary.getStore().getStoreId()); mapperPOJO = mapper.mapToSales(dispensary, store); if
+		 * (mapperPOJO != null) { mapperPOJOList.add(mapperPOJO);
+		 * 
+		 * } else log.error("[--Retrun value of MapperPOJO Object in mapToSales function is null--]"); } }
+		 */
+		mapperPOJOList = salesEJB.getAllDrugs(Calendar.getInstance().getTime());
+		salesList = salesEJB.findSalesOrderByDate();
+
+		showTabQuantityInStrip = true;
+		userType = loginAuthenticationBean.getUserType();
+
 	}
 
 	/**
@@ -129,7 +198,42 @@ public class MedicineRegistrationBean extends AbstructSessionBean {
 		storeEJB.persistEntity(store);
 		log.info("Successfully Register Drugs " + store.getDrugName() + " " + store.getQuantityperBoxperUnit() + ""
 				+ store.getUnit());
-		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Successfully save drug"));
+		showMessagePanel = true;
+		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Successfully save drug!!"));
+	}
+
+	public void onPackUnitSelected() {
+		if (unitPack != null) {
+			if (unitPack.equals("Strip"))
+				showTabQuantityInStrip = true;
+			else {
+				showTabQuantityInStrip = false;
+			}
+		}
+	}
+
+	// show only if pack type is box
+	public void showQuantityPerPackPerUnit() {
+		if (store.getPackType().equals("Cup") || store.getPackType().equals("Packed"))
+			showTabQuantityInStrip = false;
+		else
+			showTabQuantityInStrip = true;
+	}
+
+	public List<String> selectDrugPackType() {
+		if (store.getPackType() != null) {
+			packUnit = ConstantsSingleton.boxPackElement(store.getPackType());
+		}
+		return packUnit;
+	}
+
+	//
+	public List<String> selectDrugWithPackageUnit() {
+		if (unitPack != null) {
+			units = ConstantsSingleton.drugPackType(unitPack);
+		}
+
+		return units;
 	}
 
 	public void deleteDrugs() {
@@ -196,18 +300,21 @@ public class MedicineRegistrationBean extends AbstructSessionBean {
 
 			log.info("Successfully save modified drugs " + store.getDrugName() + " " + store.getBrand() + " "
 					+ store.getBathcNumber() + " " + store.getBrand() + " " + store.getModifyDate());
+			showMessagePanel = true;
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Successfuly save grugs"));
 		}
 	}
 
 	/**
-	 * store selected drug in the dispensary cart session finally save to dispensary table and update store table
+	 * Temporarily store selected drug in the dispenser cart session finally save to dispenser table and update store
+	 * table
 	 */
 	public void saveDrugToDispensary() {
 
 		for (int i = 0; i < dispensary_drugList.size(); i++) {
 			Store element = dispensary_drugList.get(i);
 			String email = loginAuthenticationBean.getEmail();
-			dispensary = dispensaryPOJO.mapDispensaryPOJO(element, quantity, email);
+			dispensary = dispensaryPOJO.mapDispensaryPOJO(element, email);
 
 			if (dispensary != null) {
 				dispensaryEJB.persistEntity(dispensary);
@@ -266,7 +373,15 @@ public class MedicineRegistrationBean extends AbstructSessionBean {
 						}
 					}
 				}
-				if (dispensary_drugList == null || found == false) {
+
+				/** if the drug selected is found in the dispensary list */
+				if (dispensary_drugList.size() > 0 && found == false) {
+					dispensaryDrug.setQuantityInBox(quantity);
+					dispensary_drugList.add(dispensaryDrug);
+				}
+
+				// if dispensary list is empty
+				if (dispensary_drugList.size() <= 0 && found == false) {
 					List<Store> newList = new ArrayList<Store>();
 					Store drug = new Store();
 					newList = manageCart.mapData(drug, dispensaryDrug, quantity, newList);
@@ -277,6 +392,197 @@ public class MedicineRegistrationBean extends AbstructSessionBean {
 			}
 		}
 	}
+
+	// ==============Add drugs to session cart ===================////
+
+	public void addToSalesSession() {
+
+		if (salesPOJO != null) {
+			int index = 0;
+			Integer dosVal = null;
+			Integer quantityVal = null;
+			if (this.salesQuantity != null) {
+				quantityVal = Integer.parseInt(this.salesQuantity);
+			}
+			if (this.dose != null)
+				dosVal = Integer.parseInt(this.dose);
+			for (int i = 0; i < mapperPOJOList.size(); i++) {
+				MapperPOJO element = mapperPOJOList.get(i);
+				if (element.getDispensaryId() != null
+						&& element.getDispensaryId().equals(salesPOJO.getDispensaryId())) {
+					if (dose != null && element.getQuantityPerUnit() > (dosVal * quantityVal)) {
+						index = 1;
+						Integer newQuantity = element.getQuantityPerUnit() - (dosVal * quantityVal);
+						if (element.getPackType().equals("Box")) {
+							Integer newUnitPackQuantity = element.getTotalUnitPack()
+									- newQuantity / element.getQuantityPerUnitPack(); // quantity per pack unit
+							mapperPOJOList.get(i).setTotalUnitPack(newUnitPackQuantity);
+						}
+						mapperPOJOList.get(i).setQuantityPerUnit(newQuantity);
+					}
+				}
+			}
+
+			// update sales table
+			boolean found = false;
+			if (index == 1) {
+				if (session_drugList != null) {
+					for (int j = 0; j < session_drugList.size(); j++) {
+						MapperPOJO element = session_drugList.get(j);
+						if (element.getDispensaryId() != null
+								&& element.getDispensaryId().equals(salesPOJO.getDispensaryId())) {
+							found = true;
+							session_drugList = mapper.modifyQuantity(session_drugList, quantityVal, dosVal, j);
+						}
+					}
+				}
+
+				if (session_drugList.size() > 0 && found == false) {
+					salesPOJO.setQuantityPerUnit(quantityVal * dosVal);
+					if (salesPOJO.getPackType().equals("Box"))
+						salesPOJO.setTotalUnitPack((quantityVal * dosVal) / salesPOJO.getQuantityPerUnitPack());
+					session_drugList.add(salesPOJO);
+				}
+
+				if (session_drugList.size() <= 0 && found == false) {
+					List<MapperPOJO> newMapperPOJOList = new ArrayList<MapperPOJO>();
+					MapperPOJO mapperPOJO = new MapperPOJO();
+					newMapperPOJOList = mapper.mapdata(mapperPOJO, salesPOJO, quantityVal, dosVal);
+					if (newMapperPOJOList != null)
+						session_drugList = newMapperPOJOList;
+				}
+				showDispensaryTable = true;
+			}
+		}
+	}
+
+	public void saveSalesDrug() {
+		for (int i = 0; i < session_drugList.size(); i++) {
+			String salesPerson = loginAuthenticationBean.getEmail();
+			MapperPOJO element = session_drugList.get(i);
+			Dispensary dispensarydrug = dispensaryEJB.findById(element.getDispensaryId());
+			if (dispensarydrug != null) {
+				sales = salesMaperPOJO.mapSalesPOJO(element, salesPerson, dispensarydrug);
+				if (sales != null) {
+					salesEJB.persistEntity(sales); // save drugs to sales table
+					for (int j = 0; j < mapperPOJOList.size(); j++) {
+						MapperPOJO salesDrug = mapperPOJOList.get(j);
+						if (salesDrug.getDispensaryId() != null
+								&& salesDrug.getDispensaryId().equals(element.getDispensaryId())) {
+							Dispensary dispennsary = new Dispensary();
+							dispennsary = dispensaryEJB.findById(salesDrug.getDispensaryId());
+							if (dispennsary != null) {
+								dispennsary.setQuantityPerUnit(
+										dispennsary.getQuantityPerUnit() - (sales.getDose() * sales.getQuantity())); // modify
+								// quantity(existingQuantity
+								// -
+								// salesQuan)
+								dispensaryEJB.merge(dispennsary); // update dispensary table in the db
+							}
+						}
+					}
+				}
+			}
+			session_drugList.remove(i);
+		}
+		showDispensaryTable = false;
+	}
+
+	public void deleteFromSalesSessionCart() {
+
+		if (sessionCart != null) {
+			for (int i = 0; i < mapperPOJOList.size(); i++) {
+				MapperPOJO elemet = mapperPOJOList.get(i);
+				if (elemet.getDispensaryId() != null
+						&& elemet.getDispensaryId().equals(sessionCart.getDispensaryId())) {
+					mapperPOJOList.get(i).setQuantityPerUnit(
+							sessionCart.getQuantityPerUnit() + mapperPOJOList.get(i).getQuantityPerUnit());
+				}
+			}
+			session_drugList.remove(sessionCart);
+			if (session_drugList.size() < 1) {
+				showDispensaryTable = false;
+			}
+		}
+	}
+
+	// filter drug based on the key
+	public void searchSalesDrugByFilterKy() {
+		if (this.filter == null || this.filter.length() < 2)
+			filteredSalesDrugs = salesEJB.findAll();
+		else {
+			salesEJB.salesDrugByFilterCriteria(this.filter);
+		}
+	}
+
+	// search sales by filter criteria for generating report
+	public void searchSalesByFilterCriateria() {
+		searchSalesList = salesEJB.filterDrugsByCriteria(searchParmes);
+		httpSession.setAttribute("searchParmes", searchParmes);
+		showDispensaryTable = true;
+	}
+
+	// search drugs by filter criteria
+	public void searchDrugsByFilterCriteria() {
+
+	}
+
+	public StreamedContent downloadSalesReport() {
+		String fileName = null;
+		if (searchParmes != null) {
+			if (searchParmes.getFromDate() != null)
+				fileName = "sales_" + new SimpleDateFormat("yyyy-MM-dd").format(searchParmes.getFromDate())
+						+ Calendar.getInstance().getTimeInMillis() + ".pdf";
+			else if (searchParmes.getToDate() != null)
+				fileName = "sales_" + new SimpleDateFormat("yyyy-MM-dd").format(searchParmes.getToDate())
+						+ Calendar.getInstance().getTimeInMillis() + ".pdf";
+			else if (searchParmes.getDrugName() != null)
+				fileName = "sales_" + searchParmes.getDrugName() + Calendar.getInstance().getTimeInMillis() + ".pdf";
+			else
+				fileName = "sales" + Calendar.getInstance().getTimeInMillis() + ".pdf";
+		}
+
+		InputStream printStream = salesEJB.getPrintHtmlFile(searchParmes);
+		StreamedContent result = new DefaultStreamedContent(printStream, "application/pdf", fileName);
+		log.info("Downlaod sales report successfully " + fileName);
+		return result;
+	}
+
+	// sales PDF report with java ////
+
+	public StreamedContent generatePDF() {
+		StreamedContent result = null;
+		try {
+			String fileName = "sales_" + searchParmes.getDrugName() + Calendar.getInstance().getTimeInMillis() + ".pdf";
+			List<Sales> salesList = new ArrayList<Sales>();
+			salesList = salesEJB.filterDrugsByCriteria(searchParmes);
+			InputStream printStream = salesEJB.createPDF(salesList, searchParmes);
+			result = new DefaultStreamedContent(printStream, "application/pdf", fileName);
+			log.info("Downlaod sales report successfully " + fileName);
+		} catch (Exception e) {
+			log.error("Download sales report is failed");
+		}
+		return result;
+	}
+
+	///// jasper sales report //////////////////
+	public void printSalesReport() {
+
+		try {
+			ServletContext servletContesct = (ServletContext) FacesContext.getCurrentInstance().getExternalContext()
+					.getContext();
+			String realPath = servletContesct.getRealPath("/");
+			String relativePath = "/WEB-INF/report/sales_report.jrxml";
+			String path = FacesContext.getCurrentInstance().getExternalContext().getRealPath(relativePath);
+			salesEJB.generateSalesPDF(salesList, realPath);
+		} catch (Exception e) {
+			log.error("Generating Sales PDF report is fail " + e.getMessage());
+		}
+	}
+
+	/*
+	 * public void downloadTest() { if (reportList.size() > 0) { int a = 0; } }
+	 */
 
 	public void showStripQuantity(ValueChangeEvent event) {
 		if (event.getNewValue() != null) {
@@ -422,6 +728,176 @@ public class MedicineRegistrationBean extends AbstructSessionBean {
 
 	public void setDispensaryCart(Store dispensaryCart) {
 		this.dispensaryCart = dispensaryCart;
+	}
+
+	///// =========Sales================== /////////////////
+
+	public List<MapperPOJO> getSession_drugList() {
+		return session_drugList;
+	}
+
+	public void setSession_drugList(List<MapperPOJO> session_drugList) {
+		this.session_drugList = session_drugList;
+	}
+
+	public List<MapperPOJO> getMapperPOJOList() {
+		return mapperPOJOList;
+	}
+
+	public void setMapperPOJOList(List<MapperPOJO> mapperPOJOList) {
+		this.mapperPOJOList = mapperPOJOList;
+	}
+
+	public Mapper getMapper() {
+		return mapper;
+	}
+
+	public void setMapper(Mapper mapper) {
+		this.mapper = mapper;
+	}
+
+	public MapperPOJO getSalesPOJO() {
+		return salesPOJO;
+	}
+
+	public void setSalesPOJO(MapperPOJO salesPOJO) {
+		this.salesPOJO = salesPOJO;
+	}
+
+	public String getSalesQuantity() {
+		return salesQuantity;
+	}
+
+	public void setSalesQuantity(String salesQuantity) {
+		this.salesQuantity = salesQuantity;
+	}
+
+	public String getDose() {
+		return dose;
+	}
+
+	public void setDose(String dose) {
+		this.dose = dose;
+	}
+
+	public MapperPOJO getSessionCart() {
+		return sessionCart;
+	}
+
+	public void setSessionCart(MapperPOJO sessionCart) {
+		this.sessionCart = sessionCart;
+	}
+
+	public List<MapperPOJO> getFilteredDrugs() {
+		return filteredDrugs;
+	}
+
+	public void setFilteredDrugs(List<MapperPOJO> filteredDrugs) {
+		this.filteredDrugs = filteredDrugs;
+	}
+
+	public List<Sales> getSalesList() {
+		return salesList;
+	}
+
+	public void setSalesList(List<Sales> salesList) {
+		this.salesList = salesList;
+	}
+
+	public String getFilter() {
+		return filter;
+	}
+
+	public void setFilter(String filter) {
+		this.filter = filter;
+	}
+
+	public List<Sales> getFilteredSalesDrugs() {
+		return filteredSalesDrugs;
+	}
+
+	public void setFilteredSalesDrugs(List<Sales> filteredSalesDrugs) {
+		this.filteredSalesDrugs = filteredSalesDrugs;
+	}
+
+	public boolean isShowMessagePanel() {
+		return showMessagePanel;
+	}
+
+	public void setShowMessagePanel(boolean showMessagePanel) {
+		this.showMessagePanel = showMessagePanel;
+	}
+
+	public boolean isShowTabQuantityInStrip() {
+		return showTabQuantityInStrip;
+	}
+
+	public void setShowTabQuantityInStrip(boolean showTabQuantityInStrip) {
+		this.showTabQuantityInStrip = showTabQuantityInStrip;
+	}
+
+	public SalesFilterPOJO getSearchParmes() {
+		return searchParmes;
+	}
+
+	public void setSearchParmes(SalesFilterPOJO searchParmes) {
+		this.searchParmes = searchParmes;
+	}
+
+	public List<Sales> getSearchSalesList() {
+		return searchSalesList;
+	}
+
+	public void setSearchSalesList(List<Sales> searchSalesList) {
+		this.searchSalesList = searchSalesList;
+	}
+
+	public Date getReportDate() {
+		return reportDate;
+	}
+
+	public void setReportDate(Date reportDate) {
+		this.reportDate = reportDate;
+	}
+
+	public List<Sales> getReportList() {
+		return reportList;
+	}
+
+	public void setReportList(List<Sales> reportList) {
+		this.reportList = reportList;
+	}
+
+	public String getSampleDate() {
+		return sampleDate;
+	}
+
+	public void setSampleDate(String sampleDate) {
+		this.sampleDate = sampleDate;
+	}
+
+	public String getUserType() {
+		return userType;
+	}
+
+	public void setUserType(String userType) {
+		this.userType = userType;
+	}
+
+	public Sales getVoidSalesDrug() {
+		return voidSalesDrug;
+	}
+
+	public void setVoidSalesDrug(Sales voidSalesDrug) {
+		this.voidSalesDrug = voidSalesDrug;
+	}
+
+	public String getBoxPack() {
+		return boxPack;
+	}
+
+	public void setBoxPack(String boxPack) {
+		this.boxPack = boxPack;
 	}
 
 }

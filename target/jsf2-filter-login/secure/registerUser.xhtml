@@ -33,7 +33,7 @@
 											</h:panelGroup>
 											<p:outputLabel value="Address" for="addressInput"></p:outputLabel>
 											<h:panelGroup>
-												<p:inputText id="addressInput" required="true" requiredMessage="User Address is rwquired" maxlength="255"
+												<p:inputText id="addressInput" required="true" requiredMessage="User Address is required" maxlength="255"
 													size="50" value="#{userRegistrationBean.users.address}" lable="Address">
 													<p:ajax event="blur" update="addressMessage"></p:ajax>
 													<p:message id="addressMessage" for="addressInput"></p:message>

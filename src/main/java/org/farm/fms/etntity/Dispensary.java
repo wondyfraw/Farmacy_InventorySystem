@@ -18,17 +18,18 @@ import javax.persistence.TemporalType;
 
 @Entity
 @Table(name = "dispensary", schema = "myfms")
-
 public class Dispensary implements Serializable {
 
 	private static final long serialVersionUID = -6235475466960061883L;
 
 	private Integer idDispensary;
 	private Store store;
+	private Integer totalUnitPack;
 	private Integer quantityInBox; // quantity_in_box
-	private Integer quantityPerUnit; // total drug quantity
-	private Integer quantityPerTab; // quantity_per_unit
-	private Integer quantityPerPack; // quantity_per_pack
+	private Integer quantityPerUnit; // total drug quantity in tab/capsule/piece
+	private Integer quantityPerTab; // quantity_per_unit(total number of drugs inside strip or total ml inside bottle or
+									// any other packaging units)
+	private Integer quantityPerPack; // quantity_per_package(total number of strip inside the package)
 	private Date dispensaryDate;
 	private String adminName;
 
@@ -81,6 +82,11 @@ public class Dispensary implements Serializable {
 		return quantityPerPack;
 	}
 
+	@Column(name = "total_strip")
+	public Integer getTotalUnitPack() {
+		return totalUnitPack;
+	}
+
 	public void setDispensaryDate(Date dispensaryDate) {
 		this.dispensaryDate = dispensaryDate;
 	}
@@ -111,6 +117,10 @@ public class Dispensary implements Serializable {
 
 	public void setQuantityPerPack(Integer quantityPerPack) {
 		this.quantityPerPack = quantityPerPack;
+	}
+
+	public void setTotalUnitPack(Integer totalUnitPack) {
+		this.totalUnitPack = totalUnitPack;
 	}
 
 }

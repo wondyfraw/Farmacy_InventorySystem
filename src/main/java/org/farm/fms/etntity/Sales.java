@@ -11,6 +11,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -18,9 +20,8 @@ import javax.persistence.TemporalType;
 
 @Entity
 @Table(name = "sales", schema = "myfms")
-// @NamedQueries(value = {
-// @NamedQuery(name = "findListofDrugs", query = "select dis FROM Store drug,Dispensary dis WHERE drug.storeId =
-// dip.store.storeId ORDER BY drug.expireDate") })
+@NamedQueries(value = {
+		@NamedQuery(name = "findSalesHistoryOrederByDate", query = "select sale FROM Sales sale ORDER BY :date DESC") })
 public class Sales implements Serializable {
 
 	private static final long serialVersionUID = 966903096023682335L;

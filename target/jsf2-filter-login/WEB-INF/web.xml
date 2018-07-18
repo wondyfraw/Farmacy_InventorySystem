@@ -17,6 +17,11 @@
 		<param-name>javax.faces.DEFAULT_SUFFIX</param-name>
 		<param-value>.xhtml</param-value>
 	</context-param>
+   
+   <context-param>
+    <param-name>javax.faces.WEBAPP_RESOURCES_DIRECTORY</param-name>
+    <param-value>/WEB-INF/report</param-value>
+   </context-param>
 
 	<!-- Login filter -->
 	<filter>
@@ -116,14 +121,19 @@
 			<param-value>http://localhost:20000</param-value>
 		</init-param>
 	</filter>
+	
+	<context-param>
+		<param-name>primefaces.UPLOADER</param-name>
+		<param-value>auto</param-value>
+	</context-param>
 
 	<filter>
 		<filter-name>primeFacesFileUploadFilter</filter-name>
-		<filter-class>org.primefaces.webapp.filter.FileUploadFilter</filter-class>
+		<filter-class>org.farm.utils.AttachmentFileUploadFilter</filter-class>
 	</filter>
 	<filter-mapping>
 		<filter-name>primeFacesFileUploadFilter</filter-name>
-		<servlet-name>facesServlet</servlet-name>
+		<servlet-name>Faces Servlet</servlet-name>
 	</filter-mapping>
 
 </web-app>

@@ -20,6 +20,11 @@ body {
 	height:25px;
 	margin-left:60px;
 }
+.ui-confirm-button{
+	width: 100px;
+    height: 40px;
+    margin-top: 90px;
+}
 #spaceOP{
   color :#fff;	
 }
@@ -30,10 +35,20 @@ body {
 	padding-left:18px;
 }
 .ui-noborder{
-	border:#fff;
+	border:#fff;	
 }
 #header_info{
 	background-color: #fff;
+}
+
+#exp_pannel{
+	background-color: #febf34; 
+	border-color: #febf34; 
+	color: #FFFFFF; 
+	padding: 17px 15px; 
+	border-bottom: 1px solid transparent; 
+	border-top-left-radius: 3px; 
+	border-top-right-radius: 3px;
 }
 .header_color{
 	color:#fff;
@@ -44,17 +59,44 @@ body {
 	background: #B61601 !important;
 	color :#fff;margin-left:350px;
 }*/
+.margin-icon.ui-button-icon-only.ui-icon.fa.ui-icon.fa.ui-icon.fa{
+	margin-top: -7px;
+}
+
+.filter_date-label{
+	font-family: initial;
+	font-family: initial;
+	margin-left: 30px;
+	font-size: 16px;
+}
 .myButton{
 	width:190px;
 	background: #B61601 !important;
 	color :#fff;margin-left:350px;
 }
-
+.myBackButton{
+	margin-left: 150px;
+    margin-top: -26px;
+    width: 190px;
+    background: #B61601 !important;
+    color: #fff
+}
+.button-primary-1e{
+	padding: 12px 40px;
+    color: #fff;
+    background: #5F69E0;
+    border-color: #5F69E0;
+    margin-left: 30px;
+    border: 0;
+    font-family: "walkway", sans-serif;
+    font-weight: bold;
+    font-size: 18px;
+}
 .dialogButton{
 	background: #B61601 !important;
 }
 .okButton{
-	margin-top: 60px;
+	margin-top: 40px;
     margin-left: 10px;
     width: -webkit-fill-available;
 }
@@ -64,8 +106,8 @@ body {
     margin-left: 12px;
 }
 .okLabel{
-	margin-top: 100px;
-    margin-left: 120px;
+	/*margin-top: 100px;
+    margin-left: 120px;*/
     font-family: -webkit-body;   
     }
 .deleteLebel{
@@ -132,7 +174,7 @@ a.ui-button .ui-icon {
 	border-top: 0;
 	/**background: #eee;
 	background: #e78f08*/
-	background: #525252;
+	background: #4CAF50;	
 	padding: 5px;
 	border: 1px solid #ddd;
 }
@@ -265,6 +307,6 @@ a.ui-button .ui-icon {
 .navbar .navbar-right > li.current-user > a span {
   float: left;
   line-height: 18px;
-  margin-top: 1px;
+  /**margin-top: px;*/
 }
 

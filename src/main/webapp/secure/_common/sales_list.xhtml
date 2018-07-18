@@ -1,0 +1,80 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui" xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:o="http://omnifaces.org/ui">
+
+
+	<h:form id="salesList" style="margin-left: -10px;margin-top: 10px;">
+		<h:panelGroup>
+			<fieldset style="margin-left: 20px;">
+				<legend> Sales History </legend>
+				<h:panelGrid columns="1" class="form" id="drugList">
+					<p:dataTable var="drug" value="#{medicineRegistrationBean.salesList}" id="salestable" widgetVar="drugWV"
+						emptyMessage="There is no registered drug in the database"
+						style="width:100%;font-size:15px;font-family: PT Sans, sans-serif ; padding:4px;color:#515151;"
+						styleClass="customcenter,customcenter,,,,customcenter notSortable" paginator="true" rows="10"
+						paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+						rowKey="#{drug.idSales}" filteredValue="#{medicineRegistrationBean.filteredDrugs}"
+						filterEvent="#{medicineRegistrationBean.searchSalesDrugByFilterKy}">
+						<f:facet name="header">
+							<p:outputPanel>
+								<h:outputText value="Search all fields:" />
+								<p:inputText id="globalFilter" onkeyup="PF('drugWV').filter()" style="width:150px" placeholder="Enter keyword"
+									value="#{medicineRegistrationBean.filter}" />
+							</p:outputPanel>
+						</f:facet>
+						<p:column headerText="Name">
+							<p:outputLabel value="#{drug.drugName}" />
+						</p:column>
+						<p:column headerText="Brand">
+							<p:outputLabel value="#{drug.brand}" />
+						</p:column>
+						<p:column headerText="Batch Number">
+							<p:outputLabel value="#{drug.batchNumber}" />
+						</p:column>
+						<p:column headerText="Weight">
+							<p:outputLabel value="#{drug.weight}" />
+						</p:column>
+						<p:column headerText="Quantity">
+							<p:outputLabel value="#{drug.quantity}" />
+						</p:column>
+						<p:column headerText="Dose">
+							<p:outputLabel value="#{drug.dose}" />
+						</p:column>
+						<p:column headerText="Sales Date">
+							<p:outputLabel value="#{drug.registrationdate}" />
+						</p:column>
+						<p:column headerText="Unit Price">
+							<p:outputLabel value="#{drug.unitPrice}" />
+						</p:column>
+						<p:column headerText="Total Price">
+							<p:outputLabel value="#{drug.totalPrice}" />
+						</p:column>
+						<p:column headerText="Unit">
+							<p:outputLabel value="#{drug.unit}" />
+						</p:column>
+						<p:column headerText="Action" rendered="#{medicineRegistrationBean.userType eq 'Administrator'}">
+							<p:commandButton id="deleteButtonD" update="salestable" process="@this" style="width:30px; height:25px;"
+								actionListener="#{medicineRegistrationBean.setVoidSalesDrug(drug)}" icon="ui-icon-trash" title="Void"
+								onsuccess="PF('eleiminateSalesWV').show();"
+								oncomplete="$('.ui-datatable-data tr').find('span.ui-icon-close').each(function(){this.click()})">
+							</p:commandButton>
+
+						</p:column>
+
+					</p:dataTable>
+				</h:panelGrid>
+			</fieldset>
+		</h:panelGroup>
+	</h:form>
+
+	<p:dialog id="eleiminateSales" widgetVar="eleiminateSalesWV" header="Delete sales Drug" modal="true" width="400"
+		showEffect="explode">
+		<p:outputLabel value="Are you sure you want to delete this sale history?" />
+
+		<p:commandButton value="Yes" title="Delete drug sales history" style="color: #fff;margin-left: 150px;margin-top: 30px;"
+			styleClass="dialogButton" onclick="PF('eleiminateSalesWV').hide();" update=":salesList:salestable">
+		</p:commandButton>
+		<p:commandButton value="No" onclick="PF('eleiminateSalesWV').hide();" style="color: #fff;margin-top: 30px;" styleClass="dialogButton" />
+
+	</p:dialog>
+</ui:composition>

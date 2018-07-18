@@ -44,6 +44,9 @@
 								</p:ajaxStatus>
 							</div>
 						</div>
+						<ui:fragment rendered="{loginAuthenticationBean.usersFromDb}">
+						  <p:messages id="messages" globalOnly="true"></p:messages>
+						</ui:fragment>
 					</fieldset>
 				</h:form>
 			</div>

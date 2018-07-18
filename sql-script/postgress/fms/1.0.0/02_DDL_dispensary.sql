@@ -23,3 +23,7 @@ WITH (
 ALTER TABLE myfms.dispensary
   OWNER TO postgres;
 GRANT ALL ON TABLE myfms.dispensary TO postgres;
+
+///////////////////////////////////
+
+ALTER TABLE myfms.dispensary ADD COLUMN total_strip INT;

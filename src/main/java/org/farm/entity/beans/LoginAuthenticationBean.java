@@ -32,6 +32,7 @@ public class LoginAuthenticationBean {
 	private String email;
 	private String password;
 	private String username;
+	private String userType;
 	private boolean loggedIn;
 
 	public static final String REGISTER_USER = "/secure/registerUser.xhtml?faces-redirect=true";
@@ -68,9 +69,11 @@ public class LoginAuthenticationBean {
 		// Get username and password from database :)
 		if (this.email != null) {
 			usersFromDb = userEJB.searchUserByEmail(this.email);
-			if (usersFromDb != null)
-				// System.out.println("Name = " + usersFromDb.getFullName() + " Email= " + usersFromDb.getEmail());
+			if (usersFromDb != null) {
+
+				userType = usersFromDb.getUserType();
 				log.info("Name = " + usersFromDb.getFullName() + " Email= " + usersFromDb.getEmail());
+			}
 
 			// Successful login
 			if (usersFromDb.getEmail().equals(this.email)
@@ -95,9 +98,11 @@ public class LoginAuthenticationBean {
 			}
 		}
 		// Set login ERROR
-		FacesMessage msg = new FacesMessage("Login error!", "ERROR MSG");
-		msg.setSeverity(FacesMessage.SEVERITY_ERROR);
-		FacesContext.getCurrentInstance().addMessage(null, msg);
+		// FacesMessage msg = new FacesMessage("Login error!", "ERROR MSG");
+		// msg.setSeverity(FacesMessage.SEVERITY_ERROR);
+		// FacesContext.getCurrentInstance().addMessage(null, msg);
+		FacesContext.getCurrentInstance().addMessage(null,
+				new FacesMessage(FacesMessage.SEVERITY_ERROR, "Login authentication error!", "ERROR MSG"));
 
 		// To to login page
 		return navigationBean.toLogin();
@@ -177,6 +182,14 @@ public class LoginAuthenticationBean {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public String getUserType() {
+		return userType;
+	}
+
+	public void setUserType(String userType) {
+		this.userType = userType;
 	}
 
 }

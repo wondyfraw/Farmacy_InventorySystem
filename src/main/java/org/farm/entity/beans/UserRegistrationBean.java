@@ -22,6 +22,7 @@ import org.apache.commons.logging.LogFactory;
 import org.farm.exception.MyStoreException;
 import org.farm.fms.entity.ejb.UsersEJB;
 import org.farm.fms.etntity.Users;
+import org.primefaces.context.RequestContext;
 
 @ManagedBean(name = "userRegistrationBean")
 @ViewScoped
@@ -34,6 +35,7 @@ public class UserRegistrationBean {
 	private List<Users> userList;
 	private boolean showPassword;
 	private Integer userId;
+	private boolean showMessage;
 
 	@EJB
 	private UsersEJB usersEJB;
@@ -77,6 +79,29 @@ public class UserRegistrationBean {
 		}
 	}
 
+	public void registerUserNew() {
+		Date now = Calendar.getInstance().getTime();
+		if (users != null) {
+			if (users.getPassword() != null) {
+				if (users.getUsersId() != null) {
+					users.setUpdatedDate(now);
+					usersEJB.mergeEntity(users);
+					FacesContext.getCurrentInstance().addMessage(null,
+							new FacesMessage("Successfully edit user profile"));
+				} else {
+					users.setRegistrationdate(now);
+					usersEJB.register(users);
+					FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Successfully register user "));
+				}
+				showMessage = true;
+				RequestContext.getCurrentInstance().addCallbackParam("success", true);
+				log.info("Successfully register user " + "Name = " + this.users.getFullName() + " Address= "
+						+ this.users.getAddress() + "password= " + this.users.getPassword());
+
+			}
+		}
+	}
+
 	/**
 	 * Save edited user info
 	 */
@@ -107,6 +132,8 @@ public class UserRegistrationBean {
 			FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Passwords do not match!",
 					"Passwords do not match!");
 			context.addMessage(toValidate.getClientId(), message);
+			log.error("Confirm Password =" + passwordConfirm + "  do not match with the first password "
+					+ users.getPassword());
 			throw new ValidatorException(message);
 			// throw new MyStoreException("Passwords do not match!");
 		}
@@ -147,8 +174,12 @@ public class UserRegistrationBean {
 	}
 
 	public void successRegistrationMessage() {
-		FacesContext context = FacesContext.getCurrentInstance();
-		context.addMessage(null, new FacesMessage("Successful", "Successully register the user "));
+		showMessage = true;
+		FacesContext.getCurrentInstance().addMessage(null,
+				new FacesMessage("Successully register the user, you can login now!!"));
+		RequestContext.getCurrentInstance().addCallbackParam("success", true);
+		// FacesContext context = FacesContext.getCurrentInstance();
+		// context.addMessage(null, new FacesMessage("Successful", "Successully register the user "));
 
 	}
 
@@ -198,6 +229,14 @@ public class UserRegistrationBean {
 
 	public void setUserId(Integer userId) {
 		this.userId = userId;
+	}
+
+	public boolean isShowMessage() {
+		return showMessage;
+	}
+
+	public void setShowMessage(boolean showMessage) {
+		this.showMessage = showMessage;
 	}
 
 }

@@ -1,10 +1,16 @@
 package org.farm.utils;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 import java.math.BigInteger;
+import java.nio.charset.Charset;
 import java.security.MessageDigest;
 import java.util.Formatter;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import org.w3c.tidy.Tidy;
 
 public class Utils {
 	public Utils() {
@@ -79,5 +85,21 @@ public class Utils {
 		}
 
 		return true;
+	}
+
+	public static String htmltoXHTML(String html) {
+		InputStream htmlIS = new ByteArrayInputStream(html.getBytes(Charset.forName("UTF-8")));
+		ByteArrayOutputStream htmlOutput = new ByteArrayOutputStream();
+		Tidy tidy = new Tidy(); // HTML parser and pretty printer.
+		tidy.setXHTML(true); // true if tidy should output XHTML
+		tidy.setInputEncoding("UTF-8");
+		tidy.setOutputEncoding("UTF-8");
+		tidy.setQuiet(true);
+		tidy.setShowErrors(0);
+		tidy.setShowWarnings(false);
+		tidy.setPrintBodyOnly(true);
+		tidy.parse(htmlIS, htmlOutput);
+
+		return new String(htmlOutput.toByteArray(), Charset.forName("UTF-8"));
 	}
 }

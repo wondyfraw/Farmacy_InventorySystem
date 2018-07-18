@@ -131,7 +131,8 @@
 																       <f:selectItem itemLabel="Box" itemValue="Box"></f:selectItem>
 																       <f:selectItem itemLabel="Cup" itemValue="Cup"></f:selectItem>
 																       <f:selectItem itemLabel="Packed" itemValue="Packed"></f:selectItem>
-																       <p:ajax event="change" process="@this" update="packTypeMessage"></p:ajax>
+																       <p:ajax event="change" process="@this" update="packUnit"></p:ajax>
+																       <!-- <p:ajax event="itemSelect" ></p:ajax> -->
 																     </h:selectOneMenu>
 																     <p:message id="packTypeMessage" for="packType"></p:message>
 																   </p:column>
@@ -146,9 +147,10 @@
 																   
 																     <p:selectOneMenu id="packUnit" required="true" requiredMessage="Must select packaging type" style="width:270px" 
 																                        value="#{medicineRegistrationBean.unitPack}">
-																            <p:ajax  event="change"></p:ajax>           
+																            <!-- <p:ajax  event="change" process="@this" re update="quantityInStripe quantityperpackUnit" listener="#{medicineRegistrationBean.onPackUnitSelected}"> </p:ajax> -->           
+																            <p:ajax event="change" render="@this" listener="#{medicineRegistrationBean.onPackUnitSelected}" update="unit"></p:ajax>
 																            <f:selectItem itemLabel="Select pack unit" itemValue="" noSelectionOption="true"></f:selectItem>
-																            <f:selectItems value="#{medicineRegistrationBean.packUnit}"></f:selectItems>																                       
+																            <f:selectItems value="#{medicineRegistrationBean.selectDrugPackType()}"></f:selectItems>																                       
 																     </p:selectOneMenu>
 																   </p:column>
 																 </div>
@@ -162,7 +164,7 @@
 																	<p:selectOneMenu id="unit" value="#{medicineRegistrationBean.store.unit}" required="true"
 																		requiredMessage="Unit can not be null" label="Unit" style="width: 270px">
 																		<f:selectItem itemLabel="Select unit" itemValue="" noSelectionOption="true"></f:selectItem>
-																		<f:selectItems value="#{medicineRegistrationBean.units}"></f:selectItems>
+																		<f:selectItems value="#{medicineRegistrationBean.selectDrugWithPackageUnit()}"></f:selectItems>
 																		<p:ajax event="blur" update="unitMessage" />
 																	</p:selectOneMenu>
 																	<p:message for="unit" id="unitMessage" />
@@ -197,40 +199,24 @@
 																	<p:message id="quantityperMessage" for="quantityperPack" />
 																</p:column>
 															</p:row>
-														    <h:panelGroup id="inputPanel"> <!-- <h:panelGroup rendered="#{medicineRegistrationBean.store.packType eq 'Box'}"> -->
-															  <p:row styleClass="ui-noborder">
-																	<div class="form-group">
-																		<p:column styleClass="ui-noborder">
-																			<p:outputLabel value="Quantity per pack pre unit" for="quantityperpackUnit" id="stripQuantity"/>
-																		</p:column>
-																		<p:column styleClass="ui-noborder">
-																			<p:inputNumber id="quantityperpackUnit" widgetVar="quantityperpackUnitWV"
-																				value="#{medicineRegistrationBean.store.quantityperUnitperTab}" decimalPlaces="2" 
-																				 size="30" maxlength="10">
-																				<!-- <p:ajax event="blur" process="@this" update="quantityperpackUnitMessage" /> -->
-																			</p:inputNumber>
-																			<!-- <p:message for="quantityperpackUnit" id="quantityperpackUnitMessage" /> -->
-																		</p:column>
-																	</div>
-																</p:row></h:panelGroup>
-																<script>
-
-															     /*$(function() {
-															            PF('selectWV').jq.change(function() {
-															                if (PF('selectWV').isChecked()) {
-															                    PF('buttonWV').jq.show();
-															                } else {
-															                    PF('buttonWV').jq.hide();
-															                }
-															            })
-															        })
-																function changeBusinessType(){
-																	 if($('[id="#{p:component('packType')}"]').val=="Cup")
-																		 $('[id="#{p:component('inputPanel')}"]').hide();
-																	 //$('[id="#{p:component('quantityperpackUnit')}"]').hide();
-																		
-																	}*/
-																</script>														
+															<ui:fragment id="quantityInStripe"  rendered ="#{medicineRegistrationBean.showTabQuantityInStrip}">
+															<p:row styleClass="ui-noborder">
+																<p:column styleClass="ui-noborder">
+																	<p:outputLabel value="Quantity per pack pre unit" for="quantityperpackUnit" />
+																</p:column>
+																<p:column styleClass="ui-noborder">
+																	<p:inputNumber id="quantityperpackUnit" value="#{medicineRegistrationBean.store.quantityperUnitperTab}"
+																		required="true" requiredMessage="Quantity per pack can not be null" label="Quantity per pack"
+																		size="30" maxlength="10">
+																		<p:ajax event="blur" process="@this" update="quantityperpackUnitMessage" />
+																	</p:inputNumber>
+																	<p:message for="quantityperpackUnit" id="quantityperpackUnitMessage" />
+																</p:column>
+															</p:row>
+															</ui:fragment>
+															
+														   
+																													
 														</p:panelGrid>
 													</fieldset>
 												</div>
@@ -304,13 +290,19 @@
 													</div>
 												</div>
 												<p:panelGrid styleClass="ui-noborder">
-													<p:commandButton value="Submit" process="@this" update="@form" styleClass="myButton" immediate="true"
-														actionListener="#{medicineRegistrationBean.registerMedicin}"  icon="ui-icon ui-icon-check" rendered="#{not medicineRegistrationBean.showSaveButton}" onsuccess="PF('saveDialogWV').show();"/>
+													<p:commandButton value="Submit" process="@form" update="@form" styleClass="myButton" immediate="true"
+														actionListener="#{medicineRegistrationBean.registerMedicin}"  icon="ui-icon ui-icon-check" rendered="#{not medicineRegistrationBean.showSaveButton}" oncomplete="PF('successDialogWV').show();"/>
 												</p:panelGrid>
 												<p:panelGrid styleClass="ui-noborder">
 												 <p:commandButton value="Save" process="@this" update="@form" styleClass="myButton" actionListener="#{medicineRegistrationBean.saveEditDrug}" icon="ui-icon ui-icon-check"
 												                   rendered="#{medicineRegistrationBean.showSaveButton}"/>
-												</p:panelGrid>
+												</p:panelGrid>											
+												<p:button outcome="manage_drugs" value="Back to List" styleClass="myBackButton"/>
+												
+												<ui:fragment rendered="#{medicineRegistrationBean.showMessagePanel}">
+												 <p:messages id="messages" globalOnly="true" closable="true"></p:messages>
+												</ui:fragment>
+												  
 											</div>
 
 											<!-- </h:form> -->
@@ -321,6 +313,15 @@
 								</h:form>							
 							</div>						
 						</div>
+						
+						<p:dialog id="successDialog" widgetVar="successDialogWV" modal="true" header="Drug Registration"
+						          width="400" height="200" showEffect="explode"><br/>
+						    <center>
+						      <span class="fa fa-check-circle fa-5x text-success"/><br/>
+						      <p:outputLabel value="Successfully Register drugs" styleClass="okLabel" style="font-size: 20px;"/>						      
+						    </center>      
+						    <p:commandButton value="Ok" styleClass="okButton" onclick="PF('successDialogWV').hide();" title="Register Drugs"/>
+					   </p:dialog>
 					</fieldset>
 				</div>
 				
@@ -333,6 +334,20 @@
 				
 			</div>
 		</div>
+		<style>
+ tr:nth-child(odd){
+      background-color:#f2f2f2;
+}
+		 
+ button.ui-button-icon-only{
+	      padding: 4px;
+          margin-bottom: 4px;
+}
+ .ui-selectonemenu .ui-selectonemenu-trigger{
+	      width: 30px;
+          padding: 0 4px;
+ }
+		</style>
 	</ui:define>
 </ui:composition>
 </html>

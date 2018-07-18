@@ -1,0 +1,165 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:p="http://primefaces.org/ui"
+	xmlns:cc="http://java.sun.com/jsf/composite/components" template="/templates/main.xhtml">
+	  
+	  <ui:define name="content">
+	    <div id="app"> 
+	      <ui:include src="/secure/sidebar.xhtml"/>
+	      <ui:include src="/secure/admin/include/header.xhtml"/>
+	      <div class="main-content">
+	        <div class="wrap-content container">
+	         <div class="col-md-12 col-sm-12 col-lg-12">
+	          <h1>Medicine Report From</h1>
+	          <h:form>
+	            <fieldset>
+	              <legend></legend>
+	              <div class="panel panel-primary">											
+				     <div class="panel-heading" style="background-color: #003576;">
+						 <p:outputLabel styleClass="header_color">Report paramater</p:outputLabel>
+					 </div>
+					 <div class="panel-body" style="background-color: #EDEDED"><br/>
+	              <tabe>           
+	                <tr> 
+	                <div>
+	                 <td>                 
+	                   <p:outputLabel value="From Date" for="fromDateInput"/>
+	                   <p:calendar id="fromDateInput" pattern="dd/MM/yyyy" showOn="button" style="margin-left:30px" value="#{medicineRegistrationBean.searchParmes.fromDate}">
+	                    <f:convertDateTime type="date" pattern="#{ui['shared.dateFormat']}"></f:convertDateTime>
+	                   </p:calendar>
+	                   <p:message for="fromDateInput"/>
+	                 </td>
+	                 </div>
+	                 <div style="    margin-left: 400px;margin-top: -40px;">
+	                 <td>
+	                   <p:outputLabel value="To Date" for="toDateInput"/>
+	                   <p:calendar id="toDateInput" pattern="dd/MM/yyyy" showOn="button" style="margin-left:40px" value="#{medicineRegistrationBean.searchParmes.toDate}">
+	                      <f:convertDateTime type="date" pattern="#{ui['shared.dateFormat']}"></f:convertDateTime>
+	                   </p:calendar>
+	                   <p:message for="toDateInput"/>
+	                 </td>
+	                 </div>	                
+	                 <td>	
+	                  <div style="margin-top: 10px;">                 
+	                  <p:outputLabel value ="Category"/>
+	                   <p:selectOneMenu id="category" value="#{medicineRegistrationBean.searchParmes.expireDate}" style="width: 230px; margin-left: 40px;    padding-bottom: 4px;">
+	                      <f:selectItem itemLabel="Store" itemValue="Store"></f:selectItem>
+	                      <f:selectItem itemLabel="Dispensary" itemValue="Dispensary"></f:selectItem> 
+	                   </p:selectOneMenu>
+	                    </div>
+	                 </td>	                
+	                  <div style="    margin-left: 400px;margin-top: -35px;">
+	                 <td>
+	                   <p:outputLabel value="ExpireDate" for="expireDateInput"/>
+	                   <p:calendar id="expireDateInput" pattern="dd/MM/yyyy" showOn="button" style="margin-left:20px" >
+	                      <f:convertDateTime type="date" pattern="#{ui['shared.dateFormat']}"></f:convertDateTime>
+	                   </p:calendar>
+	                   <p:message for="expireDateInput"/>
+	                 </td>
+	                 </div>
+	               </tr>               
+	                 <tr>
+	                   <div style="margin-top: 6px;">
+	                 <td>	                 
+	                  <p:outputLabel value="Drug Name" for="drugNameInput" />
+	                  <p:inputText id="drugNameInput" style="margin-left:28px" value="#{medicineRegistrationBean.searchParmes.drugName}"></p:inputText>
+	                 </td>
+	                 </div>	      	              
+	                </tr><br/>
+	              </tabe><br/>
+	              <p:commandButton value="Search" ajax="false" styleClass="myButton" style="margin-top: 20px;margin-left: 200px;" actionListener="#{medicineRegistrationBean.searchSalesByFilterCriateria}"
+	                               update="@form" process="@form">
+					
+				</p:commandButton>
+				
+				<!--  Display list of sales within the given date range -->
+				<ui:fragment>
+				<p:dataTable id="saleTable" value="#{medicineRegistrationBean.searchSalesList}" var="salesDrug" emptyMessage="There is sales within the given date range" 
+				             style="width:100%;font-size:15px;font-family: PT Sans, sans-serif ; padding:4px;color:#515151;"
+							 styleClass="customcenter,customcenter,,,,customcenter notSortable" paginator="true" rows="10" 
+							 paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}">
+							 
+				   <p:column headerText="Drug Name">
+				     <p:outputLabel value="#{salesDrug.drugName}"/>
+				   </p:column>
+				   <p:column headerText="Quantity">
+				     <p:outputLabel value="#{salesDrug.quantity}"/>
+				   </p:column>
+				   <p:column headerText="Weight">
+				     <p:outputLabel value="#{salesDrug.weight}"/>
+				   </p:column>
+				   <p:column headerText="Brand">
+				     <p:outputLabel value="#{salesDrug.brand}"/>
+				   </p:column>
+				   <p:column headerText="Batch Number">
+				     <p:outputLabel value="#{salesDrug.batchNumber}"/>
+				   </p:column>
+				   <p:column headerText="Dose">
+				     <p:outputLabel value="#{salesDrug.dose}"/>
+				   </p:column>
+				   <p:column headerText="Unit">
+				     <p:outputLabel value="#{salesDrug.unit}"/>
+				   </p:column>
+				   <p:column headerText="Reg Date">
+				     <p:outputLabel value="#{salesDrug.registrationdate}"/>
+				   </p:column>
+				   <p:column headerText="UPrice">
+				     <p:outputLabel value="#{salesDrug.unitPrice}"/>
+				   </p:column>
+				   <p:column headerText="Total Price">
+				    <p:outputLabel value="#{salesDrug.totalPrice}"/>
+				   </p:column>
+				</p:dataTable>
+				</ui:fragment>
+				
+				<!-- <p:commandButton value="Generate Report" ajax="false" styleClass="myButton" style="margin-top: 20px;margin-left: 200px;" 
+	                               update="@form" process="@form" rendered="#{medicineRegistrationBean.showDispensaryTable}"/> -->
+	                <p:button outcome="../../_common/print_sales.xhtml" value="Generate Report" styleClass="myButton" style="margin-top: 20px;margin-left: 200px;" rendered="#{medicineRegistrationBean.showDispensaryTable}"/> 
+								
+				</div>
+				</div>	              
+	            </fieldset>
+	            </h:form>
+	         </div>
+	        </div>
+	      </div>
+	    </div>
+	    
+	    <style>
+	      button.ui-button-icon-only{
+	         padding: 4px;
+             margin-bottom: 4px;
+	      }
+	      .ui-datatable table {
+    font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.ui-datatable table td, .ui-datatable table th {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+.ui-selectonemenu .ui-selectonemenu-trigger{
+       padding: 2px;
+    width: 30px;
+}
+.ui-selectonemenu .ui-selectonemenu-trigger .ui-icon{
+     margin-left: 2px;
+}
+
+.ui-datatable table tr:nth-child(even){background-color: #f2f2f2;}
+
+.ui-datatable table tr:hover {background-color: #ddd;}
+
+.ui-datatable table th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: #003576;
+    color: white;
+}
+	    </style>
+	  </ui:define>
+	</ui:composition>

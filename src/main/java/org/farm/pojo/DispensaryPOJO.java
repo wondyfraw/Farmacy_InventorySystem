@@ -12,19 +12,39 @@ public class DispensaryPOJO {
 
 	}
 
-	public Dispensary mapDispensaryPOJO(Store store, Integer quantity, String email) {
+	public Dispensary mapDispensaryPOJO(Store store, String email) {
 		Dispensary dispensary = new Dispensary();
 		Date now = Calendar.getInstance().getTime();
 
-		if (store != null && quantity != null && email != null) {
+		if (store != null && email != null) {
 			dispensary.setAdminName(email);
 			dispensary.setDispensaryDate(now);
-			dispensary.setQuantityInBox(quantity);
+			dispensary.setQuantityInBox(store.getQuantityInBox());
 			dispensary.setQuantityPerPack(store.getQuantityperBoxperUnit());
 			dispensary.setStore(store);
 			dispensary.setQuantityPerTab(store.getQuantityperUnitperTab());
-			dispensary.setQuantityPerUnit(
-					store.getQuantityInBox() * store.getQuantityperBoxperUnit() * store.getQuantityperUnitperTab());
+			if (store.getPackType().equals("Box")) {
+				if (store.getPackUnit().equals("Strip")) {
+					dispensary.setQuantityPerUnit(store.getQuantityInBox() * store.getQuantityperBoxperUnit()
+							* store.getQuantityperUnitperTab());
+					dispensary.setTotalUnitPack(store.getQuantityInBox() * store.getQuantityperBoxperUnit()); // total
+																												// number
+																												// of
+																												// strip
+																												// ready
+																												// for
+																												// sale(dispensary)
+				} else {
+					dispensary.setQuantityPerUnit(store.getQuantityInBox() * store.getQuantityperBoxperUnit());
+				}
+			}
+			if (store.getPackType().equals("Cup")) {
+				dispensary.setQuantityPerUnit(store.getQuantityInBox() * store.getQuantityperBoxperUnit());
+			}
+
+			if (store.getPackType().equals("Packed")) {
+				dispensary.setQuantityPerUnit(store.getQuantityInBox() * store.getQuantityperBoxperUnit());
+			}
 		}
 		return dispensary;
 	}

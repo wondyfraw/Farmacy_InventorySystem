@@ -1,0 +1,228 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui" xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:o="http://omnifaces.org/ui">
+
+                      <h:form id="editForm" style="margin-left: -10px;margin-top: 10px;">
+						<h:panelGrid columns="2" class="form" id="drugList">
+							<p:dataTable var="drug" value="#{medicineRegistrationBean.mapperPOJOList}" id="dispensarytable" widgetVar="drugWV"
+								emptyMessage="There is no registered drug in the database"
+								style="width:100%;font-size:15px;font-family: PT Sans, sans-serif ; padding:4px;color:#515151;"
+								styleClass="customcenter,customcenter,,,,customcenter notSortable" paginator="true" rows="10"
+								paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+								rowKey="#{drug.storeId}" filteredValue="#{medicineRegistrationBean.filteredDrugs}">
+								<f:facet name="header">
+									<p:outputPanel>
+										<h:outputText value="Search all fields:" />
+										<p:inputText id="globalFilter" onkeyup="PF('drugWV').filter()" style="width:150px"
+											placeholder="Enter keyword" />
+									</p:outputPanel>
+								</f:facet>
+								<!-- 
+								  <p:inputText id="searchString" title="searchString" value="#{findDoctorBean.searchString}" >
+                                      <p:ajax event="keyup" listener="#{findDoctorBean.searchForDoctorsByName}" process="@this" update=":resultGroup"></p:ajax>
+                                   </p:inputText>  
+								 -->
+								<f:facet name="header">
+                                   Drugs List
+                                </f:facet>
+								<p:column headerText="Name">
+									<p:outputLabel value="#{drug.drugName}" />
+								</p:column>
+								<p:column headerText="Brand">
+									<p:outputLabel value="#{drug.brand}" />
+								</p:column>
+								<p:column headerText="Batch Number">
+									<p:outputLabel value="#{drug.bathcNumber}" />
+								</p:column>
+								<p:column headerText="Weight">
+									<p:outputLabel value="#{drug.weight}" />
+								</p:column>
+								<p:column headerText="Quantity">
+									<p:outputLabel value="#{drug.quantityInBox}" />
+								</p:column>
+								<p:column headerText="Quantity inside Pack">
+									<p:outputLabel value="#{drug.quantityPerPack}" />
+								</p:column>
+								<p:column headerText="Quantity in Strip">
+									<p:outputLabel value="#{drug.quantityPerUnitPack}" />
+								</p:column>
+								<p:column headerText="Total Quantity">
+									<p:outputLabel value="#{drug.quantityPerUnit}" />
+								</p:column>
+								<p:column headerText="Manufactury Date">
+									<p:outputLabel value="#{drug.manufacturingDate}" />
+								</p:column>
+								<p:column headerText="Expire Date">
+									<p:outputLabel value="#{drug.expireDate}" />
+								</p:column>
+								<p:column headerText="Sales Price">
+									<p:outputLabel value="#{drug.salesPrice}" />
+								</p:column>
+								<p:column headerText="Pack Unit">
+									<p:outputLabel value="#{drug.packUnit}" />
+								</p:column>
+								<p:column headerText="Unit">
+									<p:outputLabel value="#{drug.unit}" />
+								</p:column>
+
+								<p:column headerText="Send To">
+									<p:commandButton value="Add" icon="ui-icon ui-icon-plus"
+										actionListener="#{medicineRegistrationBean.setSalesPOJO(drug)}" title="Add" process="@form"
+										update="dispensarytable" onsuccess="PF('salesDialogWV').show();" style="width:60px" />
+								</p:column>
+								
+							</p:dataTable>
+						</h:panelGrid>  <br/><br/>
+
+						<!-- Dispensary list -->
+						<h:panelGroup rendered="#{medicineRegistrationBean.showDispensaryTable}">
+						<fieldset>
+						 <legend>
+						    Sales Session cart
+						 </legend>
+						<p:panelGrid  id="sessionDrugList" columns="1">
+							<p:dataTable var="drugDis" value="#{medicineRegistrationBean.session_drugList}" id="salestable"
+								emptyMessage="There is no selected drug in the session"
+								style="width:90%;font-size:15px;font-family: PT Sans, sans-serif ; padding:4px;color:#515151;"
+								styleClass="customcenter,customcenter,,,,customcenter notSortable" paginator="true" rows="10"
+								paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+								rowKey="#{drug.storeId}">
+								<f:facet name="header">
+                                 Sales Cart List 
+                               </f:facet>
+								<p:column headerText="Name">
+									<p:outputLabel value="#{drugDis.drugName}" />
+								</p:column>
+								<p:column headerText="Brand">
+									<p:outputLabel value="#{drugDis.brand}" />
+								</p:column>
+								<p:column headerText="Batch Number">
+									<p:outputLabel value="#{drugDis.bathcNumber}" />
+								</p:column>
+								<p:column headerText="Weight">
+									<p:outputLabel value="#{drugDis.weight}" />
+								</p:column>
+								<p:column headerText="Quantity">
+									<p:outputLabel value="#{drugDis.quantityInBox}" />
+								</p:column>
+								<p:column headerText="Quantity in Strip">
+									<p:outputLabel value="#{drugDis.quantityPerUnitPack}" />
+								</p:column>
+								<!-- <p:column headerText="Quantity inside Pack">
+									<p:outputLabel value="#{drugDis.quantityperBoxperUnit}" />
+								</p:column>-->
+								<p:column headerText="Dose">
+									<p:outputLabel value="#{drugDis.dose}" />
+								</p:column>
+								<p:column headerText="Manufactury Date">
+									<p:outputLabel value="#{drugDis.manufacturingDate}" />
+								</p:column>
+								<p:column headerText="Expire Date">
+									<p:outputLabel value="#{drugDis.expireDate}" />
+								</p:column>
+								<p:column headerText="Sales Price">
+									<p:outputLabel value="#{drugDis.salesPrice}" />
+								</p:column>
+								<p:column headerText="Pack Type">
+									<p:outputLabel value="#{drugDis.packType}" />
+								</p:column>
+								<p:column headerText="Action">
+									<p:commandButton id="deleteButtonD" update="salestable" process="@this" style="width:30px; height:25px;"
+										actionListener="#{medicineRegistrationBean.setSessionCart(drugDis)}" icon="ui-icon-trash" title="Delete"
+										onsuccess="PF('eleiminateSalesCartWV').show();"
+										oncomplete="$('.ui-datatable-data tr').find('span.ui-icon-close').each(function(){this.click()})">
+										<!-- <p:confirm header="Attension!" message="Are you sure you want to delete the drug?" icon="ui-icon-alert"/>  
+                       <f:param name="id" value="#{drug.storeId}"></f:param>          -->
+									</p:commandButton>
+
+								</p:column>
+							</p:dataTable>
+
+							<!-- Save session cart to dispensary -->
+							<center>
+							<p:commandButton value="Save" process="@this" update="@form"
+								actionListener="#{medicineRegistrationBean.saveSalesDrug}"
+								 styleClass="myButton" style="color:#fff"
+								icon="ui-icon ui-icon-check" onsuccess="PF('saveDialogWV').show();">
+							  <!-- <f:param name="idDrug" value="#{drugDis.dispensaryId}"/>	 -->
+                           </p:commandButton>
+                         </center>
+						</p:panelGrid>
+						</fieldset>
+						</h:panelGroup>
+					</h:form>
+                     <!-- <script>
+                        jQuery(document).ready(function() {
+                        jQuery('input[id*="globalFilter"]').val();
+                       PF('drugWV').filter()
+                       });
+                    </script> -->
+					<p:dialog id="eliminaSedeDialog" widgetVar="eliminaSedeDialogWV" header="Delete Drug" modal="true" width="400"
+						showEffect="explode">
+						<p>Are you sure you want to delete this drug?</p>
+						<div class="text-center">
+							<p:commandButton value="Conferma deletion" title="Delete Drug"
+								actionListener="#{salesRegistrationBean.deleteDrugInfo}" update=":editForm:dispensarytable" styleClass="margin-1em"
+								onclick="PF('eliminaSedeDialogWV').hide();">
+							</p:commandButton>
+							<p:commandButton value="No" title="No" onclick="PF('eliminaSedeDialogWV').hide();" />
+						</div>
+					</p:dialog>
+
+					<p:dialog id="eleiminateSalesCart" widgetVar="eleiminateSalesCartWV" header="Delete Dispensary Cart"
+						modal="true" width="500" height="300" showEffect="explode">
+						<p:outputLabel value="!Delete dispensary cart from the session" styleClass="deleteLebel" style="font-size: 24px;" />
+						<span class="fa fa-exclamation-circle fa-5x text-danger" style="margin-left: 190px;" />
+						<div class="text-center">
+							<p:commandButton value="Conferma deletion" title="Delete Drug"
+								actionListener="#{medicineRegistrationBean.deleteFromSalesSessionCart}"  update=":editForm " styleClass="margin-1eB"
+								onclick="PF('eleiminateSalesCartWV').hide();">
+							</p:commandButton>
+							<p:commandButton value="No" title="No" onclick="PF('eleiminateSalesCartWV').hide();"
+								style="margin-top: 50px;" />
+						</div>
+					</p:dialog>
+
+					<p:dialog id="saveDialog" widgetVar="saveDialogWV" header="Send drug to dispensary" modal="true" width="500"
+						height="300" showEffect="explode">
+						<p:outputLabel value="Successfully Save drugs" styleClass="okLabel" style="font-size: 24px;" />
+						<br />
+						<span class="fa fa-check-circle fa-5x text-success" style="margin-left: 190px;" />
+						<p:commandButton value="Ok" title="send drug" update=":editForm:salestable" styleClass="okButton"
+							onclick="PF('saveDialogWV').hide();" />
+						<!-- <p:commandButton value="No" title="No" onclick="PF('saveDialogWV').hide();" styleClass="margin-1em"/>  -->
+					</p:dialog>
+
+					<p:dialog id="salesDialog" widgetVar="salesDialogWV" header="Add to Dispensary" modal="true" width="500"
+						showEffect="explode">
+						<h:form id="salesDialogForm">
+							<p>Confirm drug Add to sales</p>
+							<p:outputLabel value="Quantity" for="quantityInput" />
+							<p:inputText id="quantityInput" value="#{medicineRegistrationBean.salesQuantity}" required="true"
+								requiredMessage="Quantity can not be null" styleClass="margin-f1">
+								<o:validator validatorId="javax.faces.RegularExpression" pattern="#{validation['pattern.numeric']}"
+					                                          message="#{validation['message.numberic']}"></o:validator>
+								<p:ajax event="blur" update="quantityInputMessage" />
+							</p:inputText>
+							<p:message for="quantityInput" id="quantityInputMessage" />
+							<br />
+							<p:outputLabel value="Dose" for="dose" />
+							<p:inputText id="dose" value="#{medicineRegistrationBean.dose}" required="true"
+								requiredMessage="Dose can not be null" styleClass="margin-d1">
+							   <o:validator validatorId="javax.faces.RegularExpression" pattern="#{validation['pattern.numeric']}"
+					                                          message="#{validation['message.numberic']}"></o:validator>	
+								<p:ajax event="blur" update="doseMessage" />								
+							</p:inputText>
+							<p:message id="doseMessage" for="dose" />
+							<br/>
+							<br/>
+							<br/>
+
+							<p:commandButton value="Confirm" title="Add to Sales Session cart"
+								actionListener="#{medicineRegistrationBean.addToSalesSession}" process="@form" update="@form :editForm"
+								onclick="PF('salesDialogWV').hide();" style="color: #fff;margin-left: 160px;" styleClass="dialogButton" />
+							<p:commandButton value="Cancel" title="Cancel" onclick="PF('salesDialogWV').hide();"
+								styleClass="dialogButton" style="color: #fff" />
+						</h:form>
+					</p:dialog>
+					
+					</ui:composition>

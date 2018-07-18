@@ -10,17 +10,18 @@
 			<div class="app-content">
 				<ui:include src="/secure/admin/include/header.xhtml" />
 				<div class="main-content">
+				<h1 style="background-color:#ddd">Store Found Drug List</h1>
 					<h:form id="editForm">
 						<h:panelGrid columns="2" class="form">
 							<p:dataTable var="drug" value="#{medicineRegistrationBean.drugList}" id="storetable"
-								emptyMessage="There is no registered drug in the database"
+								emptyMessage="There is no registered drug in the database" 
 								style="width:100%;font-size:15px;font-family: PT Sans, sans-serif ; padding:4px;color:#515151;"
-								styleClass="customcenter,customcenter,,,,customcenter notSortable" paginator="true" rows="10"
+								 paginator="true" rows="10" rowsPerPageTemplate="5,10,15" selectionMode="single"
 								paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
 								rowKey="#{drug.storeId}">
-								<f:facet name="header">
+								<!-- <f:facet name="header">
                    Drugs List
-                </f:facet>
+                </f:facet> -->
 								<p:column headerText="Name">
 									<p:outputLabel value="#{drug.drugName}" />
 								</p:column>
@@ -171,7 +172,7 @@
 					</p:dialog>
 					
 					<p:dialog id="eleiminateDispensaryCart" widgetVar="eleiminateDispensaryCartWV" header="Delete Dispensary Cart" modal="true" width="500" height="300" showEffect="explode">
-						<p:outputLabel value="!Delete dispensary cart from the session" styleClass="deleteLebel" style="font-size: 24px;"/>
+						<p:outputLabel value="Are you sure want to delete from the session?" styleClass="deleteLebel" style="font-size: 20px;"/>
 						<span class="fa fa-exclamation-circle fa-5x text-danger" style="margin-left: 190px;"/>
 						<div class="text-center">
 							<p:commandButton value="Conferma deletion" title="Delete Drug"
@@ -211,5 +212,36 @@
 				</div>
 			</div>
 		</dir>
+		<style>
+.ui-datatable table {
+    font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.ui-datatable table td, .ui-datatable table th {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+.ui-datatable table tr:nth-child(even){background-color: #f2f2f2;}
+
+.ui-datatable table tr:hover {background-color: #ddd;}
+
+.ui-datatable table th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: #4CAF50;
+    color: white;
+}
+select{
+    padding-bottom: 0;
+    padding-top: 0;
+    -webkit-appearance: menulist;
+    box-sizing: border-box;
+    
+}
+</style> 
 	</ui:define>
 </ui:composition>

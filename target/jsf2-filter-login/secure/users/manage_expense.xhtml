@@ -1,9 +1,59 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:h="http://java.sun.com/jsf/html">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui" xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:o="http://omnifaces.org/ui" template="/templates/main.xhtml">
+	<link rel="stylesheet" href="../resource/common/assets/css/themes/theme-1.css" />
+	<link rel="stylesheet" href="../../resource/common/vendor/bootstrap/css/bootstrap.css" />
+	<script src="../../resource/common/vendor/bootstrap/js/bootstrap.min.js" />
 
-	<ui:composition template="">
-	</ui:composition>
-</html>
+	<ui:define name="content">
+		<div id="app">
+			<ui:include src="/secure/users/sidebar.xhtml" />
+			<div class="app-content">
+				<ui:include src="/secure/admin/include/header.xhtml" />
+				<div class="main-content">
+					<div class="row" style="margin-left: 0px">
+						<div class="col-12">
+							<div class="col-lg-6 col-sm-6 col-md-6">
+								<div class="mini-data-progress"
+									style="background: #fff; padding: 15px 20px; position: relative; border-radius: 3px; box-shadow: 0 1px 1px rgba(0, 0, 0, .05); margin-bottom: 25px; margin-top: 20px;">
+									<h3 style="font-family: walkway, sans-serif; font-weight: normal;">Total Expense</h3>
+									<br /> <i class="fa fa-money text-info"
+										style="position: absolute; top: 10px; right: 10px; font-size: 60px; color: #00C9E6;"></i>
+									<h2>
+										€ <span class="num-animater" data-delay="3000">#{expenseBean.totalExpense}</span>
+									</h2>
+									<div class="progress progress-xxs mb-0 mt-md">
+										<div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="100" aria-valuemin="0"
+											aria-valuemax="100" style="width: 100%">
+											<span class="sr-only">30% Complete</span>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="panel panel-warning" style="border: 1px solid #eee; margin-top: 20px;">
+									<div class="panel-heading"  id="exp_pannel"
+										>
+										<h1 style="color: #fff">Get in touch!</h1>
+									</div>
+									<div class="panel-body">
+
+										<div class="jumbotron p-md">
+											<p
+												style="margin-bottom: 15px; font-size: 21px; font-weight: 200; padding: 12px 40px; font-family: walkway, sans-serif; font-weight: normal;">
+												Click the button to view Expense Details!</p>
+
+											<p:button outcome="expense_details.xhtml" value="View" styleClass="button-primary-1e" />
+
+										</div>
+
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</ui:define>
+</ui:composition>

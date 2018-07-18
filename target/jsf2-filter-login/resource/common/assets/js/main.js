@@ -467,7 +467,7 @@ var Main = function() {
 			navbarHandler();
 			searchHandler();
 			tooltipHandler();
-			popoverHandler();
+			//popoverHandler();
 			perfectScrollbarHandler();
 			switcheryHandler();
 			resizeHandler();

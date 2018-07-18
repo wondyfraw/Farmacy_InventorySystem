@@ -8,6 +8,8 @@ import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.view.ViewScoped;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.farm.fms.entity.ejb.DispensaryEJB;
 import org.farm.fms.entity.ejb.SalesEJB;
 import org.farm.fms.entity.ejb.StoreEJB;
@@ -20,10 +22,13 @@ import org.farm.pojo.MapperPOJO;
 @ViewScoped
 public class SalesRegistrationBean extends AbstructSessionBean {
 
+	Log log = LogFactory.getLog(SalesRegistrationBean.class);
+
 	private List<Store> drugList;
 	private List<MapperPOJO> session_drugList;
 	private List<Dispensary> dispensaryList;
 	private List<MapperPOJO> mapperPOJOList;
+	private List<MapperPOJO> filteredDrugs;
 	private boolean showDispensaryTable;
 	private MapperPOJO dispensaryDrug;
 	private MapperPOJO sessionCart;
@@ -50,6 +55,7 @@ public class SalesRegistrationBean extends AbstructSessionBean {
 		dispensaryList = new ArrayList<Dispensary>();
 		mapperPOJOList = new ArrayList<MapperPOJO>();
 		mapper = new Mapper();
+		// dispensaryDrug = new MapperPOJO();
 
 		dispensaryList = dispensaryEJB.findAll();
 		for (int i = 0; i < dispensaryList.size(); i++) {
@@ -63,6 +69,8 @@ public class SalesRegistrationBean extends AbstructSessionBean {
 				mapperPOJO = mapper.mapToSales(dispensary, store);
 				if (mapperPOJO != null)
 					mapperPOJOList.add(mapperPOJO);
+				else
+					log.error("[--Retrun value of MapperPOJO Object in mapToSales function is null--]");
 			}
 		}
 	}
@@ -98,12 +106,14 @@ public class SalesRegistrationBean extends AbstructSessionBean {
 					}
 				}
 
-				if (session_drugList == null || found == false) {
+				if (session_drugList.size() <= 0 || found == false) {
 					List<MapperPOJO> newMapperPOJOList = new ArrayList<MapperPOJO>();
 					MapperPOJO mapperPOJO = new MapperPOJO();
-					newMapperPOJOList = mapper.mapdata(mapperPOJO, dispensaryDrug, quantity, dose, newMapperPOJOList);
-					mapperPOJOList = newMapperPOJOList;
+					newMapperPOJOList = mapper.mapdata(mapperPOJO, dispensaryDrug, quantity, dose);
+					if (newMapperPOJOList != null)
+						session_drugList = newMapperPOJOList;
 				}
+				showDispensaryTable = true;
 			}
 		}
 	}
@@ -216,6 +226,14 @@ public class SalesRegistrationBean extends AbstructSessionBean {
 
 	public void setMapper(Mapper mapper) {
 		this.mapper = mapper;
+	}
+
+	public List<MapperPOJO> getFilteredDrugs() {
+		return filteredDrugs;
+	}
+
+	public void setFilteredDrugs(List<MapperPOJO> filteredDrugs) {
+		this.filteredDrugs = filteredDrugs;
 	}
 
 }
