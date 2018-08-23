@@ -15,7 +15,7 @@
 						<h:panelGrid columns="2" class="form">
 							<p:dataTable var="drug" value="#{medicineRegistrationBean.drugList}" id="storetable"
 								emptyMessage="There is no registered drug in the database" 
-								style="width:100%;font-size:15px;font-family: PT Sans, sans-serif ; padding:4px;color:#515151;"
+								style="width:100%;font-size:13px;font-family: PT Sans, sans-serif ; padding:4px;color:#515151;"
 								 paginator="true" rows="10" rowsPerPageTemplate="5,10,15" selectionMode="single"
 								paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
 								rowKey="#{drug.storeId}">
@@ -40,7 +40,7 @@
 								<p:column headerText="Quantity inside Box">
 									<p:outputLabel value="#{drug.quantityperBoxperUnit}" />
 								</p:column>
-								<p:column headerText="Quantity per Unit">
+								<p:column headerText="Quantity per UnitP">
 									<p:outputLabel value="#{drug.quantityperUnitperTab}" />
 								</p:column>
 								<p:column headerText="Registration Date">
@@ -96,7 +96,7 @@
 						<p:panelGrid columns="2">
 							<p:dataTable var="drugDis" value="#{medicineRegistrationBean.dispensary_drugList}" id="dispensarytable"
 								emptyMessage="There is no selected drug in the session"
-								style="width:90%;font-size:15px;font-family: PT Sans, sans-serif ; padding:4px;color:#515151;"
+								style="width:90%;font-size:13px;font-family: PT Sans, sans-serif ; padding:4px;color:#515151;"
 								styleClass="customcenter,customcenter,,,,customcenter notSortable" paginator="true" rows="10"
 								paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
 								rowKey="#{drug.storeId}" rendered="#{medicineRegistrationBean.showDispensaryTable}">
@@ -121,7 +121,7 @@
 								<p:column headerText="Quantity inside Pack">
 									<p:outputLabel value="#{drugDis.quantityperBoxperUnit}" />
 								</p:column>
-								<p:column headerText="Quantity in Strip">
+								<p:column headerText="Quantity in Unit_Pack">
 									<p:outputLabel value="#{drugDis.quantityperUnitperTab}" />
 								</p:column>
 								<p:column headerText="Registration Date">
@@ -160,7 +160,7 @@
 						</p:panelGrid>
 					</h:form>
 
-					<p:dialog id="eliminaSedeDialog" widgetVar="eliminaSedeDialogWV" header="Delete Drug" modal="true" width="400" showEffect="explode">
+					<p:dialog id="eliminaSedeDialog" widgetVar="eliminaSedeDialogWV" header="Delete Drug" modal="true" width="50%" showEffect="explode" responsive="true">
 						<p>Are you sure you want to delete this drug?</p>
 						<div class="text-center">
 							<p:commandButton value="Conferma deletion" title="Delete Drug"
@@ -171,7 +171,8 @@
 						</div>
 					</p:dialog>
 					
-					<p:dialog id="eleiminateDispensaryCart" widgetVar="eleiminateDispensaryCartWV" header="Delete Dispensary Cart" modal="true" width="500" height="300" showEffect="explode">
+					<p:dialog id="eleiminateDispensaryCart" widgetVar="eleiminateDispensaryCartWV" header="Delete Dispensary Cart" modal="true" width="50%" height="300" 
+					        responsive="true" showEffect="explode">
 						<p:outputLabel value="Are you sure want to delete from the session?" styleClass="deleteLebel" style="font-size: 20px;"/>
 						<span class="fa fa-exclamation-circle fa-5x text-danger" style="margin-left: 190px;"/>
 						<div class="text-center">
@@ -183,7 +184,8 @@
 						</div>
 					</p:dialog>
 									
-					<p:dialog id="saveDialog" widgetVar="saveDialogWV" header="Send drug to dispensary" modal="true" width="500" height="300" top= "200.5px" left= "220.5px" showEffect="explode">			
+					<p:dialog id="saveDialog" widgetVar="saveDialogWV" header="Send drug to dispensary" modal="true" width="50%" height="300" top= "200.5px" left= "220.5px" 
+					           responsive="true" showEffect="explode">			
 					  <span class="fa fa-check-circle fa-5x text-success" style="margin-left: 190px;"/>
 					  <p:outputLabel value="Successfully Save drugs" styleClass="okLabel" style="font-size: 24px;padding-top: 20px;padding-left: 30px;"/><br/> 					  
 					  <p:commandButton value="Ok" title="send drug"  update=":editForm:dispensarytable" 
@@ -191,7 +193,8 @@
 					   <!-- <p:commandButton value="No" title="No" onclick="PF('saveDialogWV').hide();" styleClass="margin-1em"/>  -->               
 					</p:dialog>
 
-					<p:dialog id="dispensaryDialog" widgetVar="dispensaryDialogWV" header="Add to Dispensary" modal="true" width="500" showEffect="explode">
+					<p:dialog id="dispensaryDialog" widgetVar="dispensaryDialogWV" header="Add to Dispensary" modal="true" width="50%" showEffect="explode" 
+					           responsive="true">
 						<h:form id="dispensaryDialogForm">
 							<p>Confirm drug Add to dispensary</p>
 							<p:outputLabel value="Quantity" for="quantityInput" />

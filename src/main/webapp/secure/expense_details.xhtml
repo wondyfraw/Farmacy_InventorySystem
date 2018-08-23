@@ -1,0 +1,25 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui" xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:o="http://omnifaces.org/ui" template="/templates/main.xhtml">
+	<link rel="stylesheet" href="../resource/common/assets/css/themes/theme-1.css" />
+	<link rel="stylesheet" href="../../resource/common/vendor/bootstrap/css/bootstrap.css" />
+	<script src="../../resource/common/vendor/bootstrap/js/bootstrap.min.js" />
+
+	<ui:define name="content">
+		<div id="app">
+			<ui:include src="/secure/sidebar.xhtml" />
+			<div class="app-content">
+				<ui:include src="/secure/admin/include/header.xhtml" />
+				<div class="main-content">
+				  <ui:include src="/secure/_common/_expense_details.xhtml" />
+				</div>
+			</div>
+		</div>
+	</ui:define>
+	<style>
+		.ui-widget-header{
+		    background :#4CAF50; 
+		 }
+		   
+		</style>
+</ui:composition>

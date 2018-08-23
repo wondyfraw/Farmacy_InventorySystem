@@ -8,7 +8,7 @@
 			<ui:include src="/secure/admin/include/header.xhtml" />
 			<div class="main-content">
 				<div class="wrap-content container" id="container">
-					<div class="col-md-8 col-sm-12 col-lg-8">
+					<div class="col-md-10 col-sm-12 col-lg-10">
 						<fieldset>
 							<div class="panel panel-primary">
 								<div class="panel-heading" style="background-color: #003576;">
@@ -99,7 +99,8 @@
 											    </ui:fragment>             
 								    </h:form>
 								    
-								    <p:dialog id="registerUser" widgetVar="registerUserWV" header="Register User" modal="true" width="400" height="200" showEffect="explode">
+								    <p:dialog id="registerUser" widgetVar="registerUserWV" header="Register User" modal="true" width="50%" height="200" 
+								           responsive="true" showEffect="explode">
 								      <br/><p:outputLabel value="Please Confirm user registration!!"  style="font-size: 18px;"/><br/>
 								      <center>
 								      <p:commandButton value="Confirm" styleClass="ui-confirm-button" icon="ui-icon-check" oncomplete="onCompletRegister(args)"
@@ -108,7 +109,8 @@
 								      </center>            
 								    </p:dialog>
 								    
-								    <p:dialog id="saveDialog" widgetVar="saveDialogWV" header="Register User" modal="true" width="400" height="200" showEffect="explode"><br/>
+								    <p:dialog id="saveDialog" widgetVar="saveDialogWV" header="Register User" modal="true" width="50%" height="200" 
+								        responsive="true" showEffect="explode"><br/>
 								    <center>
 								    <span class="fa fa-check-circle fa-5x text-success"/><br/>	
 									    <p:outputLabel value="Successfully Save user" styleClass="okLabel" style="font-size: 20px;"/>
@@ -131,6 +133,10 @@
 			</div>
 		</div>
 		<style>
+  .ui-selectonemenu .ui-selectonemenu-trigger{
+	      width: 30px;
+          padding: 0 4px;
+ }				
 .palel-primary {
 	border-color: #bce8f1;
 }

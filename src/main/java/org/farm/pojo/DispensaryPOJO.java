@@ -22,7 +22,7 @@ public class DispensaryPOJO {
 			dispensary.setQuantityInBox(store.getQuantityInBox());
 			dispensary.setQuantityPerPack(store.getQuantityperBoxperUnit());
 			dispensary.setStore(store);
-			dispensary.setQuantityPerTab(store.getQuantityperUnitperTab());
+			dispensary.setQuantityPerPackPerUnit(store.getQuantityperUnitperTab());
 			if (store.getPackType().equals("Box")) {
 				if (store.getPackUnit().equals("Strip")) {
 					dispensary.setQuantityPerUnit(store.getQuantityInBox() * store.getQuantityperBoxperUnit()

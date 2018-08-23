@@ -2,15 +2,16 @@
 	xmlns:p="http://primefaces.org/ui" xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:o="http://omnifaces.org/ui">
 
                       <h:form id="editForm" style="margin-left: -10px;margin-top: 10px;">
+                      <div class="ui-fluid">
 						<h:panelGrid columns="2" class="form" id="drugList">
 							<p:dataTable var="drug" value="#{medicineRegistrationBean.mapperPOJOList}" id="dispensarytable" widgetVar="drugWV"
-								emptyMessage="There is no registered drug in the database"
-								style="width:100%;font-size:15px;font-family: PT Sans, sans-serif ; padding:4px;color:#515151;"
+								emptyMessage="There is no registered drug in the database" reflow="true"
+								style="width:100%;font-size:13px;font-family: PT Sans, sans-serif ; padding:4px;color:#515151;"
 								styleClass="customcenter,customcenter,,,,customcenter notSortable" paginator="true" rows="10"
 								paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
 								rowKey="#{drug.storeId}" filteredValue="#{medicineRegistrationBean.filteredDrugs}">
 								<f:facet name="header">
-									<p:outputPanel>
+									<p:outputPanel style="margin-left:10px">
 										<h:outputText value="Search all fields:" />
 										<p:inputText id="globalFilter" onkeyup="PF('drugWV').filter()" style="width:150px"
 											placeholder="Enter keyword" />
@@ -21,13 +22,13 @@
                                       <p:ajax event="keyup" listener="#{findDoctorBean.searchForDoctorsByName}" process="@this" update=":resultGroup"></p:ajax>
                                    </p:inputText>  
 								 -->
-								<f:facet name="header">
+								<!-- <f:facet name="header">
                                    Drugs List
-                                </f:facet>
-								<p:column headerText="Name">
+                                </f:facet> -->
+								<p:column headerText="Name" filterBy="#{drug.drugName}" filterMatchMode="contains">
 									<p:outputLabel value="#{drug.drugName}" />
 								</p:column>
-								<p:column headerText="Brand">
+								<p:column headerText="Brand" filterBy="#{drug.brand}" filterMatchMode="contains">
 									<p:outputLabel value="#{drug.brand}" />
 								</p:column>
 								<p:column headerText="Batch Number">
@@ -60,7 +61,7 @@
 								<p:column headerText="Pack Unit">
 									<p:outputLabel value="#{drug.packUnit}" />
 								</p:column>
-								<p:column headerText="Unit">
+								<p:column headerText="Unit" filterBy="#{drug.unit}" filterMatchMode="contains">
 									<p:outputLabel value="#{drug.unit}" />
 								</p:column>
 
@@ -71,9 +72,10 @@
 								</p:column>
 								
 							</p:dataTable>
-						</h:panelGrid>  <br/><br/>
+						</h:panelGrid> </div> <br/><br/>
 
 						<!-- Dispensary list -->
+						<div class="ui-fluid">
 						<h:panelGroup rendered="#{medicineRegistrationBean.showDispensaryTable}">
 						<fieldset>
 						 <legend>
@@ -81,8 +83,8 @@
 						 </legend>
 						<p:panelGrid  id="sessionDrugList" columns="1">
 							<p:dataTable var="drugDis" value="#{medicineRegistrationBean.session_drugList}" id="salestable"
-								emptyMessage="There is no selected drug in the session"
-								style="width:90%;font-size:15px;font-family: PT Sans, sans-serif ; padding:4px;color:#515151;"
+								emptyMessage="There is no selected drug in the session" reflow="true"
+								style="width:100%;font-size:13px;font-family: PT Sans, sans-serif ; padding:4px;color:#515151;"
 								styleClass="customcenter,customcenter,,,,customcenter notSortable" paginator="true" rows="10"
 								paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
 								rowKey="#{drug.storeId}">
@@ -104,7 +106,7 @@
 								<p:column headerText="Quantity">
 									<p:outputLabel value="#{drugDis.quantityInBox}" />
 								</p:column>
-								<p:column headerText="Quantity in Strip">
+								<p:column headerText="Quantity in Unit Pack">
 									<p:outputLabel value="#{drugDis.quantityPerUnitPack}" />
 								</p:column>
 								<!-- <p:column headerText="Quantity inside Pack">
@@ -122,8 +124,11 @@
 								<p:column headerText="Sales Price">
 									<p:outputLabel value="#{drugDis.salesPrice}" />
 								</p:column>
-								<p:column headerText="Pack Type">
-									<p:outputLabel value="#{drugDis.packType}" />
+								<p:column headerText="Pack Unit">
+									<p:outputLabel value="#{drugDis.packUnit}" />
+								</p:column>
+								<p:column headerText="Unit">
+								  <p:outputLabel value="#{drugDis.unit}"/>
 								</p:column>
 								<p:column headerText="Action">
 									<p:commandButton id="deleteButtonD" update="salestable" process="@this" style="width:30px; height:25px;"
@@ -136,28 +141,49 @@
 
 								</p:column>
 							</p:dataTable>
+							
+							<ui:fragment id="totalPrice">
+							   <p:outputLabel value="Total Price = #{medicineRegistrationBean.totalPrice}"/>
+							   <p:outputLabel />
+							</ui:fragment>
 
 							<!-- Save session cart to dispensary -->
 							<center>
 							<p:commandButton value="Save" process="@this" update="@form"
 								actionListener="#{medicineRegistrationBean.saveSalesDrug}"
-								 styleClass="myButton" style="color:#fff"
+								 style="background: #B61601 !important;color:#fff;width:35%; margin-left:100px" 
 								icon="ui-icon ui-icon-check" onsuccess="PF('saveDialogWV').show();">
 							  <!-- <f:param name="idDrug" value="#{drugDis.dispensaryId}"/>	 -->
                            </p:commandButton>
+                         
                          </center>
 						</p:panelGrid>
 						</fieldset>
 						</h:panelGroup>
+						</div>
 					</h:form>
-                     <!-- <script>
-                        jQuery(document).ready(function() {
-                        jQuery('input[id*="globalFilter"]').val();
-                       PF('drugWV').filter()
-                       });
-                    </script> -->
-					<p:dialog id="eliminaSedeDialog" widgetVar="eliminaSedeDialogWV" header="Delete Drug" modal="true" width="400"
-						showEffect="explode">
+					
+						<div id="ajaxStatus_container">
+							<div id="ajaxStatus">
+								<p:ajaxStatus id="ajaxStatusPanel" widgetVar="ajaxStatusVar">
+									<f:facet name="start">
+										<p:graphicImage value="/resource/images/loader.gif" alt="loader" />
+									</f:facet>
+									<f:facet name="complete">
+										<h:outputText value="" />
+									</f:facet>
+								</p:ajaxStatus>
+							</div>
+						</div>
+					<!-- <div style="width:64px;height:64px;position:fixed;right:5px;bottom:5px">
+					  <div id="start" style="display: none;">
+					     <i class="fa fa-3x fa-circle-o-notch fa-spin ajax-loader" aria-hidden="true"></i>
+					  </div>
+					  <div id="complete"></div>
+					</div> -->
+                    
+					<p:dialog id="eliminaSedeDialog" widgetVar="eliminaSedeDialogWV" header="Delete Drug" modal="true" width="50%"
+						showEffect="explode" responsive="true">
 						<p>Are you sure you want to delete this drug?</p>
 						<div class="text-center">
 							<p:commandButton value="Conferma deletion" title="Delete Drug"
@@ -169,11 +195,11 @@
 					</p:dialog>
 
 					<p:dialog id="eleiminateSalesCart" widgetVar="eleiminateSalesCartWV" header="Delete Dispensary Cart"
-						modal="true" width="500" height="300" showEffect="explode">
-						<p:outputLabel value="!Delete dispensary cart from the session" styleClass="deleteLebel" style="font-size: 24px;" />
+						modal="true" width="50%" height="300" showEffect="explode" style="margin-left: -120px;margin-top: 170px;" responsive="true">
 						<span class="fa fa-exclamation-circle fa-5x text-danger" style="margin-left: 190px;" />
+						<p:outputLabel value="Are you sure Delete dispensary cart from the session?" styleClass="deleteLebel" style="font-size: 24px; margin-top: 30px;" />						
 						<div class="text-center">
-							<p:commandButton value="Conferma deletion" title="Delete Drug"
+							<p:commandButton value="Yes" title="Delete Drug"
 								actionListener="#{medicineRegistrationBean.deleteFromSalesSessionCart}"  update=":editForm " styleClass="margin-1eB"
 								onclick="PF('eleiminateSalesCartWV').hide();">
 							</p:commandButton>
@@ -182,18 +208,18 @@
 						</div>
 					</p:dialog>
 
-					<p:dialog id="saveDialog" widgetVar="saveDialogWV" header="Send drug to dispensary" modal="true" width="500"
-						height="300" showEffect="explode">
-						<p:outputLabel value="Successfully Save drugs" styleClass="okLabel" style="font-size: 24px;" />
-						<br />
-						<span class="fa fa-check-circle fa-5x text-success" style="margin-left: 190px;" />
+					<p:dialog id="saveDialog" widgetVar="saveDialogWV" header="Send drug to dispensary" modal="true" width="50%"
+						height="300" left= "300.5px" showEffect="explode" responsive="true">
+						<span class="fa fa-check-circle fa-5x text-success" style="margin-left: 190px;" />	<br />
+						<p:outputLabel value="Successfully Save drugs" styleClass="okLabel" style="font-size: 24px;" />					
+						
 						<p:commandButton value="Ok" title="send drug" update=":editForm:salestable" styleClass="okButton"
-							onclick="PF('saveDialogWV').hide();" />
+							onclick="PF('saveDialogWV').hide();"  style="margin-top: 150px;"/>
 						<!-- <p:commandButton value="No" title="No" onclick="PF('saveDialogWV').hide();" styleClass="margin-1em"/>  -->
 					</p:dialog>
-
-					<p:dialog id="salesDialog" widgetVar="salesDialogWV" header="Add to Dispensary" modal="true" width="500"
-						showEffect="explode">
+                   
+					<p:dialog id="salesDialog" widgetVar="salesDialogWV" header="Add to Dispensary" modal="true" width="50%"
+						showEffect="explode" responsive="true">
 						<h:form id="salesDialogForm">
 							<p>Confirm drug Add to sales</p>
 							<p:outputLabel value="Quantity" for="quantityInput" />
@@ -225,4 +251,11 @@
 						</h:form>
 					</p:dialog>
 					
+					<style>
+					 
+					.ui-datatable .ui-column-filter{
+					   width: 74px;
+					   margin-left: -9px;
+					 }
+					</style>
 					</ui:composition>

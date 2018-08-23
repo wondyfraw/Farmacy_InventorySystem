@@ -38,6 +38,7 @@ public class ExpenseBean extends AbstructSessionBean {
 	private UploadedFile fileUpload;
 	private String attachFileName;
 	private Double total;
+	private boolean showMessage;
 
 	@EJB
 	private ExpenseEJB expenseEJB;
@@ -65,7 +66,9 @@ public class ExpenseBean extends AbstructSessionBean {
 		}
 		sessionExpenseList.removeAll(sessionExpenseList);
 		showPanel = false;
+		showMessage = true;
 		log.info("[Successfully Register Expense] " + "Performed by " + userName);
+		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Successfully Register Expense"));
 
 	}
 
@@ -79,8 +82,14 @@ public class ExpenseBean extends AbstructSessionBean {
 			newExpense.setExpenseDate(expense.getExpenseDate());
 			newExpense.setAmount(amountVal);
 			newExpense.setInvoiceNumber(expense.getInvoiceNumber());
+			newExpense.setFileName(fileUpload.getFileName());
+			newExpense.setMimType(fileUpload.getContentType());
+			newExpense.setDataFile(fileUpload.getContents());
 			sessionExpenseList.add(newExpense);
+			fileUpload = null;
 			showPanel = true;
+			log.info("Successfully put expense to session cart  " + " Amount =" + newExpense.getAmount()
+					+ "  Description = " + newExpense.getDescription());
 		}
 	}
 
@@ -94,6 +103,8 @@ public class ExpenseBean extends AbstructSessionBean {
 						showPanel = false;
 						break;
 					}
+					log.info("Delete expense successfully from from session cart!" + "Desctiption "
+							+ elemet.getDescription() + " " + "Amount = " + elemet.getAmount());
 				}
 			}
 		}
@@ -226,6 +237,14 @@ public class ExpenseBean extends AbstructSessionBean {
 
 	public void setTotal(Double total) {
 		this.total = total;
+	}
+
+	public boolean isShowMessage() {
+		return showMessage;
+	}
+
+	public void setShowMessage(boolean showMessage) {
+		this.showMessage = showMessage;
 	}
 
 }

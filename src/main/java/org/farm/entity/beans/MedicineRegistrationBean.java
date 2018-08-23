@@ -91,6 +91,7 @@ public class MedicineRegistrationBean extends AbstructSessionBean {
 	private List<Sales> reportList;
 	private String sampleDate;
 	private String userType;
+	private Double totalPrice;
 
 	@EJB
 	private StoreEJB storeEJB;
@@ -269,8 +270,14 @@ public class MedicineRegistrationBean extends AbstructSessionBean {
 	public void deleteDrugInfo() {
 		drugList.remove(deleteDrug);
 
-		if (deleteDrug.getStoreId() != null)
+		if (deleteDrug.getStoreId() != null) {
+			List<Dispensary> dispensaryList = new ArrayList<Dispensary>();
+			dispensaryList = dispensaryEJB.findDispensaryByStoreId(deleteDrug.getStoreId());
+			for (Dispensary dispensary : dispensaryList) {
+				dispensaryEJB.removeById(dispensary.getIdDispensary());
+			}
 			storeEJB.removeById(deleteDrug.getStoreId());
+		}
 	}
 
 	/**
@@ -397,6 +404,7 @@ public class MedicineRegistrationBean extends AbstructSessionBean {
 
 	public void addToSalesSession() {
 
+		totalPrice = 0.0;
 		if (salesPOJO != null) {
 			int index = 0;
 			Integer dosVal = null;
@@ -415,7 +423,8 @@ public class MedicineRegistrationBean extends AbstructSessionBean {
 						Integer newQuantity = element.getQuantityPerUnit() - (dosVal * quantityVal);
 						if (element.getPackType().equals("Box")) {
 							Integer newUnitPackQuantity = element.getTotalUnitPack()
-									- newQuantity / element.getQuantityPerUnitPack(); // quantity per pack unit
+									- (dosVal * quantityVal) / element.getQuantityPerUnitPack(); // quantity per pack
+																									// unit
 							mapperPOJOList.get(i).setTotalUnitPack(newUnitPackQuantity);
 						}
 						mapperPOJOList.get(i).setQuantityPerUnit(newQuantity);
@@ -451,6 +460,8 @@ public class MedicineRegistrationBean extends AbstructSessionBean {
 					if (newMapperPOJOList != null)
 						session_drugList = newMapperPOJOList;
 				}
+
+				totalPrice = calculateTotalPrice(session_drugList);
 				showDispensaryTable = true;
 			}
 		}
@@ -488,8 +499,36 @@ public class MedicineRegistrationBean extends AbstructSessionBean {
 		showDispensaryTable = false;
 	}
 
-	public void deleteFromSalesSessionCart() {
+	/**
+	 * void sales drugs by removing drugs from sales table add to dispensery table
+	 */
+	public void voidSales() {
+		// check invoice with sales id
+		if (voidSalesDrug != null) {
 
+			// fist delete from sales table
+			salesEJB.removeById(voidSalesDrug.getIdSales());
+
+			// update Dispenser table
+			Dispensary dispensary = new Dispensary();
+			dispensary = dispensaryEJB.findById(voidSalesDrug.getDispensary());
+			if (dispensary.getIdDispensary() != null) {
+				Date now = Calendar.getInstance().getTime();
+				dispensary.setModifiedDate(now);
+				dispensary.setQuantityPerUnit(
+						dispensary.getQuantityPerUnit() + voidSalesDrug.getDose() * voidSalesDrug.getQuantity());
+				dispensary.setTotalUnitPack(
+						dispensary.getTotalUnitPack() + ((voidSalesDrug.getDose() * voidSalesDrug.getQuantity())
+								/ dispensary.getQuantityPerPackPerUnit()));
+				dispensaryEJB.merge(dispensary);
+			}
+			salesList.remove(voidSalesDrug);
+		}
+	}
+
+	// function to delete drugs from sales session cart
+	public void deleteFromSalesSessionCart() {
+		totalPrice = 0.0;
 		if (sessionCart != null) {
 			for (int i = 0; i < mapperPOJOList.size(); i++) {
 				MapperPOJO elemet = mapperPOJOList.get(i);
@@ -499,11 +538,23 @@ public class MedicineRegistrationBean extends AbstructSessionBean {
 							sessionCart.getQuantityPerUnit() + mapperPOJOList.get(i).getQuantityPerUnit());
 				}
 			}
+
 			session_drugList.remove(sessionCart);
-			if (session_drugList.size() < 1) {
-				showDispensaryTable = false;
-			}
+			totalPrice = calculateTotalPrice(session_drugList);
+
 		}
+		if (session_drugList.size() < 1) {
+			showDispensaryTable = false;
+		}
+	}
+
+	public Double calculateTotalPrice(List<MapperPOJO> salesList) {
+		Double price = 0.0;
+		for (MapperPOJO mapper : session_drugList) {
+			price = price + mapper.getSalesPrice() * mapper.getQuantityInBox();
+		}
+
+		return price;
 	}
 
 	// filter drug based on the key
@@ -553,7 +604,11 @@ public class MedicineRegistrationBean extends AbstructSessionBean {
 	public StreamedContent generatePDF() {
 		StreamedContent result = null;
 		try {
-			String fileName = "sales_" + searchParmes.getDrugName() + Calendar.getInstance().getTimeInMillis() + ".pdf";
+			String fileName;
+			if (searchParmes.getDrugName() != null)
+				fileName = "sales_" + searchParmes.getDrugName() + Calendar.getInstance().getTimeInMillis() + ".pdf";
+			else
+				fileName = "sales_" + Calendar.getInstance().getTimeInMillis() + ".pdf";
 			List<Sales> salesList = new ArrayList<Sales>();
 			salesList = salesEJB.filterDrugsByCriteria(searchParmes);
 			InputStream printStream = salesEJB.createPDF(salesList, searchParmes);
@@ -898,6 +953,14 @@ public class MedicineRegistrationBean extends AbstructSessionBean {
 
 	public void setBoxPack(String boxPack) {
 		this.boxPack = boxPack;
+	}
+
+	public Double getTotalPrice() {
+		return totalPrice;
+	}
+
+	public void setTotalPrice(Double totalPrice) {
+		this.totalPrice = totalPrice;
 	}
 
 }

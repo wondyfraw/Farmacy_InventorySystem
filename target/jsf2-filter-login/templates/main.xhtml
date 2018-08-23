@@ -19,6 +19,9 @@
 	<meta content="" name="description" />
 	<meta content="" name="author" />
 	<f:attribute name="notPrimeFaces" value="dont include aristo.css, fix for primefaces 5.1 renderer"></f:attribute> 
+	
+	<h:outputScript library="javax.faces" name="jsf.js" />
+	
 	<link
 		href="http://fonts.googleapis.com/css?family=Lato:300,400,400italic,600,700|Raleway:300,400,500,600,700|Crete+Round:400italic"
 		rel="stylesheet" />
@@ -110,6 +113,9 @@
 	<script src="#{request.contextPath}/resource/common/assets/js/login.js"></script>
 
 	<script>
+	jQuery.noConflict();
+	 // Add the $() function
+          $ = jQuery;         
 			jQuery(document).ready(function() {
 				Main.init();
 				Login.init();

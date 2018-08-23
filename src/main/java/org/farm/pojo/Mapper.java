@@ -30,7 +30,7 @@ public class Mapper implements Serializable {
 			mapperPOJO.setPackUnit(store.getPackUnit());
 			mapperPOJO.setQuantityInBox(dispensary.getQuantityInBox());
 			mapperPOJO.setQuantityPerPack(dispensary.getQuantityPerPack());
-			mapperPOJO.setQuantityPerUnitPack(dispensary.getQuantityPerTab());
+			mapperPOJO.setQuantityPerUnitPack(dispensary.getQuantityPerPackPerUnit());
 			mapperPOJO.setQuantityPerUnit(dispensary.getQuantityPerUnit());
 			mapperPOJO.setRegistrationDate(store.getRegistrationDate());
 			mapperPOJO.setSalesPrice(store.getSalesPrice());
@@ -69,10 +69,13 @@ public class Mapper implements Serializable {
 			drug.setExpireDate(mapperPOJO.getExpireDate());
 			drug.setManufacturingDate(mapperPOJO.getManufacturingDate());
 			drug.setPackUnit(mapperPOJO.getPackUnit());
+			drug.setUnit(mapperPOJO.getUnit());
+			drug.setPackUnit(mapperPOJO.getPackUnit());
 			drug.setQuantityInBox(quantity);
 			drug.setQuantityPerPack(mapperPOJO.getQuantityPerPack());
 			drug.setQuantityPerUnitPack(mapperPOJO.getQuantityPerUnitPack());
 			drug.setQuantityPerUnit(quantity * dose);
+			drug.setPackType(mapperPOJO.getPackType());
 			if (mapperPOJO.getPackType().equals("Box"))
 				drug.setTotalUnitPack((quantity * dose) / mapperPOJO.getQuantityPerUnitPack());
 			drug.setRegistrationDate(mapperPOJO.getRegistrationDate());

@@ -148,7 +148,10 @@ public class SalesEJB extends AbstructHome<Sales, Integer> {
 			mapperPOJO.setQuantityInBox(Integer.parseInt(next[12].toString()));
 			mapperPOJO.setQuantityPerUnit(Integer.parseInt(next[13].toString()));
 			mapperPOJO.setQuantityPerUnitPack(Integer.parseInt(next[14].toString()));
-			mapperPOJO.setQuantityPerPack(Integer.parseInt(next[15].toString()));
+			if (next[15] != null)
+				mapperPOJO.setTotalUnitPack(Integer.parseInt(next[15].toString()));
+			mapperPOJO.setQuantityPerPack(Integer.parseInt(next[16].toString()));
+			mapperPOJO.setPackType(next[17].toString());
 			results.add(mapperPOJO);
 		}
 		return results;
@@ -224,8 +227,9 @@ public class SalesEJB extends AbstructHome<Sales, Integer> {
 				storeJoin.get(Store_.manufacturingDate), storeJoin.get(Store_.expireDate), storeJoin.get(Store_.unit),
 				storeJoin.get(Store_.registrationDate), storeJoin.get(Store_.salesPrice),
 				storeJoin.get(Store_.packUnit), root.get(Dispensary_.idDispensary), root.get(Dispensary_.quantityInBox),
-				root.get(Dispensary_.quantityPerUnit), root.get(Dispensary_.quantityPerTab),
-				root.get(Dispensary_.totalStrip), root.get(Dispensary_.quantityPerPack)));
+				root.get(Dispensary_.quantityPerUnit), root.get(Dispensary_.quantityPerPackPerUnit),
+				root.get(Dispensary_.totalUnitPack), root.get(Dispensary_.quantityPerPack),
+				storeJoin.get(Store_.packType)));
 
 		return query;
 	}

@@ -10,11 +10,10 @@
 				<h:panelGrid columns="1" class="form" id="drugList">
 					<p:dataTable var="drug" value="#{medicineRegistrationBean.salesList}" id="salestable" widgetVar="drugWV"
 						emptyMessage="There is no registered drug in the database"
-						style="width:100%;font-size:15px;font-family: PT Sans, sans-serif ; padding:4px;color:#515151;"
+						style="width:100%;font-size:13px;font-family: PT Sans, sans-serif ; padding:4px;color:#515151;"
 						styleClass="customcenter,customcenter,,,,customcenter notSortable" paginator="true" rows="10"
 						paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
-						rowKey="#{drug.idSales}" filteredValue="#{medicineRegistrationBean.filteredDrugs}"
-						filterEvent="#{medicineRegistrationBean.searchSalesDrugByFilterKy}">
+						rowKey="#{drug.idSales}" filteredValue="#{medicineRegistrationBean.filteredSalesDrugs}">
 						<f:facet name="header">
 							<p:outputPanel>
 								<h:outputText value="Search all fields:" />
@@ -22,8 +21,8 @@
 									value="#{medicineRegistrationBean.filter}" />
 							</p:outputPanel>
 						</f:facet>
-						<p:column headerText="Name">
-							<p:outputLabel value="#{drug.drugName}" />
+						<p:column headerText="Name" filterBy="#{drug.drugName}">
+							<p:outputLabel value="#{drug.drugName}"/>
 						</p:column>
 						<p:column headerText="Brand">
 							<p:outputLabel value="#{drug.brand}" />
@@ -40,7 +39,7 @@
 						<p:column headerText="Dose">
 							<p:outputLabel value="#{drug.dose}" />
 						</p:column>
-						<p:column headerText="Sales Date">
+						<p:column headerText="Sales Date" filterBy="#{drug.registrationdate}">
 							<p:outputLabel value="#{drug.registrationdate}" />
 						</p:column>
 						<p:column headerText="Unit Price">
@@ -54,9 +53,16 @@
 						</p:column>
 						<p:column headerText="Action" rendered="#{medicineRegistrationBean.userType eq 'Administrator'}">
 							<p:commandButton id="deleteButtonD" update="salestable" process="@this" style="width:30px; height:25px;"
-								actionListener="#{medicineRegistrationBean.setVoidSalesDrug(drug)}" icon="ui-icon-trash" title="Void"
+								actionListener="#{medicineRegistrationBean.setVoidSalesDrug(drug)}" icon="ui-icon-trash" title="Delete"
 								onsuccess="PF('eleiminateSalesWV').show();"
 								oncomplete="$('.ui-datatable-data tr').find('span.ui-icon-close').each(function(){this.click()})">
+							</p:commandButton>
+							<p:commandButton id="voidSales" update="salestable" process="@this" style="width:30px; height:25px;"
+							           actionListener="#{medicineRegistrationBean.setVoidSalesDrug(drug)}"
+							            icon="ui-icon-arrowrefresh-1-w" title="void" onsuccess="PF('voidDialogWV').show();"
+							           oncomplete="$('.ui-datatable-data tr').find('span.ui-icon-close').each(function(){this.click()})"
+							           rendered="#{medicineRegistrationBean.userType eq 'Administrator'}">
+							
 							</p:commandButton>
 
 						</p:column>
@@ -77,4 +83,14 @@
 		<p:commandButton value="No" onclick="PF('eleiminateSalesWV').hide();" style="color: #fff;margin-top: 30px;" styleClass="dialogButton" />
 
 	</p:dialog>
+	
+	<p:dialog id="voidDialog" widgetVar="voidDialogWV" header="Void sales drug" modal="true" width="400"  style="top:98px;margin-left: -120px;"
+	       showEffect="explode">
+	       <p:outputLabel value="Are you sure you want to void this sale history?"/><br/>
+	       
+	       <p:commandButton value="Yes" title="Void sales drug"  style="color: #fff;margin-left: 150px" actionListener="#{medicineRegistrationBean.voidSales}"
+	                    styleClass="dialogButton" onclick="PF('voidDialogWV').hide();" update=":salesList:salestable"/>
+	       <p:commandButton value="No" onclick="PF('voidDialogWV').hide();" actionListener="#{medicineRegistrationBean.voidSales}" styleClass="dialogButton" style="color:#fff"/>                                                                                  
+	</p:dialog>
+	
 </ui:composition>

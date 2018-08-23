@@ -5,12 +5,9 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.SequenceGenerator;
@@ -27,7 +24,7 @@ public class Sales implements Serializable {
 	private static final long serialVersionUID = 966903096023682335L;
 
 	private Integer idSales;
-	private Dispensary dispensary;
+	private Integer dispensary;
 	private String drugName;
 	private Integer quantity;
 	private String weight;
@@ -39,6 +36,7 @@ public class Sales implements Serializable {
 	private Double totalPrice;
 	private Integer dose;
 	private String salesPerson;
+	private String packUnit;
 
 	public Sales() {
 		// defuale constructor
@@ -50,12 +48,6 @@ public class Sales implements Serializable {
 	@Column(name = "id_sales", unique = true, nullable = false)
 	public Integer getIdSales() {
 		return idSales;
-	}
-
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "id_dispensary")
-	public Dispensary getDispensary() {
-		return dispensary;
 	}
 
 	@Column(name = "drug_name", nullable = false, length = 255)
@@ -109,12 +101,26 @@ public class Sales implements Serializable {
 		return salesPerson;
 	}
 
-	public void setIdSales(Integer idSales) {
-		this.idSales = idSales;
+	@Column(name = "id_dispensary")
+	public Integer getDispensary() {
+		return dispensary;
 	}
 
-	public void setDispensary(Dispensary idDispensary) {
-		this.dispensary = idDispensary;
+	@Column(name = "pack_unit")
+	public String getPackUnit() {
+		return packUnit;
+	}
+
+	public void setPackUnit(String packUnit) {
+		this.packUnit = packUnit;
+	}
+
+	public void setDispensary(Integer dispensary) {
+		this.dispensary = dispensary;
+	}
+
+	public void setIdSales(Integer idSales) {
+		this.idSales = idSales;
 	}
 
 	public void setDrugName(String drugName) {

@@ -174,7 +174,8 @@ a.ui-button .ui-icon {
 	border-top: 0;
 	/**background: #eee;
 	background: #e78f08*/
-	background: #4CAF50;	
+	background: #4CAF50;
+	/* background-image:linear-gradient(277deg, #1b81d7, #1f4869) */	
 	padding: 5px;
 	border: 1px solid #ddd;
 }

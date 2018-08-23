@@ -131,7 +131,7 @@
 																       <f:selectItem itemLabel="Box" itemValue="Box"></f:selectItem>
 																       <f:selectItem itemLabel="Cup" itemValue="Cup"></f:selectItem>
 																       <f:selectItem itemLabel="Packed" itemValue="Packed"></f:selectItem>
-																       <p:ajax event="change" process="@this" update="packUnit"></p:ajax>
+																       <p:ajax event="change" process="@this" update="packUnit @form" listener="#{medicineRegistrationBean.showQuantityPerPackPerUnit}"></p:ajax>
 																       <!-- <p:ajax event="itemSelect" ></p:ajax> -->
 																     </h:selectOneMenu>
 																     <p:message id="packTypeMessage" for="packType"></p:message>

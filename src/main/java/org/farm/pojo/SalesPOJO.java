@@ -27,7 +27,7 @@ public class SalesPOJO {
 			// if (dispensary != null) {
 			sales.setBatchNumber(mapperPOJO.getBathcNumber());
 			sales.setBrand(mapperPOJO.getBrand());
-			sales.setDispensary(dispensary);
+			sales.setDispensary(dispensary.getIdDispensary());
 			sales.setDose(mapperPOJO.getDose());
 			sales.setDrugName(mapperPOJO.getDrugName());
 			sales.setQuantity(mapperPOJO.getQuantityInBox());
@@ -36,6 +36,7 @@ public class SalesPOJO {
 			sales.setTotalPrice(mapperPOJO.getSalesPrice() * mapperPOJO.getQuantityInBox());
 			sales.setUnit(mapperPOJO.getUnit());
 			sales.setUnitPrice(mapperPOJO.getSalesPrice());
+			sales.setPackUnit(mapperPOJO.getPackUnit());
 			sales.setWeight(mapperPOJO.getWeight());
 			// }
 		}

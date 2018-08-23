@@ -23,6 +23,9 @@ public class Expense implements Serializable {
 	private Double amount;
 	private String userName;
 	private String invoiceNumber;
+	private String fileName;
+	private String mimType;
+	private byte[] dataFile;
 
 	public Expense() {
 		// required by JPA
@@ -59,6 +62,33 @@ public class Expense implements Serializable {
 	@Column(name = "invoive_number")
 	public String getInvoiceNumber() {
 		return invoiceNumber;
+	}
+
+	@Column(name = "file_name")
+	public String getFileName() {
+		return fileName;
+	}
+
+	@Column(name = "mim_type")
+	public String getMimType() {
+		return mimType;
+	}
+
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
+	}
+
+	@Column(name = "data_file")
+	public byte[] getDataFile() {
+		return dataFile;
+	}
+
+	public void setMimType(String mimType) {
+		this.mimType = mimType;
+	}
+
+	public void setDataFile(byte[] dataFile) {
+		this.dataFile = dataFile;
 	}
 
 	public void setExpenseCode(Integer expenseCode) {

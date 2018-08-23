@@ -1,0 +1,84 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui" xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:o="http://omnifaces.org/ui">
+ 
+ 	<h:form id="viewExpense">
+						<p:panelGrid styleClass="ui-noborder">
+							<p:row styleClass="ui-noborder">
+								<h2 style="margin-left: 30px; font-family: initial;">Expense Date</h2>
+								<div class="form-group">
+									<p:column styleClass="ui-noborder">
+										<p:outputLabel value="From" for="from" 
+											styleClass="filter_date-label" />
+										<p:calendar navigator="true" label="From Date" id="from" size="30" value="#{expenseBean.fromExpenseDate}">
+											<f:convertDateTime pattern="dd/MM/yyyy" />
+										</p:calendar>
+										<p:outputLabel value="To" for="to"  styleClass="filter_date-label"/>
+										<p:calendar id="to" label="To Date" navigator="true" size="30" value="#{expenseBean.toExpenseDate}">
+											<f:convertDateTime pattern="dd/MM/yyyy" />
+										</p:calendar>
+										<p:commandButton value="Search" process="@form" update="@form"
+											actionListener="#{expenseBean.filterExpenseByDate}" style="margin-left: 10px;padding: 0 30px;color:#fff"
+											styleClass="myButton" icon="ui-icon ui-icon-search" />
+									</p:column>
+								</div>
+							</p:row>
+
+						</p:panelGrid>
+						<br />
+						<h:panelGroup rendered="#{expenseBean.showPanel}">
+							<fieldset style="margin-left: 20px">
+								<legend>Expense Details</legend>
+								<p:panelGrid>
+									<p:dataTable var="expense" value="#{expenseBean.expenseListByDate}" id="expensetable"
+										emptyMessage="There is no registered expense in this range of time"
+										style="width:100%;font-size:15px;font-family: PT Sans, sans-serif ;color:#515151;"
+										styleClass="customcenter,customcenter,,,,customcenter notSortable" paginator="true" rows="10"
+										paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink} {Exporters}"
+										rowKey="#{expense.expenseCode}" sortBy="#{expense.expenseDate}">
+
+										<f:facet name="{Exporters}">
+											<h:commandLink title="Pdf">
+												<!-- <p:graphicImage value="resource/images/pdf.png" width="24"/> -->
+												<img src="../resource/images/pdf.png" width="24"
+													style="padding-bottom: 17px; float: right; margin-right: 5px;" />
+												<p:dataExporter type="pdf" target="expensetable" fileName="expenseListByDate" />
+											</h:commandLink>
+											<h:commandLink title="CSV">
+												<img src="../resource/images/csv.png" width="24"
+													style="padding-bottom: 17px; float: right; margin-right: 5px;" />
+												<p:dataExporter type="csv" target="expensetable" fileName="Expense List" />
+											</h:commandLink>
+										</f:facet>
+										
+										<p:column headerText="Amount" sortBy="#{expense.amount}">
+											<p:outputLabel value="#{expense.amount}" />
+										</p:column>
+										<p:column headerText="Expense Date" sortBy="#{expense.expenseDate}">
+											<p:outputLabel value="#{expense.expenseDate}">
+												<f:convertDateTime pattern="dd/MM/yyyy" />
+											</p:outputLabel>
+										</p:column>
+										<p:column headerText="Description">
+											<p:outputLabel value="#{expense.description}" />
+										</p:column>
+										<p:column headerText="Invoice Number" sortBy="#{expense.invoiceNumber}">
+											<p:outputLabel value="#{expense.invoiceNumber}" />
+										</p:column>
+										<!-- <p:summaryRow>
+            <p:column  style="text-align:right">
+                <p:outputLabel value="Total:"/>
+            </p:column>
+            <p:column>
+                <p:outputLabel value="#{expenseBean.total}">
+                    <f:convertNumber type="currency" currencySymbol="$" />
+                </p:outputLabel>
+            </p:column>
+        </p:summaryRow> -->
+									</p:dataTable>
+								</p:panelGrid>
+							</fieldset>
+						</h:panelGroup>
+					</h:form>	
+</ui:composition>
+	

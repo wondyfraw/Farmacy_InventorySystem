@@ -1,6 +1,10 @@
 package org.farm.fms.entity.ejb;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.ejb.Stateless;
+import javax.persistence.TypedQuery;
 
 import org.farm.fms.etntity.Dispensary;
 
@@ -27,6 +31,16 @@ public class DispensaryEJB extends AbstructHome<Dispensary, Integer> {
 	public Dispensary findById(Integer id) {
 
 		return findById(Dispensary.class, id);
+	}
+
+	public List<Dispensary> findDispensaryByStoreId(Integer storeId) {
+		List<Dispensary> dispensaryList = new ArrayList<Dispensary>();
+
+		TypedQuery<Dispensary> dispensaryQuery = entityManager.createNamedQuery("findDrugByStoreId", Dispensary.class);
+		dispensaryQuery.setParameter("storeId", storeId);
+		dispensaryList = dispensaryQuery.getResultList();
+
+		return dispensaryList;
 	}
 
 }

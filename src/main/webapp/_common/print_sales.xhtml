@@ -52,12 +52,12 @@
 							  </p:dataTable>
 							  </ui:fragment>
 							  
-							 <!--   <p:commandButton value="Download" ajax="false" styleClass="myButton" style="margin-top: 20px;margin-left: 200px;" 
-	                               update="@form" process="@form">
-					 <p:fileDownload value="#{medicineRegistrationBean.downloadTest()}"/>  -->
+							
 					 <p:commandButton value="Download" ajax="false" styleClass="myButton" style="margin-top: 20px;margin-left: 200px;" 
 	                               update="@form" process="@form">
-					 <p:fileDownload value="#{medicineRegistrationBean.generatePDF()}"/> 				
+					  <!-- <p:fileDownload value="#{medicineRegistrationBean.generatePDF()}"/>  --> 
+					  <p:ajax event="click" />
+					 <p:printer target="saleTable" ></p:printer>	 			
 				</p:commandButton>
 				<p:button outcome="/secure/_common/sales_report.xhtml" value="Back to Report Form" styleClass="myButton" style="margin-top: 20px;margin-left: 2px;"/>
 							  </h:form>													

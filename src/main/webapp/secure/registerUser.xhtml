@@ -120,7 +120,8 @@
 										<!-- </h:panelGrid> -->
                                                   
 									</h:form>
-									<p:dialog id="saveDialog" widgetVar="saveDialogWV" header="Register User" modal="true" width="500" height="300" showEffect="explode">
+									<p:dialog id="saveDialog" widgetVar="saveDialogWV" header="Register User" modal="true" width="50%" height="300" 
+									          responsive="true" showEffect="explode">
 									    <p:outputLabel value="Successfully Save user" styleClass="okLabel" style="font-size: 24px;"/><br/>
 									    <span class="fa fa-check-circle fa-5x text-success" style="margin-left: 190px;"/>
 									    <p:commandButton value="Ok" title="Register User" update=":register" styleClass="okButton" onclick="PF('saveDialogWV').hide();"></p:commandButton>

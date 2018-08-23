@@ -1,0 +1,34 @@
+
+	public void prepareDownload(Integer allegatoid) {
+		List<FbCandidaturaAllegatoDTO> all = new ArrayList<FbCandidaturaAllegatoDTO>();
+		all = fbCandidaturaAllegatoHome.findAllegatoById(allegatoid);
+
+		InputStream input = new ByteArrayInputStream(all.get(0).getDataFile());
+
+		ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
+		setDownload(new DefaultStreamedContent(input, externalContext.getMimeType(all.get(0).getNomeFile()),
+				all.get(0).getNomeFile()));
+	}
+
+	public void setDownload(DefaultStreamedContent download) {
+		this.download = download;
+	}
+
+	public DefaultStreamedContent getDownload() throws Exception {
+		System.out.println("GET = " + download.getName());
+		return download;
+	}
+	
+	
+	
+	//////////////////////////////////
+	<ui:fragment rendered="#{fbSchedaFormBean.isInCandidaturaAllegatoMode(candidatura.id)}">												   						    							    
+							   <!--  <p:commandButton immediate="true" ajax="false" id="download" icon="ui-icon-arrowthickstop-1-s" actionListener="#{fbSchedaFormBean.prepareDownload(candidatura.id)}"
+							    process="@this"> -->
+							    <p:commandButton immediate="true" ajax="false" id="download" icon="ui-icon-arrowthickstop-1-s" 
+							    process="@this">
+					                 <!-- <p:fileDownload value="#{fbSchedaFormBean.download}" />  -->
+					                 <p:fileDownload value="#{fbSchedaFormBean.downloadStampaCandidateAllegato(candidatura.id)}" />
+				               </p:commandButton>
+				               <p:tooltip for="download" value="Scarica allegato" />
+						</ui:fragment>	

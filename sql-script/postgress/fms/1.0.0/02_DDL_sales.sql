@@ -1,7 +1,7 @@
 CREATE TABLE myfms.sales
 (
   id_sales serial NOT NULL,
-  id_dispensary integer,
+  id_dispensary integer NOT NULL,
   id_user integer,
   dosage integer,
   quantity integer NOT NULL,
@@ -15,9 +15,9 @@ CREATE TABLE myfms.sales
   CONSTRAINT sales_id_dispensary_fk FOREIGN KEY (id_dispensary)
       REFERENCES myfms.dispensary(id_dispensary) MATCH SIMPLE
       ON UPDATE NO ACTION ON DELETE NO ACTION,
-  CONSTRAINT sales_id_user_fk FOREIGN KEY ( id_user)
-      REFERENCES myfms.users( id_user) MATCH SIMPLE
-      ON UPDATE NO ACTION ON DELETE NO ACTION
+  -- CONSTRAINT sales_id_user_fk FOREIGN KEY ( id_user)
+      --REFERENCES myfms.users( id_user) MATCH SIMPLE
+      --ON UPDATE NO ACTION ON DELETE NO ACTION
 )
 WITH (
   OIDS=FALSE
