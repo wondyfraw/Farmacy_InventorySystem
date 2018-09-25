@@ -196,15 +196,15 @@
 
 					<p:dialog id="eleiminateSalesCart" widgetVar="eleiminateSalesCartWV" header="Delete Dispensary Cart"
 						modal="true" width="50%" height="300" showEffect="explode" style="margin-left: -120px;margin-top: 170px;" responsive="true">
-						<span class="fa fa-exclamation-circle fa-5x text-danger" style="margin-left: 190px;" />
-						<p:outputLabel value="Are you sure Delete dispensary cart from the session?" styleClass="deleteLebel" style="font-size: 24px; margin-top: 30px;" />						
+						<span class="fa fa-exclamation-circle fa-5x text-danger" style="margin-left: 50px;" />
+						<p:outputLabel value="Are you sure Delete dispensary cart from the session?" styleClass="deleteLebel" style="font-size: 18px; margin-top: 30px;" />						
 						<div class="text-center">
 							<p:commandButton value="Yes" title="Delete Drug"
-								actionListener="#{medicineRegistrationBean.deleteFromSalesSessionCart}"  update=":editForm " styleClass="margin-1eB"
+								actionListener="#{medicineRegistrationBean.deleteFromSalesSessionCart}"  update=":editForm "  style="color: #fff;margin-top: 30px;width:60px" styleClass="dialogButton"
 								onclick="PF('eleiminateSalesCartWV').hide();">
 							</p:commandButton>
 							<p:commandButton value="No" title="No" onclick="PF('eleiminateSalesCartWV').hide();"
-								style="margin-top: 50px;" />
+								styleClass="dialogButton" style="color: #fff;margin-top: 30px;width:60px" />
 						</div>
 					</p:dialog>
 
@@ -213,16 +213,16 @@
 						<span class="fa fa-check-circle fa-5x text-success" style="margin-left: 190px;" />	<br />
 						<p:outputLabel value="Successfully Save drugs" styleClass="okLabel" style="font-size: 24px;" />					
 						
-						<p:commandButton value="Ok" title="send drug" update=":editForm:salestable" styleClass="okButton"
-							onclick="PF('saveDialogWV').hide();"  style="margin-top: 150px;"/>
+						<p:commandButton value="Ok" title="send drug" update=":editForm:salestable"  style="color: #fff;margin-left: 100px;" styleClass="dialogButton"
+							onclick="PF('saveDialogWV').hide();"/>
 						<!-- <p:commandButton value="No" title="No" onclick="PF('saveDialogWV').hide();" styleClass="margin-1em"/>  -->
 					</p:dialog>
                    
-					<p:dialog id="salesDialog" widgetVar="salesDialogWV" header="Add to Dispensary" modal="true" width="50%"
-						showEffect="explode" responsive="true">
+					<p:dialog id="salesDialog" widgetVar="salesDialogWV" header="Add to Dispensary" modal="true" width="75%"
+						showEffect="explode" responsive="true">						
 						<h:form id="salesDialogForm">
 							<p>Confirm drug Add to sales</p>
-							<p:outputLabel value="Quantity" for="quantityInput" />
+							<p:outputLabel value="Quantity" for="quantityInput" style="margin-left:30px"/>
 							<p:inputText id="quantityInput" value="#{medicineRegistrationBean.salesQuantity}" required="true"
 								requiredMessage="Quantity can not be null" styleClass="margin-f1">
 								<o:validator validatorId="javax.faces.RegularExpression" pattern="#{validation['pattern.numeric']}"
@@ -231,7 +231,7 @@
 							</p:inputText>
 							<p:message for="quantityInput" id="quantityInputMessage" />
 							<br />
-							<p:outputLabel value="Dose" for="dose" />
+							<p:outputLabel value="Dose" for="dose" style="margin-left:30px"/>
 							<p:inputText id="dose" value="#{medicineRegistrationBean.dose}" required="true"
 								requiredMessage="Dose can not be null" styleClass="margin-d1">
 							   <o:validator validatorId="javax.faces.RegularExpression" pattern="#{validation['pattern.numeric']}"
@@ -240,15 +240,13 @@
 							</p:inputText>
 							<p:message id="doseMessage" for="dose" />
 							<br/>
-							<br/>
-							<br/>
-
+						
 							<p:commandButton value="Confirm" title="Add to Sales Session cart"
 								actionListener="#{medicineRegistrationBean.addToSalesSession}" process="@form" update="@form :editForm"
-								onclick="PF('salesDialogWV').hide();" style="color: #fff;margin-left: 160px;" styleClass="dialogButton" />
+								onclick="PF('salesDialogWV').hide();" style="color: #fff;margin-left: 100px;" styleClass="dialogButton" />
 							<p:commandButton value="Cancel" title="Cancel" onclick="PF('salesDialogWV').hide();"
 								styleClass="dialogButton" style="color: #fff" />
-						</h:form>
+						</h:form>						
 					</p:dialog>
 					
 					<style>

@@ -498,11 +498,14 @@ public class SalesEJB extends AbstructHome<Sales, Integer> {
 
 	public InputStream createPDF(List<Sales> salesList, SalesFilterPOJO searchparam) {
 		ByteArrayOutputStream outPut = new ByteArrayOutputStream();
-		// Document doc = new Document(PageSize.A4.rotate(), 10f, 10f, 10f, 0f);
-		Document document = new Document();
+		// Document document = new Document(PageSize.A4.rotate(), 10f, 10f, 10f, 0f);
+		Document document = new Document(PageSize.A4_LANDSCAPE);
+		document.setPageSize(PageSize.A4.rotate());
+		document.newPage();
 		try {
 			PdfWriter.getInstance(document, outPut);
 			// PdfWriter writer = PdfWriter.getInstance(document, outPut);
+			// writer.addPageDictEntry(PdfName.ROTATE, PdfPage.SEASCAPE);
 			// Rotate rotate = new Rotate();
 			// writer.setPageEvent(rotate);
 			document.open();

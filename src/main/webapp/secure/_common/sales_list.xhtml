@@ -79,10 +79,10 @@
 		showEffect="explode" responsive="true">
 		<p:outputLabel value="Are you sure you want to delete this sale history?" />
 
-		<p:commandButton value="Yes" title="Delete drug sales history" style="color: #fff;margin-left: 150px;margin-top: 30px;"
+		<p:commandButton value="Yes" title="Delete drug sales history" style="color: #fff;margin-left:-100px;margin-top: 90px;"
 			styleClass="dialogButton" onclick="PF('eleiminateSalesWV').hide();" update=":salesList:salestable">
 		</p:commandButton>
-		<p:commandButton value="No" onclick="PF('eleiminateSalesWV').hide();" style="color: #fff;margin-top: 30px;" styleClass="dialogButton" />
+		<p:commandButton value="No" onclick="PF('eleiminateSalesWV').hide();" style="color: #fff;margin-top: 90px;" styleClass="dialogButton" />
 
 	</p:dialog>
 	
@@ -90,9 +90,9 @@
 	       showEffect="explode" responsive="true">
 	       <p:outputLabel value="Are you sure you want to void this sale history?"/><br/>
 	       
-	       <p:commandButton value="Yes" title="Void sales drug"  style="color: #fff;margin-left: 150px" actionListener="#{medicineRegistrationBean.voidSales}"
+	       <p:commandButton value="Yes" title="Void sales drug"  style="color: #fff;margin-left: 50px;margin-top: 30px;" actionListener="#{medicineRegistrationBean.voidSales}"
 	                    styleClass="dialogButton" onclick="PF('voidDialogWV').hide();" update=":salesList:salestable"/>
-	       <p:commandButton value="No" onclick="PF('voidDialogWV').hide();" actionListener="#{medicineRegistrationBean.voidSales}" styleClass="dialogButton" style="color:#fff"/>                                                                                  
+	       <p:commandButton value="No" onclick="PF('voidDialogWV').hide();" actionListener="#{medicineRegistrationBean.voidSales}" styleClass="dialogButton" style="color:#fff;margin-top: 30px;"/>                                                                                  
 	</p:dialog>
 	
 </ui:composition>

@@ -1,0 +1,39 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui" xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:o="http://omnifaces.org/ui">
+	
+	<h:panelGrid columns="2" columnClasses="left,right" style="width:100%">
+    <p:chart type="line" model="#{chartView.animatedModel1}" style="width:400px;" />
+    <p:chart type="bar" model="#{chartView.animatedModel2}" style="width:400px;" />
+</h:panelGrid>
+<h:form>
+<p:panelMenu style="width:300px">
+                               <p:submenu label="Ajax Menuitems" >
+                               <p:menuitem value="Save"  icon="ui-icon-disk" immediate="true"/>
+                               <p:menuitem value="Update"  icon="ui-icon-arrowrefresh-1-w" immediate="true"/>
+                          </p:submenu>
+                          </p:panelMenu> 
+                          
+                          <p:menubar autoSubmenuDisplay="true">
+        <p:submenu label="File" icon="ui-icon ui-icon-document">
+            <p:submenu label="New" icon="ui-icon ui-icon-contact">
+                <p:menuitem value="Project" url="#" helpText="CTRL+N" />
+                <p:menuitem value="Other" url="#" helpText="CTRL+O"/>
+            </p:submenu>
+            <p:menuitem value="Open" url="#" />
+            <p:menuitem value="Quit" url="#" />
+        </p:submenu></p:menubar>
+        
+        
+        <p:growl id="growl" showDetail="true" />
+ 
+    <h:panelGrid columns="2" columnClasses="left,right" style="width:100%">
+        <p:chart type="pie" model="#{chartView.pieModel1}" style="width:400px;height:300px">
+            <p:ajax event="itemSelect" listener="#{chartView.itemSelect}" update="growl" />
+        </p:chart>
+ 
+        <p:chart type="bar" model="#{chartView.barModel}" style="width:400px;height:300px">
+            <p:ajax event="itemSelect" listener="#{chartView.itemSelect}" update="growl" />
+        </p:chart>  
+    </h:panelGrid>
+        </h:form>
+</ui:composition>	
