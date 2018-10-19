@@ -162,9 +162,9 @@
 																<p:column styleClass="ui-noborder">
 																
 																	<p:selectOneMenu id="unit" value="#{medicineRegistrationBean.store.unit}" required="true"
-																		requiredMessage="Unit can not be null" label="Unit" style="width: 270px">
+																		requiredMessage="Unit can not be null" label="Unit" style="width: 270px;">
 																		<f:selectItem itemLabel="Select unit" itemValue="" noSelectionOption="true"></f:selectItem>
-																		<f:selectItems value="#{medicineRegistrationBean.selectDrugWithPackageUnit()}"></f:selectItems>
+																		<f:selectItems value="#{medicineRegistrationBean.selectDrugWithPackageUnit()}" style="color: #1c94c4;"></f:selectItems>
 																		<p:ajax event="blur" update="unitMessage" />
 																	</p:selectOneMenu>
 																	<p:message for="unit" id="unitMessage" />

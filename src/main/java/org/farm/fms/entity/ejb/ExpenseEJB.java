@@ -13,6 +13,7 @@ import javax.persistence.criteria.Root;
 
 import org.farm.fms.etntity.Expense;
 import org.farm.fms.etntity.Expense_;
+import org.farm.utils.ConstantsSingleton;
 
 @Stateless
 public class ExpenseEJB extends AbstructHome<Expense, Integer> {
@@ -73,4 +74,36 @@ public class ExpenseEJB extends AbstructHome<Expense, Integer> {
 		return predicate;
 	}
 
+	public List<Expense> getOlderThanNDays(int days) {
+		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+		CriteriaQuery<Expense> query = cb.createQuery(Expense.class);
+		Root<Expense> root = query.from(Expense.class);
+
+		Date nDaysAgoDate = ConstantsSingleton.getDateRage(days);
+
+		// Is here the response to your question?
+		query.where(cb.lessThanOrEqualTo(root.get(Expense_.expenseDate), nDaysAgoDate));
+
+		TypedQuery<Expense> q = entityManager.createQuery(query);
+
+		List<Expense> list = q.getResultList();
+		return list;
+	}
+
+	public List<Expense> findExpenseWithGiveDate(int days) {
+		List<Expense> expenseList = new ArrayList<Expense>();
+
+		Date nDaysAgoDate = ConstantsSingleton.getDateRage(days);
+
+		TypedQuery<Object[]> query = entityManager.createNamedQuery("expenseForTheLastFiveDays", Object[].class);
+		query.setParameter("date", nDaysAgoDate);
+		List<Object[]> result = query.getResultList();
+		for (Object[] next : result) {
+			Expense expense = new Expense();
+			expense.setAmount(Double.parseDouble(next[0].toString()));
+			expense.setExpenseDate((Date) next[1]);
+			expenseList.add(expense);
+		}
+		return expenseList;
+	}
 }

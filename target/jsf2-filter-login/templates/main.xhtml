@@ -21,7 +21,8 @@
 	<f:attribute name="notPrimeFaces" value="dont include aristo.css, fix for primefaces 5.1 renderer"></f:attribute> 
 	
 	<h:outputScript library="javax.faces" name="jsf.js" />
-	
+	<!-- <link rel="stylesheet"  href="#{request.contextPath}/resource/common/chart/jquery.jqplot.css"/>  -->
+	 
 	<link
 		href="http://fonts.googleapis.com/css?family=Lato:300,400,400italic,600,700|Raleway:300,400,500,600,700|Crete+Round:400italic"
 		rel="stylesheet" />
@@ -49,6 +50,7 @@
 	<link rel="stylesheet" href="#{request.contextPath}/resource/css/theme-1.css"/>
     <!-- <link rel="stylesheet" href="../resource/css/myportal.css"/> --> 
      <link rel="stylesheet" href="#{request.contextPath}/resource/css/myportalPrimefaces.css"/> 
+     <link rel="stylesheet" href="#{request.contextPath}/resource/common/chart/jquery.jqplot.min.css"/>
 	<!-- <link rel="stylesheet" href="../resource/css/page.css"/> -->
 	
 	<!-- JQuery 12.0  -->
@@ -105,6 +107,13 @@
      <script src="#{request.contextPath}/resource/common/vendor/selectFx/classie.js"></script>
      <script src="#{request.contextPath}/resource/common/vendor/select2/select2.min.js"/>
     
+    <script src="#{request.contextPath}/resource/common/chart/jquery.jqplot.js"></script> 
+    <script src="#{request.contextPath}/resource/common/chart/jqplot.barRenderer.js"></script> 
+    <script src="#{request.contextPath}/resource/common/chart/jqplot.barRenderer.min.js"></script> 
+    <script src="#{request.contextPath}/resource/common/chart/jqplot.pieRenderer.js"></script> 
+    <script src="#{request.contextPath}/resource/common/chart/jqplot.pieRenderer.min.js"></script> 
+    <script  scr="#{request.contextPath}/resource/JQ12Version/js/jqplot.categoryAxisRenderer.min.js" /> 
+    <script  scr="#{request.contextPath}/resource/JQ12Version/js/jqplot.pointLabels.min.js" />    
     <!-- end: JAVASCRIPTS REQUIRED FOR THIS PAGE ONLY -->
 		<!-- start: CLIP-TWO JAVASCRIPTS -->
 	<script src="#{request.contextPath}/resource/common/assets/js/main.js"></script> 

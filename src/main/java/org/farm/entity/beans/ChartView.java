@@ -1,11 +1,17 @@
 package org.farm.entity.beans;
 
+import java.text.SimpleDateFormat;
+import java.util.List;
+
 import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 
+import org.farm.fms.entity.ejb.ExpenseEJB;
+import org.farm.fms.etntity.Expense;
 import org.primefaces.event.ItemSelectEvent;
 import org.primefaces.model.chart.Axis;
 import org.primefaces.model.chart.AxisType;
@@ -24,6 +30,9 @@ public class ChartView extends AbstructSessionBean {
 
 	private BarChartModel barModel;
 	private PieChartModel pieModel1;
+
+	@EJB
+	private ExpenseEJB expenseEJB;
 
 	@PostConstruct
 	public void init() {
@@ -77,6 +86,14 @@ public class ChartView extends AbstructSessionBean {
 		girls.set("2007", 135);
 		girls.set("2008", 120);
 
+		List<Expense> list = expenseEJB.findExpenseWithGiveDate(6);
+		ChartSeries expense = new LineChartSeries();
+		expense.setLabel("Expense");
+		for (Expense exp : list) {
+			expense.set(new SimpleDateFormat("yyyy").format(exp.getExpenseDate()), exp.getAmount());
+		}
+
+		model.addSeries(expense);
 		model.addSeries(boys);
 		model.addSeries(girls);
 
@@ -87,7 +104,7 @@ public class ChartView extends AbstructSessionBean {
 		LineChartModel model = new LineChartModel();
 
 		LineChartSeries series1 = new LineChartSeries();
-		series1.setLabel("Series 1");
+		series1.setLabel("Date");
 
 		series1.set(1, 2);
 		series1.set(2, 1);
@@ -95,8 +112,14 @@ public class ChartView extends AbstructSessionBean {
 		series1.set(4, 6);
 		series1.set(5, 8);
 
+		List<Expense> list = expenseEJB.findExpenseWithGiveDate(6);
+		LineChartSeries expense = new LineChartSeries();
+		expense.setLabel("Exp");
+		for (Expense exp : list) {
+			expense.set(new SimpleDateFormat("yyyy-MM-dd").format(exp.getExpenseDate()), exp.getAmount());
+		}
 		LineChartSeries series2 = new LineChartSeries();
-		series2.setLabel("Series 2");
+		series2.setLabel("Amount");
 
 		series2.set(1, 6);
 		series2.set(2, 3);
@@ -104,6 +127,7 @@ public class ChartView extends AbstructSessionBean {
 		series2.set(4, 7);
 		series2.set(5, 9);
 
+		// model.addSeries(expense);
 		model.addSeries(series1);
 		model.addSeries(series2);
 

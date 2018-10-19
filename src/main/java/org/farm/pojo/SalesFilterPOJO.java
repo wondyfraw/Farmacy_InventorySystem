@@ -9,6 +9,7 @@ public class SalesFilterPOJO implements IDTO {
 	private Date toDate;
 	private String drugName;
 	private Date expireDate;
+	private boolean onlyExpired;
 
 	public SalesFilterPOJO() {
 
@@ -44,6 +45,14 @@ public class SalesFilterPOJO implements IDTO {
 
 	public void setExpireDate(Date expireDate) {
 		this.expireDate = expireDate;
+	}
+
+	public boolean isOnlyExpired() {
+		return onlyExpired;
+	}
+
+	public void setOnlyExpired(boolean onlyExpired) {
+		this.onlyExpired = onlyExpired;
 	}
 
 }

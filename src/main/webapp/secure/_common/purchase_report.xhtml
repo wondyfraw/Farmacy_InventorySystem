@@ -24,7 +24,7 @@
 	                <div>
 	                 <td>                 
 	                   <p:outputLabel value="From Date" for="fromDateInput"/>
-	                   <p:calendar id="fromDateInput" pattern="dd/MM/yyyy" showOn="button" style="margin-left:30px" value="#{medicineRegistrationBean.searchParmes.fromDate}">
+	                   <p:calendar id="fromDateInput" pattern="dd/MM/yyyy" showOn="button" style="margin-left:30px" value="#{medicineRegistrationBean.purchaseSearchParmes.fromDate}">
 	                    <f:convertDateTime type="date" pattern="#{ui['shared.dateFormat']}"></f:convertDateTime>
 	                   </p:calendar>
 	                   <p:message for="fromDateInput"/>
@@ -33,88 +33,85 @@
 	                 <div style="    margin-left: 400px;margin-top: -40px;">
 	                 <td>
 	                   <p:outputLabel value="To Date" for="toDateInput"/>
-	                   <p:calendar id="toDateInput" pattern="dd/MM/yyyy" showOn="button" style="margin-left:40px" value="#{medicineRegistrationBean.searchParmes.toDate}">
+	                   <p:calendar id="toDateInput" pattern="dd/MM/yyyy" showOn="button" style="margin-left:40px" value="#{medicineRegistrationBean.purchaseSearchParmes.toDate}">
 	                      <f:convertDateTime type="date" pattern="#{ui['shared.dateFormat']}"></f:convertDateTime>
 	                   </p:calendar>
 	                   <p:message for="toDateInput"/>
 	                 </td>
 	                 </div>	                
-	                 <td>	
+	             <!--     <td>	
 	                  <div style="margin-top: 10px;">                 
 	                  <p:outputLabel value ="Category"/>
-	                   <p:selectOneMenu id="category" value="#{medicineRegistrationBean.searchParmes.expireDate}" style="width: 230px; margin-left: 40px;    padding-bottom: 4px;">
+	                   <p:selectOneMenu id="category" value="#{medicineRegistrationBean.purchaseSearchParmes.expireDate}" style="width: 230px; margin-left: 40px;    padding-bottom: 4px;">
 	                      <f:selectItem itemLabel="Store" itemValue="Store"></f:selectItem>
 	                      <f:selectItem itemLabel="Dispensary" itemValue="Dispensary"></f:selectItem> 
 	                   </p:selectOneMenu>
 	                    </div>
-	                 </td>	                
-	                  <div style="    margin-left: 400px;margin-top: -35px;">
-	                 <td>
-	                   <p:outputLabel value="ExpireDate" for="expireDateInput"/>
-	                   <p:calendar id="expireDateInput" pattern="dd/MM/yyyy" showOn="button" style="margin-left:20px" >
-	                      <f:convertDateTime type="date" pattern="#{ui['shared.dateFormat']}"></f:convertDateTime>
-	                   </p:calendar>
-	                   <p:message for="expireDateInput"/>
-	                 </td>
-	                 </div>
+	                 </td> -->	                
+	                
 	               </tr>               
 	                 <tr>
 	                   <div style="margin-top: 6px;">
 	                 <td>	                 
 	                  <p:outputLabel value="Drug Name" for="drugNameInput" />
-	                  <p:inputText id="drugNameInput" style="margin-left:28px" value="#{medicineRegistrationBean.searchParmes.drugName}"></p:inputText>
+	                  <p:inputText id="drugNameInput" style="margin-left:28px" value="#{medicineRegistrationBean.purchaseSearchParmes.drugName}"></p:inputText>
+	                 </td>
+	                 </div>
+	                   <div style="margin-left: 400px;margin-top:-2%">
+	                 <td>
+	                    <p:outputLabel for="expireDateInput" value="Only Expired:"/>
+								<p:selectBooleanCheckbox id="expireDateInput" value="#{medicineRegistrationBean.purchaseSearchParmes.onlyExpired}" style="width: 230px; margin-left: 40px;padding-bottom: 4px;"/>
+								<p:message for="expireDateInput" />
+									               
 	                 </td>
 	                 </div>	      	              
 	                </tr><br/>
 	              </tabe><br/>
-	              <p:commandButton value="Search" ajax="false" styleClass="myButton" style="margin-top: 20px;margin-left: 200px;" actionListener="#{medicineRegistrationBean.searchSalesByFilterCriateria}"
+	              <p:commandButton value="Search" ajax="false" styleClass="myButton" style="margin-top: 20px;margin-left: 200px;" actionListener="#{medicineRegistrationBean.searchPurchaseDrugsByFilterCriteria}"
 	                               update="@form" process="@form">
 					
 				</p:commandButton>
 				
 				<!--  Display list of sales within the given date range -->
 				<ui:fragment>
-				<p:dataTable id="saleTable" value="#{medicineRegistrationBean.searchSalesList}" var="salesDrug" emptyMessage="There is sales within the given date range" 
+				<p:dataTable id="saleTable" value="#{medicineRegistrationBean.purchaseDrug}" var="purchaseDrug" emptyMessage="There is sales within the given date range" 
 				             style="width:100%;font-size:15px;font-family: PT Sans, sans-serif ; padding:4px;color:#515151;"
 							 styleClass="customcenter,customcenter,,,,customcenter notSortable" paginator="true" rows="10" 
 							 paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}">
 							 
 				   <p:column headerText="Drug Name">
-				     <p:outputLabel value="#{salesDrug.drugName}"/>
+				     <p:outputLabel value="#{purchaseDrug.drugName}"/>
 				   </p:column>
 				   <p:column headerText="Quantity">
-				     <p:outputLabel value="#{salesDrug.quantity}"/>
+				     <p:outputLabel value="#{purchaseDrug.quantityInBox}"/>
 				   </p:column>
 				   <p:column headerText="Weight">
-				     <p:outputLabel value="#{salesDrug.weight}"/>
+				     <p:outputLabel value="#{purchaseDrug.weight}"/>
 				   </p:column>
 				   <p:column headerText="Brand">
-				     <p:outputLabel value="#{salesDrug.brand}"/>
+				     <p:outputLabel value="#{purchaseDrug.brand}"/>
 				   </p:column>
 				   <p:column headerText="Batch Number">
-				     <p:outputLabel value="#{salesDrug.batchNumber}"/>
-				   </p:column>
-				   <p:column headerText="Dose">
-				     <p:outputLabel value="#{salesDrug.dose}"/>
-				   </p:column>
+				     <p:outputLabel value="#{purchaseDrug.bathcNumber}"/>
+				   </p:column>				  
 				   <p:column headerText="Unit">
-				     <p:outputLabel value="#{salesDrug.unit}"/>
+				     <p:outputLabel value="#{purchaseDrug.unit}"/>
 				   </p:column>
-				   <p:column headerText="Reg Date">
-				     <p:outputLabel value="#{salesDrug.registrationdate}"/>
+				   <p:column headerText="Purchased Date">
+				     <p:outputLabel value="#{purchaseDrug.registrationDate}"/>
 				   </p:column>
 				   <p:column headerText="UPrice">
-				     <p:outputLabel value="#{salesDrug.unitPrice}"/>
+				     <p:outputLabel value="#{purchaseDrug.unitPrice}"/>
 				   </p:column>
 				   <p:column headerText="Total Price">
-				    <p:outputLabel value="#{salesDrug.totalPrice}"/>
+				    <p:outputLabel value="#{purchaseDrug.totalPrice}"/>
 				   </p:column>
 				</p:dataTable>
 				</ui:fragment>
 				
 				<!-- <p:commandButton value="Generate Report" ajax="false" styleClass="myButton" style="margin-top: 20px;margin-left: 200px;" 
 	                               update="@form" process="@form" rendered="#{medicineRegistrationBean.showDispensaryTable}"/> -->
-	                <p:button outcome="../../_common/print_sales.xhtml" value="Generate Report" styleClass="myButton" style="margin-top: 20px;margin-left: 200px;" rendered="#{medicineRegistrationBean.showDispensaryTable}"/> 
+	                <p:button outcome="../../_common/print_purchase.xhtml" value="Generate Report" styleClass="myButton" style="margin-top: 20px;margin-left: 200px;" rendered="#{medicineRegistrationBean.showDispensaryTable}"/> 
 								
 				</div>
 				</div>	              

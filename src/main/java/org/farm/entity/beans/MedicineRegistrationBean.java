@@ -24,9 +24,11 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.farm.fms.entity.ejb.DispensaryEJB;
+import org.farm.fms.entity.ejb.PurchaseEJB;
 import org.farm.fms.entity.ejb.SalesEJB;
 import org.farm.fms.entity.ejb.StoreEJB;
 import org.farm.fms.etntity.Dispensary;
+import org.farm.fms.etntity.Purchase;
 import org.farm.fms.etntity.Sales;
 import org.farm.fms.etntity.Store;
 import org.farm.pojo.DispensaryPOJO;
@@ -45,6 +47,7 @@ public class MedicineRegistrationBean extends AbstructSessionBean {
 
 	Log log = LogFactory.getLog(MedicineRegistrationBean.class);
 
+	private Purchase purchase;
 	private Store store;
 	private Store dispensaryDrug;
 	private Store deleteDrug;
@@ -67,6 +70,7 @@ public class MedicineRegistrationBean extends AbstructSessionBean {
 
 	private List<MapperPOJO> session_drugList;
 	private List<MapperPOJO> mapperPOJOList;
+	private List<MapperPOJO> purchaseDrug;
 	private Mapper mapper;
 	private MapperPOJO salesPOJO;
 	private String salesQuantity;
@@ -81,6 +85,7 @@ public class MedicineRegistrationBean extends AbstructSessionBean {
 	private boolean showMessagePanel;
 	private boolean showTabQuantityInStrip;
 	private SalesFilterPOJO searchParmes;
+	private SalesFilterPOJO purchaseSearchParmes;
 	private List<Sales> searchSalesList;
 	private FacesContext context = FacesContext.getCurrentInstance();
 	private HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
@@ -89,6 +94,7 @@ public class MedicineRegistrationBean extends AbstructSessionBean {
 
 	private Date reportDate;
 	private List<Sales> reportList;
+	private List<MapperPOJO> purchaseReportList;
 	private String sampleDate;
 	private String userType;
 	private Double totalPrice;
@@ -102,9 +108,13 @@ public class MedicineRegistrationBean extends AbstructSessionBean {
 	@EJB
 	private SalesEJB salesEJB;
 
+	@EJB
+	private PurchaseEJB purchaseEJB;
+
 	@PostConstruct
 	public void init() {
 		store = new Store();
+		purchase = new Purchase();
 		packUnit = new ArrayList<String>();
 		units = new ArrayList<String>();
 		data = new HashMap<String, List<String>>();
@@ -113,8 +123,12 @@ public class MedicineRegistrationBean extends AbstructSessionBean {
 		manageCart = new ManageCart();
 		dispensaryPOJO = new DispensaryPOJO();
 		dispensary = new Dispensary();
+		purchaseDrug = new ArrayList<MapperPOJO>();
 
-		drugList = storeEJB.findAll();
+		String dates = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+		Date toDate = salesEJB.convertDate(dates);
+		drugList = storeEJB.filterDrugByExpireDate(toDate);
+		// drugList = storeEJB.findAll();
 
 		packUnit = ConstantsSingleton.packType();
 		units = ConstantsSingleton.packUnit();
@@ -156,15 +170,24 @@ public class MedicineRegistrationBean extends AbstructSessionBean {
 		filteredSalesDrugs = new ArrayList<Sales>();
 
 		searchParmes = (SalesFilterPOJO) httpSession.getAttribute("searchParmes");
+		purchaseSearchParmes = (SalesFilterPOJO) httpSession.getAttribute("purchaseSearchParmes");
 
 		if (searchParmes != null) {
 			reportList = salesEJB.filterDrugsByCriteria(searchParmes);
 		}
+
+		if (purchaseSearchParmes != null) {
+			purchaseReportList = storeEJB.filterDrugsByCriteria(purchaseSearchParmes);
+		}
+
 		if (searchParmes == null)
 			searchParmes = new SalesFilterPOJO();
 
+		if (purchaseSearchParmes == null)
+			purchaseSearchParmes = new SalesFilterPOJO();
+
 		reportDate = Calendar.getInstance().getTime();
-		sampleDate = "20/06/2018";
+		sampleDate = new SimpleDateFormat("dd/MM/yyyy").format(new Date());
 
 		// dispensaryDrug = new MapperPOJO();
 
@@ -197,6 +220,11 @@ public class MedicineRegistrationBean extends AbstructSessionBean {
 		store.setRegistrationDate(date);
 		store.setPackUnit(unitPack);
 		storeEJB.persistEntity(store);
+		purchase.setStore(store);
+		purchase.setQuantityInBox(store.getQuantityInBox());
+		purchase.setTotalPrice(store.getTotalPrice());
+		purchase.setRegistrationDate(date);
+		purchaseEJB.persistEntity(purchase);
 		log.info("Successfully Register Drugs " + store.getDrugName() + " " + store.getQuantityperBoxperUnit() + ""
 				+ store.getUnit());
 		showMessagePanel = true;
@@ -574,8 +602,11 @@ public class MedicineRegistrationBean extends AbstructSessionBean {
 	}
 
 	// search drugs by filter criteria
-	public void searchDrugsByFilterCriteria() {
-
+	public void searchPurchaseDrugsByFilterCriteria() {
+		purchaseDrug = storeEJB.filterDrugsByCriteria(purchaseSearchParmes);
+		httpSession.setAttribute("purchaseSearchParmes", purchaseSearchParmes);
+		if (purchaseDrug.size() > 0)
+			showDispensaryTable = true;
 	}
 
 	public StreamedContent downloadSalesReport() {
@@ -618,6 +649,30 @@ public class MedicineRegistrationBean extends AbstructSessionBean {
 			log.error("Download sales report is failed");
 		}
 		return result;
+	}
+
+	/**
+	 * 
+	 * @return
+	 */
+
+	public StreamedContent generatePurchasedPDF() {
+		StreamedContent content = null;
+		try {
+			String fileName;
+			if (purchaseSearchParmes.getDrugName() != null)
+				fileName = "purchased_" + purchaseSearchParmes.getDrugName() + Calendar.getInstance().getTimeInMillis()
+						+ ".pdf";
+			else
+				fileName = "purchased_" + Calendar.getInstance().getTimeInMillis() + ".pdf";
+			List<MapperPOJO> purchasedList = new ArrayList<MapperPOJO>();
+			purchasedList = storeEJB.filterDrugsByCriteria(purchaseSearchParmes);
+			InputStream printStream = storeEJB.createPDF(purchasedList, purchaseSearchParmes);
+			content = new DefaultStreamedContent(printStream, "application/pdf", fileName);
+		} catch (Exception e) {
+			log.error("Fail to Generate Purchased drug PDF");
+		}
+		return content;
 	}
 
 	///// jasper sales report //////////////////
@@ -961,6 +1016,30 @@ public class MedicineRegistrationBean extends AbstructSessionBean {
 
 	public void setTotalPrice(Double totalPrice) {
 		this.totalPrice = totalPrice;
+	}
+
+	public List<MapperPOJO> getPurchaseDrug() {
+		return purchaseDrug;
+	}
+
+	public void setPurchaseDrug(List<MapperPOJO> purchaseDrug) {
+		this.purchaseDrug = purchaseDrug;
+	}
+
+	public SalesFilterPOJO getPurchaseSearchParmes() {
+		return purchaseSearchParmes;
+	}
+
+	public void setPurchaseSearchParmes(SalesFilterPOJO purchaseSearchParmes) {
+		this.purchaseSearchParmes = purchaseSearchParmes;
+	}
+
+	public List<MapperPOJO> getPurchaseReportList() {
+		return purchaseReportList;
+	}
+
+	public void setPurchaseReportList(List<MapperPOJO> purchaseReportList) {
+		this.purchaseReportList = purchaseReportList;
 	}
 
 }

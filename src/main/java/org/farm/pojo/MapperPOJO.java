@@ -22,6 +22,8 @@ public class MapperPOJO implements Serializable {
 	private Double salesPrice;
 	private String packUnit;
 	private String packType;
+	private Double totalPrice;
+	private Double unitPrice;
 
 	// from dispensary
 	private Integer dispensaryId;
@@ -188,6 +190,22 @@ public class MapperPOJO implements Serializable {
 
 	public void setTotalUnitPack(Integer totalUnitPack) {
 		this.totalUnitPack = totalUnitPack;
+	}
+
+	public Double getTotalPrice() {
+		return totalPrice;
+	}
+
+	public void setTotalPrice(Double totalPrice) {
+		this.totalPrice = totalPrice;
+	}
+
+	public Double getUnitPrice() {
+		return unitPrice;
+	}
+
+	public void setUnitPrice(Double unitPrice) {
+		this.unitPrice = unitPrice;
 	}
 
 }

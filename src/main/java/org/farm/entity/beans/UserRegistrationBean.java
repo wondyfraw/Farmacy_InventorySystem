@@ -20,13 +20,22 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.farm.exception.MyStoreException;
+import org.farm.exception.MyUserException;
 import org.farm.fms.entity.ejb.UsersEJB;
 import org.farm.fms.etntity.Users;
+import org.farm.utils.Utils;
 import org.primefaces.context.RequestContext;
+
+/**
+ * 
+ * @author wonde
+ * @since 2018
+ *
+ */
 
 @ManagedBean(name = "userRegistrationBean")
 @ViewScoped
-public class UserRegistrationBean {
+public class UserRegistrationBean extends AbstructSessionBean {
 
 	protected Log log = LogFactory.getLog(this.getClass());
 	private Users users;
@@ -36,6 +45,8 @@ public class UserRegistrationBean {
 	private boolean showPassword;
 	private Integer userId;
 	private boolean showMessage;
+	private String newPassword;
+	private String email;
 
 	@EJB
 	private UsersEJB usersEJB;
@@ -56,6 +67,9 @@ public class UserRegistrationBean {
 		}
 	}
 
+	/**
+	 * make new user registration
+	 */
 	public void registerUser() {
 		Date now = Calendar.getInstance().getTime();
 		if (users.getPassword() != null)
@@ -85,6 +99,7 @@ public class UserRegistrationBean {
 			if (users.getPassword() != null) {
 				if (users.getUsersId() != null) {
 					users.setUpdatedDate(now);
+					users.setPassword(Utils.encryptSHA1(users.getPassword()));
 					usersEJB.mergeEntity(users);
 					FacesContext.getCurrentInstance().addMessage(null,
 							new FacesMessage("Successfully edit user profile"));
@@ -99,6 +114,39 @@ public class UserRegistrationBean {
 						+ this.users.getAddress() + "password= " + this.users.getPassword());
 
 			}
+		}
+	}
+
+	public void updatePassword() {
+		Date now = Calendar.getInstance().getTime();
+		users.setUpdatedDate(now);
+		users.setEmail(loginAuthenticationBean.getEmail());
+		users.setAddress(loginAuthenticationBean.getUsersFromDb().getAddress());
+		users.setFullName(loginAuthenticationBean.getUsersFromDb().getFullName());
+		users.setRegistrationdate(loginAuthenticationBean.getUsersFromDb().getRegistrationdate());
+		users.setUserType(loginAuthenticationBean.getUsersFromDb().getUserType());
+		users.setUsersId(loginAuthenticationBean.getUsersFromDb().getUsersId());
+		users.setPassword(Utils.encryptSHA1(users.getPassword()));
+		usersEJB.mergeEntity(users);
+
+		log.info("Successfully update the password!!");
+		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Successfully Update the password"));
+		this.showMessage = true;
+
+	}
+
+	public void resetPassword() {
+		Date now = Calendar.getInstance().getTime();
+		try {
+			Users searchedUser = usersEJB.searchUserByEmail(users.getEmail());
+			if (searchedUser != null) {
+				searchedUser.setPassword(Utils.encryptSHA1(users.getPassword()));
+				searchedUser.setUpdatedDate(now);
+				usersEJB.mergeEntity(searchedUser);
+			}
+		} catch (MyUserException e) {
+			log.error("Reset password is failed becuase user name or email address is wrong");
+			e.printStackTrace();
 		}
 	}
 
@@ -139,6 +187,36 @@ public class UserRegistrationBean {
 		}
 	}
 
+	/**
+	 * 
+	 * @param context
+	 * @param toValidate
+	 * @param value
+	 * @throws MyStoreException
+	 * 
+	 * @check old password to the save saved password before make any password change
+	 * @author Wonde
+	 */
+	public void validateOldPassword(FacesContext context, UIComponent toValidate, Object value)
+			throws MyStoreException {
+		String confirmPassword = (String) value;
+		if (!confirmPassword.equals(loginAuthenticationBean.getPassword())) {
+			FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR,
+					"Inserted Passwords do not match with old Password!", "Passwords do not match!");
+			context.addMessage(toValidate.getClientId(), message);
+			log.error("Confirm Password =" + passwordConfirm + "  do not match with the first password "
+					+ users.getPassword());
+			throw new ValidatorException(message);
+			// throw new MyStoreException("Passwords do not match!");
+		}
+	}
+
+	/**
+	 * 
+	 * @param context
+	 * @param toValidate
+	 * @param value
+	 */
 	public void validatePassword(FacesContext context, UIComponent toValidate, Object value) {
 		String confirm = (String) value;
 		UIInput passComp = (UIInput) toValidate.getAttributes().get("passwordComponent");
@@ -237,6 +315,22 @@ public class UserRegistrationBean {
 
 	public void setShowMessage(boolean showMessage) {
 		this.showMessage = showMessage;
+	}
+
+	public String getNewPassword() {
+		return newPassword;
+	}
+
+	public void setNewPassword(String newPassword) {
+		this.newPassword = newPassword;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
 }

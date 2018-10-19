@@ -1,0 +1,100 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:p="http://primefaces.org/ui"
+	xmlns:cc="http://java.sun.com/jsf/composite/components" template="/templates/main.xhtml">
+
+	<ui:define name="content">
+		<div id="app">
+			<div class="main-content">
+				<!-- <div class="wrap-content container"> -->
+					<div class="col-md-12 col-sm-12 col-lg-12">
+					<div style="text-align: justify; padding: 100px 70px;">
+					<div style="text-align: center;">
+					  <h3>Mega Pharmacy</h3>
+					  <h3>Drug Purchase Report</h3>
+					  <h3>Report Dates #{medicineRegistrationBean.sampleDate}</h3>				      
+					  </div>
+					  <h:form>
+					  <ui:fragment>	 	
+				<p:dataTable id="saleTable" value="#{medicineRegistrationBean.purchaseReportList}" var="purchaseDrug" emptyMessage="There is no sales within the given date range" 
+				             style="width:100%;font-size:15px;font-family: PT Sans, sans-serif ; padding:4px;color:#515151;">
+				             
+				     <p:column headerText="Drug Name">
+				    <p:outputLabel value="#{purchaseDrug.drugName}"/>
+				   </p:column>
+				   <p:column headerText="Quantity">
+				     <p:outputLabel value="#{purchaseDrug.quantityInBox}"/>
+				   </p:column>
+				   <p:column headerText="Weight">
+				     <p:outputLabel value="#{purchaseDrug.weight}"/>
+				   </p:column>
+				   <p:column headerText="Brand">
+				     <p:outputLabel value="#{purchaseDrug.brand}"/>
+				   </p:column>
+				   <p:column headerText="Batch Number">
+				     <p:outputLabel value="#{purchaseDrug.bathcNumber}"/>
+				   </p:column>				  
+				   <p:column headerText="Unit">
+				     <p:outputLabel value="#{purchaseDrug.unit}"/>
+				   </p:column>
+				   <p:column headerText="Purchased Date">
+				     <p:outputLabel value="#{purchaseDrug.registrationDate}"/>
+				   </p:column>
+				   <p:column headerText="UPrice">
+				     <p:outputLabel value="#{purchaseDrug.unitPrice}"/>
+				   </p:column>
+				   <p:column headerText="Total Price">
+				    <p:outputLabel value="#{purchaseDrug.totalPrice}"/>
+				   </p:column>
+							  </p:dataTable>
+							  </ui:fragment>
+							  
+							
+					 <p:commandButton value="Download" ajax="false" styleClass="myButton" style="margin-top: 20px;margin-left: 200px;" 
+	                               update="@form" process="@form">
+					   <p:fileDownload value="#{medicineRegistrationBean.generatePurchasedPDF()}"/>  
+					  <!-- <p:ajax event="click" />
+					 <p:printer target="saleTable" ></p:printer> -->	 			
+				</p:commandButton>
+				<p:button outcome="/secure/_common/purchase_report.xhtml" value="Back to Report Form" styleClass="myButton" style="margin-top: 20px;margin-left: 2px;"/>
+							  </h:form>													
+					  </div>
+					</div>
+				<!-- </div> -->
+			</div>
+		</div>
+		
+		<style>
+.ui-datatable table {
+    font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.ui-datatable table td, .ui-datatable table th {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+.ui-datatable table tr:nth-child(even){background-color: #f2f2f2;}
+
+.ui-datatable table tr:hover {background-color: #ddd;}
+
+.ui-datatable table th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: #4CAF50;
+    color: white;
+}
+select{
+    padding-bottom: 0;
+    padding-top: 0;
+    -webkit-appearance: menulist;
+    box-sizing: border-box;
+    
+}
+</style> 
+
+	</ui:define>
+</ui:composition>

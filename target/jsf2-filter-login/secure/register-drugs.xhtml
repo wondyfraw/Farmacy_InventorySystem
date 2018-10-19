@@ -162,9 +162,9 @@
 																<p:column styleClass="ui-noborder">
 																
 																	<p:selectOneMenu id="unit" value="#{medicineRegistrationBean.store.unit}" required="true"
-																		requiredMessage="Unit can not be null" label="Unit" style="width: 270px">
+																		requiredMessage="Unit can not be null" label="Unit" style="width: 270px;">
 																		<f:selectItem itemLabel="Select unit" itemValue="" noSelectionOption="true"></f:selectItem>
-																		<f:selectItems value="#{medicineRegistrationBean.selectDrugWithPackageUnit()}"></f:selectItems>
+																		<f:selectItems value="#{medicineRegistrationBean.selectDrugWithPackageUnit()}" style="color: #1c94c4;"></f:selectItems>
 																		<p:ajax event="blur" update="unitMessage" />
 																	</p:selectOneMenu>
 																	<p:message for="unit" id="unitMessage" />
@@ -315,7 +315,7 @@
 						</div>
 						
 						<p:dialog id="successDialog" widgetVar="successDialogWV" modal="true" header="Drug Registration"
-						          width="400" height="200" showEffect="explode"><br/>
+						          width="50%" height="200" showEffect="explode" responsive="true"><br/>
 						    <center>
 						      <span class="fa fa-check-circle fa-5x text-success"/><br/>
 						      <p:outputLabel value="Successfully Register drugs" styleClass="okLabel" style="font-size: 20px;"/>						      

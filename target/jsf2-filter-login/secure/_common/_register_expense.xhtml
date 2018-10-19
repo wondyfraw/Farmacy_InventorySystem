@@ -1,202 +1,177 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:p="http://primefaces.org/ui" xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:o="http://omnifaces.org/ui">
-	
+
 	<h:form id="expenseForm" enctype="multipart/form-data">
-						<fieldset style="margin-top: 50px;margin-left: 10px;">
-							<legend> Expense Form </legend>
-							<div class="panel panel-primary">
-								<!-- <div class="panel-heading" style="background-color: #4CAF50"> -->
-								<div class="panel-heading" style="background-color: #003576;">
-									<p:outputLabel styleClass="header_color">Expense Registration Form</p:outputLabel>
-								</div>
-								<div class="panel-body" style="background-color: #EDEDED">
-									<p:panelGrid styleClass="ui-noborder">
+		<fieldset style="margin-top: 50px; margin-left: 10px;">
+			<!-- <legend> Expense Form </legend> -->
+			<div class="panel panel-primary">
+				<!-- <div class="panel-heading" style="background-color: #4CAF50"> -->
+				<div class="panel-heading" style="background-color: #003576;">
+					<p:outputLabel styleClass="header_color">Expense Registration Form</p:outputLabel>
+				</div>
+				<div class="panel-body" style="background-color: #EDEDED">
+					<div class="ui-fluid">
+						<p:panelGrid columns="3" columnClasses="ui-grid-col-2,ui-grid-col-10" layout="grid"
+							styleClass="ui-panelgrid-blank">
+							<p:outputLabel value="Expense Date" for="expenseDate1" />
+							<p:calendar id="expenseDate1" value="#{expenseBean.expense.expenseDate}" required="true"
+								requiredMessage="Expense Date can not be null" label="Manufactury Date" showOn="button" pattern="dd/MM/yyyy"
+								navigator="true" size="50">
+								<p:ajax event="blur" update="expenseDateMessage1"></p:ajax>
+								<f:convertDateTime type="date" pattern="#{ui['shared.dateFormat']}"></f:convertDateTime>
+								<f:validator validatorId="nullValueValidation" for="expenseDate" />
+							</p:calendar>
+							<p:message id="expenseDateMessage1" for="expenseDate1"></p:message>
+							<p:outputLabel value="Amount" for="amount" />
+							<p:inputText id="amount" value="#{expenseBean.amount}" required="true"
+								requiredMessage="Expense Amount can not be null" size="50" decimalPlaces="2" maxlength="10"
+								style="background: #fff;" styleClass="ui-nbackground">
+								<p:ajax event="blur" update="amounteMessage" />
+								<o:validator validatorId="javax.faces.RegularExpression" pattern="#{validation['pattern.decimal']}"
+									message="#{validation['message.numberic']}"></o:validator>
+							</p:inputText>
+							<p:message id="amounteMessage" for="amount" />
+							<p:outputLabel value="Invoice Number" for="invoice" styleClass="manufactury_padding" />
+							<p:inputText id="invoice" style="background: #fff;" value="#{expenseBean.expense.invoiceNumber}" size="50"
+								maxlength="255">
 
-										<p:row styleClass="ui-noborder" style="background: #fff;">
-											<div class="form-group">
-												<p:column styleClass="ui-noborder">
-													<p:outputLabel value="Expense Date" for="expenseDate" styleClass="manufactury_padding" />
-												</p:column>
-												<p:column styleClass="ui-noborder">
-													<p:calendar id="expenseDate" value="#{expenseBean.expense.expenseDate}" label="Expense Date"
-														navigator="true" size="50" style="background: #fff;" showOn="button" required="true" requiredMessage="Date can not be null">
-														<f:convertDateTime pattern="dd/MM/yyyy" /> 
-														<p:ajax event="blur" update="expenseDateMessage"></p:ajax>
-														<f:converter converterId="dateValidators"></f:converter>
-														<!-- <f:convertDateTime type="date" pattern="#{ui['shared.dateFormat']}"></f:convertDateTime> -->
-														<!-- <f:validator validatorId="dateValidators" for="expenseDate" /> -->
-														<span class="add-on">
-														 <i class="icon-calendar"></i>
-														</span>
-													</p:calendar>
-													<p:message id="expenseDateMessage" for="expenseDate"></p:message>
-												</p:column>
-											</div>
-										</p:row>
-										<p:row styleClass="ui-noborder" style="background: #fff;">
-											<div class="form-group">
-												<p:column styleClass="ui-noborder">
-													<p:outputLabel value="Amount" for="amount" styleClass="manufactury_padding" />
-												</p:column>
-												<p:column styleClass="ui-noborder" style="background: #fff;">
-													<p:inputText id="amount" value="#{expenseBean.amount}" required="true"
-														requiredMessage="Expense Amount can not be null" size="50" decimalPlaces="2" maxlength="10"
-														style="background: #fff;" styleClass="ui-nbackground">
-														<p:ajax event="blur" update="amounteMessage" />
-														<o:validator validatorId="javax.faces.RegularExpression" pattern="#{validation['pattern.decimal']}"
-															message="#{validation['message.numberic']}"></o:validator>
-													</p:inputText>
-													<p:message id="amounteMessage" for="amount" />
-												</p:column>
-											</div>
-										</p:row>
-										<p:row styleClass="ui-noborder" style="background: #fff;">
-											<div class="form-group">
-												<p:column>
-													<p:outputLabel value="Invoice Number" for="invoice" styleClass="manufactury_padding" />
-												</p:column>
-												<p:column styleClass="ui-noborder">
-													<p:inputText id="invoice" style="background: #fff;" value="#{expenseBean.expense.invoiceNumber}" size="50"
-														maxlength="255">
+							</p:inputText>
+							<!-- <p:message for="description" id="descriptionMessage"></p:message> -->
+							<p:outputLabel value="Description" for="description" styleClass="manufactury_padding" />
+							<p:inputTextarea value="#{expenseBean.expense.description}" id="description" required="true"
+								requiredMessage="Expense Description field can not be null" size="50" maxlength="255" style="background: #fff;"
+								rows="12">
+								<p:ajax event="blur" update="descriptionMessage"></p:ajax>
+							</p:inputTextarea>
+							<p:message for="description" id="descriptionMessage"></p:message>
+							<p:outputLabel value="Attach file" styleClass="manufactury_padding" />
+							<h:panelGroup id="uploadAllegatoPanel">
+								<ui:fragment>
+									<p:fileUpload fileUploadListener="#{expenseBean.uploadAttachFile}" id="expenseUploadElement"
+										sizeLimit="5242880" fileLimit="3" multiple="false" dragDropSupport="false"
+										fileLimitMessage="upload maximum of 3 files" mode="advanced"
+										invalidSizeMessage="file size must be less than 5 MB." label="Seach file" auto="true"
+										update="uploadAllegatoPanel" ajax="false">
+									</p:fileUpload>
+								</ui:fragment>
+								<ui:fragment rendered="#{not empty expenseBean.fileUpload}">
+									<p>#{expenseBean.attachFileName}</p>
+									<p:messages id="messages" globalOnly="true"></p:messages>
+								</ui:fragment>
+								<ui:fragment rendered="#{empty expenseBean.fileUpload}">
+									<p>#{expenseBean.attachFileName}</p>
+									<p:messages id="messagesError" globalOnly="true"></p:messages>
+								</ui:fragment>
+							</h:panelGroup><br/>
+                              <div></div>
+                              <p:outputLabel></p:outputLabel>
+                              <p:commandButton value="Save" update="@form" styleClass="background: #B61601 !important;" icon="ui-icon ui-icon-check"
+							actionListener="#{expenseBean.addToSession}" style="background: #B61601 !important;color:#fff;width:35%" />
+							
+						</p:panelGrid>
+					</div>
+					<br />					
 
-													</p:inputText>
-													<!-- <p:message for="description" id="descriptionMessage"></p:message> -->
-												</p:column>
-											</div>
-										</p:row>
-										<p:row styleClass="ui-noborder" style="background:#fff">
-											<div class="form-group">
-												<p:column>
-													<p:outputLabel value="Description" for="description" styleClass="manufactury_padding" />
-												</p:column>
-												<p:column styleClass="ui-noborder">
-													<p:inputTextarea value="#{expenseBean.expense.description}" id="description" required="true"
-														requiredMessage="Expense Description field can not be null" size="50" maxlength="255"
-														style="width:390px;background: #fff;" rows="12">
-														<p:ajax event="blur" update="descriptionMessage"></p:ajax>
-													</p:inputTextarea>
-													<p:message for="description" id="descriptionMessage"></p:message>
-												</p:column>
-											</div>
-										</p:row>
-										<p:row styleClass="ui-noborder">
-										  <div class="form-group">
-										    <p:column>
-										       <p:outputLabel value="Attach file" styleClass="manufactury_padding"/>
-										    </p:column>
-										    <p:column styleClass="ui-noborder">
-										    <h:panelGroup id="uploadAllegatoPanel">
-										         <ui:fragment >
-							                          <p:fileUpload fileUploadListener="#{expenseBean.uploadAttachFile}" id="expenseUploadElement"
-								                             sizeLimit="5242880" fileLimit="3" multiple="false" 
-								                            dragDropSupport="false" fileLimitMessage="upload maximum of 3 files" mode="advanced"
-								                            invalidSizeMessage="file size must be less than 5 MB." label="Seach file" auto="true"
-								                             update="uploadAllegatoPanel" ajax="false">
-							                         </p:fileUpload>
-						                         </ui:fragment>
-						
-						                  <ui:fragment rendered="#{not empty expenseBean.fileUpload}">
-						                        <p>#{expenseBean.attachFileName}</p>
-						                        <p:messages id="messages" globalOnly="true"></p:messages>
-					                     </ui:fragment> 
-					                     <ui:fragment rendered="#{empty expenseBean.fileUpload}">
-						                   <p>#{expenseBean.attachFileName}</p>
-						                   <p:messages id="messagesError" globalOnly="true"></p:messages>
-					                    </ui:fragment>
-					                    </h:panelGroup>
-										    </p:column>
-										  </div>
-										</p:row>
-									</p:panelGrid>
-									<br />
-									<p:panelGrid styleClass="ui-noborder">
-										<p:commandButton value="Save" update="@form" styleClass="myButton" icon="ui-icon ui-icon-check"
-											actionListener="#{expenseBean.addToSession}" style="background: #f6f6f6;color:#fff" />
-									</p:panelGrid>
+					<!-- Session Table -->
+					<h:panelGroup id="sessionExpenseList" rendered="#{expenseBean.showPanel}">
+						<p:panelGrid columns="1">
+							<p:dataTable var="expense" value="#{expenseBean.sessionExpenseList}" id="expensetable"
+								emptyMessage="There is no expense in the session" reflow="true"
+								style="width:100%;font-size:15px;font-family: PT Sans, sans-serif ; padding:4px;color:#515151;"
+								styleClass="customcenter,customcenter,,,,customcenter notSortable" paginator="true" rows="10"
+								paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}">
 
-									<!-- Session Table -->
-									<h:panelGroup id="sessionExpenseList" rendered="#{expenseBean.showPanel}">
-										<p:panelGrid columns="1">
-											<p:dataTable var="expense" value="#{expenseBean.sessionExpenseList}" id="expensetable"
-												emptyMessage="There is no expense in the session"
-												style="width:100%;font-size:15px;font-family: PT Sans, sans-serif ; padding:4px;color:#515151;"
-												styleClass="customcenter,customcenter,,,,customcenter notSortable" paginator="true" rows="10"
-												paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}">
+								<p:column headerText="Expense Date">
+									<p:outputLabel value="#{expense.expenseDate}">
+										<f:convertDateTime pattern="dd/MM/yyyy" />
+									</p:outputLabel>
+								</p:column>
+								<p:column headerText="Amount">
+									<p:outputLabel value="#{expense.amount}" />
+								</p:column>
+								<p:column headerText="Invoice Number">
+									<p:outputLabel value="#{expense.invoiceNumber}" />
+								</p:column>
+								<p:column headerText="Description">
+									<p:outputLabel value="#{expense.description}" />
+								</p:column>
+								<p:column headerText="Upload file">
+									<p:outputLabel value="#{expense.fileName}" />
+								</p:column>
+								<p:column headerText="Action">
+									<p:commandButton id="deleteButtonD" update="expensetable" process="@this" style="width:30px; height:25px;"
+										actionListener="#{expenseBean.setSessionExpense(expense)}" icon="ui-icon-trash" title="Delete"
+										onsuccess="PF('eleiminateExpenseCartWV').show();"
+										oncomplete="$('.ui-datatable-data tr').find('span.ui-icon-close').each(function(){this.click()})">
+									</p:commandButton>
 
-												<p:column headerText="Expense Date">
-													<p:outputLabel value="#{expense.expenseDate}">
-														<f:convertDateTime pattern="dd/MM/yyyy" />
-													</p:outputLabel>
-												</p:column>
-												<p:column headerText="Amount">
-													<p:outputLabel value="#{expense.amount}" />
-												</p:column>
-												<p:column headerText="Invoice Number">
-													<p:outputLabel value="#{expense.invoiceNumber}" />
-												</p:column>
-												<p:column headerText="Description">
-													<p:outputLabel value="#{expense.description}" />
-												</p:column>
-												<p:column headerText="Upload file">
-												     <p:outputLabel value="#{expense.fileName}"/>
-												</p:column>
-												<p:column headerText="Action">
-													<p:commandButton id="deleteButtonD" update="expensetable" process="@this" style="width:30px; height:25px;"
-														actionListener="#{expenseBean.setSessionExpense(expense)}" icon="ui-icon-trash" title="Delete"
-														onsuccess="PF('eleiminateExpenseCartWV').show();"
-														oncomplete="$('.ui-datatable-data tr').find('span.ui-icon-close').each(function(){this.click()})">
-													</p:commandButton>
+								</p:column>
+							</p:dataTable>
+							<!-- Save session cart to dispensary -->
+							<center>
+								<ui:fragment>
+									<p:commandButton value="Submit" process="@form" update="expensetable sessionExpenseList"
+										actionListener="#{expenseBean.registerExpense}" rendered="#{expenseBean.showPanel}" styleClass="myButton"
+										style="color:#fff" icon="ui-icon ui-icon-check" onsuccess="PF('saveDialogWV').show();">
+									</p:commandButton>
+								</ui:fragment>
+							</center>
+							<ui:fragment rendered="#{expenseBean.showMessage}">
+								<p:messages id="messagesExpense" globalOnly="true"></p:messages>
+							</ui:fragment>
+						</p:panelGrid>
+					</h:panelGroup>
+				</div>
+			</div>
+		</fieldset>
+	</h:form>
 
-												</p:column>
-											</p:dataTable>
-											<!-- Save session cart to dispensary -->
-											<center>
-												<p:commandButton value="Submit" process="@form" update="expensetable sessionExpenseList"
-													actionListener="#{expenseBean.registerExpense}" rendered="#{expenseBean.showPanel}" styleClass="myButton"
-													style="color:#fff" icon="ui-icon ui-icon-check" onsuccess="PF('saveDialogWV').show();">
-												</p:commandButton>
-											</center>
-										</p:panelGrid>
-									</h:panelGroup>
-								</div>
-							</div>
-						</fieldset>
-					</h:form>
+	<p:dialog id="saveDialog" widgetVar="saveDialogWV" header="Save Expense" modal="true" width="50%" height="300"
+		showEffect="explode" style="margin-top: 100px;" responsive="true">
+		<br />
+		<span class="fa fa-check-circle fa-5x text-success" style="margin-left: 190px;" />
+		<p:outputLabel value="Successfully register expense" styleClass="okLabel" style="font-size: 24px;margin-left: 50px" />
+		<br />
+		<p:commandButton value="Ok" title="save expense" styleClass="okButton" update=":expenseForm"
+			style="margin-top: 120px;background: #4CAF50;color: #fff;" onclick="PF('saveDialogWV').hide();" />
+		<!-- <p:commandButton value="No" title="No" onclick="PF('saveDialogWV').hide();" styleClass="margin-1em"/>  -->
+	</p:dialog>
 
-					<p:dialog id="saveDialog" widgetVar="saveDialogWV" header="Save Expense" modal="true" width="500" height="300"
-						showEffect="explode">
-						<p:outputLabel value="Successfully register expense" styleClass="okLabel" style="font-size: 24px;" />
-						<br />
-						<span class="fa fa-check-circle fa-5x text-success" style="margin-left: 190px;" />
-						<p:commandButton value="Ok" title="save expense" styleClass="okButton" update=":expenseForm"
-							onclick="PF('saveDialogWV').hide();" />
-						<!-- <p:commandButton value="No" title="No" onclick="PF('saveDialogWV').hide();" styleClass="margin-1em"/>  -->
-					</p:dialog>
+	<p:dialog id="eleiminateExpenseCart" widgetVar="eleiminateExpenseCartWV" header="Delete expense cart" modal="true"
+		width="50%" height="331" showEffect="explode" style="margin-top: 100px;" responsive="true">
+		<br />
+		<span class="fa fa-exclamation-circle fa-5x text-danger" style="margin-left: 190px;" />
+		<p:outputLabel value="Are you sure you want to delete expense from session?" styleClass="deleteLebel"
+			style="font-size: 24px;margin-top: 20px;" />
+		<div class="text-center">
+			<p:commandButton value="Yes" title="Delete expense" actionListener="#{expenseBean.deleteExpenseSessionCart}"
+				update=":expenseForm" styleClass="margin-1eB" onclick="PF('eleiminateExpenseCartWV').hide();"
+				style="width:60px;background: #B61601 !important;color:#fff" />
+			<p:commandButton value="No" title="no" style="margin-top: 50px;width:60px;background: #B61601 !important;color:#fff"
+				onclick="PF('eleiminateExpenseCartWV').hide();" />
+		</div>
+	</p:dialog>
 
-					<p:dialog id="eleiminateExpenseCart" widgetVar="eleiminateExpenseCartWV" header="Delete expense cart" modal="true"
-						width="500" height="400" showEffect="explode">
-						<p:outputLabel value="!Are you sure you want to delete expense from session" styleClass="deleteLebel"
-							style="font-size: 24px;" />
-						<span class="fa fa-exclamation-circle fa-5x text-danger" style="margin-left: 190px;" /><br/><br/>
-						<div class="text-center">
-							<p:commandButton value="Yes" title="Delete expense" actionListener="#{expenseBean.deleteExpenseSessionCart}"
-								update=":expenseForm" styleClass="margin-1eB" onclick="PF('eleiminateExpenseCartWV').hide();" style="width:60px" />
-							<p:commandButton value="No" title="no" style="margin-top: 50px;width:60px" onclick="PF('eleiminateExpenseCartWV').hide();" />
-						</div>
-					</p:dialog>
-	
 	<style>
-	#expenseDate.ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default{
-	   background: #fff; 
-	}
-	ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-left ui-fileupload-choose{
-	   /* background: #f6f6f6; */
-	}
+#expenseDate.ui-state-default, .ui-widget-content .ui-state-default,
+	.ui-widget-header .ui-state-default {
+	background: #fff;
+}
+
+.ui-button-icon-only {
+	padding: 4px;
+}
+
+ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-left ui-fileupload-choose
+	{
+	/* background: #f6f6f6; */
 	
-	.ui-widget-header{
-	  background: #3667b3;
-	}
+}
+
+.ui-widget-header {
+	/* background: #3667b3;  */
 	
-	</style>
-	</ui:composition>
+}
+</style>
+</ui:composition>

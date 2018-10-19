@@ -18,7 +18,8 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "expense", schema = "myfms")
 @NamedQueries({
-		@NamedQuery(name = "totalExpenseForEachDay", query = "select sum(amount),expenseDate from Expense group by expenseDate") })
+		@NamedQuery(name = "totalExpenseForEachDay", query = "select sum(amount),expenseDate from Expense group by expenseDate"),
+		@NamedQuery(name = "expenseForTheLastFiveDays", query = "select sum(amount), expenseDate from Expense where expenseDate <= :date group by expenseDate") })
 public class Expense implements Serializable {
 
 	private static final long serialVersionUID = -8686228350401399741L;
@@ -26,6 +27,7 @@ public class Expense implements Serializable {
 	private Integer expenseCode;
 	private Date expenseDate;
 	private String description;
+
 	private Double amount;
 	private String userName;
 	private String invoiceNumber;

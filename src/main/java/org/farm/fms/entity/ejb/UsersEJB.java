@@ -34,8 +34,24 @@ public class UsersEJB extends AbstructHome<Users, Integer> {
 
 	}
 
+	public Users findUserByEmail(String email) throws MyUserException {
+		try {
+			TypedQuery<Users> usersQuery = entityManager.createNamedQuery("searchUserByEmail", Users.class);
+			usersQuery.setParameter("email", email);
+			Users queryResult = usersQuery.getSingleResult();
+			return queryResult;
+		} catch (Exception e) {
+			return null;
+		}
+
+	}
+
 	public Boolean exist(String email) throws MyUserException {
 		return searchUserByEmail(email) != null;
+	}
+
+	public Boolean notExist(String email) throws MyUserException {
+		return findUserByEmail(email) == null;
 	}
 
 	public void register(Users users) {

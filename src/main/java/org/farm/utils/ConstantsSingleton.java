@@ -1,6 +1,7 @@
 package org.farm.utils;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -114,16 +115,29 @@ public class ConstantsSingleton {
 				drugPackList.add("Tooth soap");
 				drugPackList.add("Condom");
 				drugPackList.add("Cream");
-				drugPackList.add("IV Fload");
+				drugPackList.add("IV Flood");
 				drugPackList.add("IV Set");
 				drugPackList.add("Injection needle");
-				drugPackList.add("Butterfly needle");
+				drugPackList.add("Betterfly needle");
 				drugPackList.add("Powder");
 				drugPackList.add("Modis");
 				drugPackList.add("Baby diaper");
 				drugPackList.add("Tooth Brash");
+				drugPackList.add("Body lotion");
+			}
+			if (drugPack.equals("Bottle")) {
+				drugPackList.add("Sirup");
+				drugPackList.add("Eye drop");
 			}
 		}
 		return drugPackList;
+	}
+
+	public static Date getDateRage(int days) {
+		long today = System.currentTimeMillis();
+		long nDays = days * 24 * 60 * 60 * 1000;
+		long nDaysAgo = today - nDays;
+		Date nDaysAgoDate = new Date(nDaysAgo);
+		return nDaysAgoDate;
 	}
 }

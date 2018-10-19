@@ -12,7 +12,7 @@ CREATE TABLE myfms.dispensary
   quantity_per_pack_unit integer DEFAULT 0,
   quantity_per_pack integer DEFAULT 0,
   dispensary_date date NOT NULL DEFAULT '2000-01-01'::date,
-  CONSTRAINT id_convenzione_pk PRIMARY KEY (id_dispensary),
+  CONSTRAINT id_dispensary_pk PRIMARY KEY (id_dispensary),
   CONSTRAINT dispensary_myfms_store_fk FOREIGN KEY (id_store)
       REFERENCES myfms.store (id_store) MATCH SIMPLE
       ON UPDATE NO ACTION ON DELETE NO ACTION
