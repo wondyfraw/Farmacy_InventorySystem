@@ -1,0 +1,242 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:p="http://primefaces.org/ui"
+	xmlns:cc="http://java.sun.com/jsf/composite/components" template="/templates/main.xhtml">
+	  
+	  <ui:define name="content">
+	    <div id="app"> 
+	      <ui:include src="/secure/sidebar.xhtml"/>
+	      <ui:include src="/secure/admin/include/header.xhtml"/>
+	      <div class="main-content">
+	        <div class="wrap-content container">
+	         <div class="col-md-12 col-sm-12 col-lg-12">
+	          <h1>Sales Invoice From</h1>
+	          <h:form id="invoiceForm">
+	            <fieldset>
+	              <legend></legend>
+	              <div class="panel panel-primary">											
+				     <div class="panel-heading" style="background-color: #003576;">
+						 <p:outputLabel styleClass="header_color">Report paramater</p:outputLabel>
+					 </div>
+					 <div class="panel-body" style="background-color: #EDEDED"><br/>
+	              <tabe>
+	               <tr>
+	                 <td>
+	                   <p:outputLabel value="From Date" for="fromDateInput"/>
+	                   <p:calendar id="fromDateInput" pattern="dd/MM/yyyy" showOn="button" style="margin-left:30px" value="#{medicineRegistrationBean.searchParmes.fromDate}">
+	                    <f:convertDateTime type="date" pattern="#{ui['shared.dateFormat']}"></f:convertDateTime>
+	                   </p:calendar>
+	                   <p:message for="fromDateInput"/>
+	                 </td>
+	                 <td>
+	                   <p:outputLabel value="To Date" for="toDateInput"/>
+	                   <p:calendar id="toDateInput" pattern="dd/MM/yyyy" showOn="button" style="margin-left:50px" value="#{medicineRegistrationBean.searchParmes.toDate}">
+	                      <f:convertDateTime type="date" pattern="#{ui['shared.dateFormat']}"></f:convertDateTime>
+	                   </p:calendar>
+	                   <p:message for="toDateInput"/>
+	                 </td>
+	                 <td>
+	                  <p:outputLabel value="Drug Name" for="drugNameInput" />
+	                  <p:inputText id="drugNameInput" style="margin-left:30px" value="#{medicineRegistrationBean.searchParmes.drugName}"></p:inputText>
+	                 </td>
+	               </tr>
+	              </tabe><br/>
+	              <p:commandButton value="Search" ajax="false" styleClass="myButton" style="margin-top: 20px;margin-left: 200px;" actionListener="#{medicineRegistrationBean.searchSalesByFilterCriateriaForInvoice}"
+	                               update="saleTable" process="@form">
+					
+				</p:commandButton>
+				
+				<!--  Display list of sales within the given date range -->
+				<ui:fragment>
+				<p:dataTable id="saleTable" value="#{medicineRegistrationBean.searchSalesList}" var="salesDrug" emptyMessage="There is no sales within the given date range" 
+				             style="width:100%;font-size:15px;font-family: PT Sans, sans-serif ; padding:4px;color:#515151;"
+							 styleClass="customcenter,customcenter,,,,customcenter notSortable" paginator="true" rows="10" 
+							 paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}">
+							 
+				   <p:column headerText="Drug Name">
+				     <p:outputLabel value="#{salesDrug.drugName}"/>
+				   </p:column>
+				   <p:column headerText="Quantity">
+				     <p:outputLabel value="#{salesDrug.quantity}"/>
+				   </p:column>
+				   <p:column headerText="Weight">
+				     <p:outputLabel value="#{salesDrug.weight}"/>
+				   </p:column>
+				   <p:column headerText="Brand">
+				     <p:outputLabel value="#{salesDrug.brand}"/>
+				   </p:column>
+				   <p:column headerText="Batch Number">
+				     <p:outputLabel value="#{salesDrug.batchNumber}"/>
+				   </p:column>
+				   <p:column headerText="Dose">
+				     <p:outputLabel value="#{salesDrug.dose}"/>
+				   </p:column>
+				   <p:column headerText="Unit">
+				     <p:outputLabel value="#{salesDrug.unit}"/>
+				   </p:column>
+				   <p:column headerText="Reg Date">
+				     <p:outputLabel value="#{salesDrug.registrationdate}"/>
+				   </p:column>
+				   <p:column headerText="UPrice">
+				     <p:outputLabel value="#{salesDrug.unitPrice}"/>
+				   </p:column>
+				   <p:column headerText="Total Price">
+				    <p:outputLabel value="#{salesDrug.totalPrice}"/>
+				   </p:column>
+				   <p:column headerText="Action">
+				     <p:commandButton value="Add" icon="ui-icon ui-icon-plus" actionListener="#{medicineRegistrationBean.addToInvoiceSession(salesDrug)}" 
+				         title="Add" process="@form" update="@form"/>
+				   </p:column>
+				</p:dataTable>
+				</ui:fragment>
+				
+				<!-- <p:commandButton value="Generate Report" ajax="false" styleClass="myButton" style="margin-top: 20px;margin-left: 200px;" 
+	                               update="@form" process="@form" rendered="#{medicineRegistrationBean.showDispensaryTable}"/> -->
+	               <!--  <p:button outcome="../../_common/print_sales.xhtml" value="Generate Invoice" styleClass="myButton" style="margin-top: 20px;margin-left: 200px;" rendered="#{medicineRegistrationBean.showDispensaryTable}"/>  -->
+								
+				</div>
+				</div>	              
+	            </fieldset>
+	             <h:panelGroup rendered="#{medicineRegistrationBean.showDispensaryTable}">
+	            <p:dataTable id="saleCart" value="#{medicineRegistrationBean.salesSessionList}" var="salesDrugs" emptyMessage="There is no sales within the given date range" 
+				             style="width:100%;font-size:15px;font-family: PT Sans, sans-serif ; padding:4px;color:#515151;"
+							 styleClass="customcenter,customcenter,,,,customcenter notSortable" paginator="true" rows="10" 
+							 paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}">
+							 
+							  
+							 <p:column headerText="Drug Name">
+				     <p:outputLabel value="#{salesDrugs.drugName}"/>
+				   </p:column>
+				   <p:column headerText="Quantity">
+				     <p:outputLabel value="#{salesDrugs.quantity}"/>
+				   </p:column>
+				   <p:column headerText="Weight">
+				     <p:outputLabel value="#{salesDrugs.weight}"/>
+				   </p:column>
+				   <p:column headerText="Brand">
+				     <p:outputLabel value="#{salesDrugs.brand}"/>
+				   </p:column>
+				   <p:column headerText="Batch Number">
+				     <p:outputLabel value="#{salesDrugs.batchNumber}"/>
+				   </p:column>
+				   <p:column headerText="Dose">
+				     <p:outputLabel value="#{salesDrugs.dose}"/>
+				   </p:column>
+				   <p:column headerText="Unit">
+				     <p:outputLabel value="#{salesDrugs.unit}"/>
+				   </p:column>
+				   <p:column headerText="Reg Date">
+				     <p:outputLabel value="#{salesDrugs.registrationdate}"/>
+				   </p:column>
+				   <p:column headerText="UPrice">
+				     <p:outputLabel value="#{salesDrugs.unitPrice}"/>
+				   </p:column>
+				   <p:column headerText="Total Price">
+				    <p:outputLabel value="#{salesDrugs.totalPrice}"/>
+				   </p:column>
+				   <p:column headerText="Action">
+				     <p:commandButton id="deleteButtonD" update="saleCart" process="@this" style="width:30px; height:25px;"
+										actionListener="#{medicineRegistrationBean.setInvoiceCart(salesDrugs)}" icon="ui-icon-trash" title="Delete"
+										onsuccess="PF('eleiminateSalesCartWV').show();"
+										oncomplete="$('.ui-datatable-data tr').find('span.ui-icon-close').each(function(){this.click()})"/>
+					</p:column>					
+							 </p:dataTable>
+							   <p:commandButton value="Generate Report" styleClass="myButton" style="margin-top: 20px;margin-left: 200px;" onclick="PF('printInvoiceWV').show();"/>
+							   <!-- <p:button outcome="../../_common/print_invoice.xhtml" value="Generate Report" styleClass="myButton" style="margin-top: 20px;margin-left: 200px;"/>  -->
+							 </h:panelGroup>
+	            	          
+	            </h:form>
+	            
+	              	<div id="ajaxStatus_container">
+							<div id="ajaxStatus">
+								<p:ajaxStatus id="ajaxStatusPanel" widgetVar="ajaxStatusVar">
+									<f:facet name="start">
+										<p:graphicImage value="/resource/images/loader.gif" alt="loader" />
+									</f:facet>
+									<f:facet name="complete">
+										<h:outputText value="" />
+									</f:facet>
+								</p:ajaxStatus>
+							</div>
+						</div>
+	            
+	            	<p:dialog id="eleiminateSalesCart" widgetVar="eleiminateSalesCartWV" header="Delete Dispensary Cart"
+						modal="true" width="50%" height="300" showEffect="explode" style="margin-left: -120px;margin-top: 170px;" responsive="true">
+						<span class="fa fa-exclamation-circle fa-5x text-danger" style="margin-left: 40%;" />
+						<p:outputLabel value="Are you sure Delete cart from the session?" styleClass="deleteLebel" style="font-size: 18px; margin-top: 30px;" />						
+						<div class="text-center">
+							<p:commandButton value="Yes" title="Delete Drug"
+								actionListener="#{medicineRegistrationBean.deleteFromInvoiceSessionCart}"  update=":invoiceForm "  style="color: #fff;margin-top: 30px;width:60px" styleClass="dialogButton"
+								onclick="PF('eleiminateSalesCartWV').hide();">
+							</p:commandButton>
+							<p:commandButton value="No" title="No" onclick="PF('eleiminateSalesCartWV').hide();"
+								styleClass="dialogButton" style="color: #fff;margin-top: 30px;width:60px" />
+						</div>
+					</p:dialog>
+					
+					<p:dialog id="printInvoice" widgetVar="printInvoiceWV" header="Customer Details" modal="true"
+					          width="50%" height="300" showEffect="explode" style="margin-left: -120px;margin-top: 170px;" responsive="true">
+					       <h:form id="invoiceDialogForm">
+								<tabe>
+								<tr>
+									<td></td>
+									<td><p:outputLabel value="customer full name: " for="customername" /> 
+									<p:inputText id="customername" value="#{medicineRegistrationBean.customerName}"
+											style="margin-left:30px" required="true" requiredmessage="customer name is required">
+											<p:ajax event="blur" update="namemessage" />
+										</p:inputText> <p:message for="customername" id="namemessage" />
+								   </td><br/>
+									<td><p:outputLabel value="address: " for="address" /> 
+									    <p:inputText id="address" style="margin-left:21%" value="#{medicineRegistrationBean.customerAddress}"
+											required="true" requiredmessage="address is required">
+											<p:ajax event="blur" update="addressmessage" />
+										</p:inputText> 
+										<p:message for="address" id="addressmessage" />
+									</td>
+								</tr>
+								</tabe><br/>
+								<p:commandButton value="Download" ajax="false" styleClass="dialogButton" style="color: #fff;"
+									 update="@form" process="@form :invoiceForm" onclick="PF('printInvoiceWV').hide();">
+									<p:fileDownload value="#{medicineRegistrationBean.generateInvoice()}"/>									
+								</p:commandButton>
+								<p:commandButton  value="Cancel" title="Cancel" oncomplete="PF('printInvoiceWV').hide();"
+								styleClass="dialogButton" style="color: #fff" />
+								
+							</h:form>   
+					 </p:dialog>
+					
+	         </div>
+	        </div>
+	      </div>
+	    </div>
+	    
+	    <style>
+	      button.ui-button-icon-only{
+	         padding: 4px;
+             margin-bottom: 4px;
+	      }
+	      .ui-datatable table {
+    font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.ui-datatable table td, .ui-datatable table th {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+.ui-datatable table tr:nth-child(even){background-color: #f2f2f2;}
+
+.ui-datatable table tr:hover {background-color: #ddd;}
+
+.ui-datatable table th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: #003576;
+    color: white;
+}
+	    </style>
+	  </ui:define>
+	</ui:composition>

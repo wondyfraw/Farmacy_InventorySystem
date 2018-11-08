@@ -59,6 +59,7 @@ public class MedicineRegistrationBean extends AbstructSessionBean {
 	private String boxPack;
 	private List<Store> drugList;
 	private List<Store> dispensary_drugList;
+	private List<Store> filterStoreDrug;
 	private boolean showQuantityperStrip;
 	private boolean showSaveButton;
 	private boolean showDispensaryTable;
@@ -87,6 +88,10 @@ public class MedicineRegistrationBean extends AbstructSessionBean {
 	private SalesFilterPOJO searchParmes;
 	private SalesFilterPOJO purchaseSearchParmes;
 	private List<Sales> searchSalesList;
+	private Sales salesSession;
+	private List<Sales> salesSessionList;
+	private List<Sales> tempInvoiceList;
+	private Sales invoiceCart;
 	private FacesContext context = FacesContext.getCurrentInstance();
 	private HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
 	private HttpSession httpSession = request.getSession(false);
@@ -98,6 +103,10 @@ public class MedicineRegistrationBean extends AbstructSessionBean {
 	private String sampleDate;
 	private String userType;
 	private Double totalPrice;
+
+	// invoice
+	private String customerName;
+	private String customerAddress;
 
 	@EJB
 	private StoreEJB storeEJB;
@@ -161,13 +170,15 @@ public class MedicineRegistrationBean extends AbstructSessionBean {
 		}
 
 		//////////// Sales ====//////
+		// salesSessionList = new ArrayList<Sales>();
+		tempInvoiceList = new ArrayList<Sales>();
 		session_drugList = new ArrayList<MapperPOJO>();
 		mapperPOJOList = new ArrayList<MapperPOJO>();
 		mapper = new Mapper();
 		salesMaperPOJO = new SalesPOJO();
 		sales = new Sales();
 		salesList = new ArrayList<Sales>();
-		filteredSalesDrugs = new ArrayList<Sales>();
+		// filteredSalesDrugs = new ArrayList<Sales>();
 
 		searchParmes = (SalesFilterPOJO) httpSession.getAttribute("searchParmes");
 		purchaseSearchParmes = (SalesFilterPOJO) httpSession.getAttribute("purchaseSearchParmes");
@@ -495,6 +506,27 @@ public class MedicineRegistrationBean extends AbstructSessionBean {
 		}
 	}
 
+	public void addToInvoiceSession(Sales salesInvoice) {
+		boolean found = false;
+		if (salesInvoice != null) {
+			for (int i = 0; i < tempInvoiceList.size(); i++) {
+				Sales sales = tempInvoiceList.get(i);
+				if (sales.getIdSales() != null && sales.getIdSales().equals(salesInvoice.getIdSales())) {
+					found = true;
+					tempInvoiceList.get(i).setQuantity(sales.getQuantity() + salesInvoice.getQuantity());
+				}
+			}
+			if (tempInvoiceList.size() > 0 && found == false) {
+				tempInvoiceList.add(salesInvoice);
+			}
+			if (tempInvoiceList.size() < 1 && found == false) {
+				tempInvoiceList.add(salesInvoice);
+			}
+			salesSessionList = tempInvoiceList;
+			showDispensaryTable = true;
+		}
+	}
+
 	public void saveSalesDrug() {
 		for (int i = 0; i < session_drugList.size(); i++) {
 			String salesPerson = loginAuthenticationBean.getEmail();
@@ -550,7 +582,7 @@ public class MedicineRegistrationBean extends AbstructSessionBean {
 								/ dispensary.getQuantityPerPackPerUnit()));
 				dispensaryEJB.merge(dispensary);
 			}
-			salesList.remove(voidSalesDrug);
+			this.salesList.remove(voidSalesDrug);
 		}
 	}
 
@@ -573,6 +605,15 @@ public class MedicineRegistrationBean extends AbstructSessionBean {
 		}
 		if (session_drugList.size() < 1) {
 			showDispensaryTable = false;
+		}
+	}
+
+	public void deleteFromInvoiceSessionCart() {
+		if (invoiceCart != null) {
+			salesSessionList.remove(invoiceCart);
+			if (salesSessionList.size() < 1) {
+				showDispensaryTable = false;
+			}
 		}
 	}
 
@@ -599,6 +640,11 @@ public class MedicineRegistrationBean extends AbstructSessionBean {
 		searchSalesList = salesEJB.filterDrugsByCriteria(searchParmes);
 		httpSession.setAttribute("searchParmes", searchParmes);
 		showDispensaryTable = true;
+	}
+
+	public void searchSalesByFilterCriateriaForInvoice() {
+		searchSalesList = salesEJB.filterDrugsByCriteria(searchParmes);
+		httpSession.setAttribute("searchParmes", searchParmes);
 	}
 
 	// search drugs by filter criteria
@@ -673,6 +719,23 @@ public class MedicineRegistrationBean extends AbstructSessionBean {
 			log.error("Fail to Generate Purchased drug PDF");
 		}
 		return content;
+	}
+
+	public StreamedContent generateInvoice() {
+		StreamedContent content = null;
+		try {
+			String filename;
+			if (customerName != null) {
+				filename = "invoice_" + this.customerName + Calendar.getInstance().getTimeInMillis() + ".pdf";
+			} else
+				filename = "invoice_" + Calendar.getInstance().getTimeInMillis() + ".pdf";
+			InputStream printStream = salesEJB.createInvoice(salesSessionList, this.customerName, this.customerAddress);
+			content = new DefaultStreamedContent(printStream, "application/pdf", filename);
+		} catch (Exception e) {
+			log.error("Fail to Generate invoice");
+		}
+		return content;
+
 	}
 
 	///// jasper sales report //////////////////
@@ -1040,6 +1103,54 @@ public class MedicineRegistrationBean extends AbstructSessionBean {
 
 	public void setPurchaseReportList(List<MapperPOJO> purchaseReportList) {
 		this.purchaseReportList = purchaseReportList;
+	}
+
+	public List<Store> getFilterStoreDrug() {
+		return filterStoreDrug;
+	}
+
+	public void setFilterStoreDrug(List<Store> filterStoreDrug) {
+		this.filterStoreDrug = filterStoreDrug;
+	}
+
+	public Sales getSalesSession() {
+		return salesSession;
+	}
+
+	public void setSalesSession(Sales salesSession) {
+		this.salesSession = salesSession;
+	}
+
+	public List<Sales> getSalesSessionList() {
+		return salesSessionList;
+	}
+
+	public void setSalesSessionList(List<Sales> salesSessionList) {
+		this.salesSessionList = salesSessionList;
+	}
+
+	public Sales getInvoiceCart() {
+		return invoiceCart;
+	}
+
+	public void setInvoiceCart(Sales invoiceCart) {
+		this.invoiceCart = invoiceCart;
+	}
+
+	public String getCustomerName() {
+		return customerName;
+	}
+
+	public void setCustomerName(String customerName) {
+		this.customerName = customerName;
+	}
+
+	public String getCustomerAddress() {
+		return customerAddress;
+	}
+
+	public void setCustomerAddress(String customerAddress) {
+		this.customerAddress = customerAddress;
 	}
 
 }

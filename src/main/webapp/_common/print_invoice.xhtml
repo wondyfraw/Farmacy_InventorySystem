@@ -1,0 +1,122 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:p="http://primefaces.org/ui"
+	xmlns:cc="http://java.sun.com/jsf/composite/components" template="/templates/main.xhtml">
+
+	<ui:define name="content">
+		<div id="app">
+			<div class="main-content">
+				<!-- <div class="wrap-content container"> -->
+					<div class="col-md-12 col-sm-12 col-lg-12">
+					<div style="text-align: justify; padding: 100px 70px;">
+					<div style="text-align: center;">
+					  <h3>Mega Pharmacy</h3>
+					  <h3>Sales Invoice</h3>
+					  <h3>Report Dates #{medicineRegistrationBean.sampleDate}</h3>				      
+					  </div>
+					  <h:form>
+					  
+					  <tabe>
+	               <tr>
+	                <td>	                 
+	                 </td>
+	                 <td>
+	                   <p:outputLabel value="Customer Full Name: " for="customerName"/>
+	                   <p:inputText id="customerName"  style="margin-left:30px" required="true" requiredMessage="Customer name is required">
+	                    <p:ajax event="blur" update="nameMessage"/>
+	                   </p:inputText>
+	                   <p:message for="customerName" id="nameMessage"/>
+	                 </td>
+	                 <td>
+	                   <p:outputLabel value="Address: " for="address"/>
+	                   <p:inputText id="address"  style="margin-left:12%" required="true" requiredMessage="Address is required">
+	                     <p:ajax event="blur" update="addressMessage"/> 
+	                   </p:inputText>
+	                   <p:message for="address" id="addressMessage"/>
+	                 </td>
+	                 </tr>
+	                 </tabe>
+					  
+					  <ui:fragment>	 	
+				<p:dataTable id="saleTable" value="#{medicineRegistrationBean.salesSessionList}" var="salesDrug" emptyMessage="There is no sales within the given date range" 
+				             style="width:100%;font-size:15px;font-family: PT Sans, sans-serif ; padding:4px;color:#515151;">
+				             
+				            <p:column headerText="Drug Name">
+				     <p:outputLabel value="#{salesDrug.drugName}"/>
+				   </p:column>
+				   <p:column headerText="Quantity">
+				     <p:outputLabel value="#{salesDrug.quantity}"/>
+				   </p:column>
+				   <p:column headerText="Weight">
+				     <p:outputLabel value="#{salesDrug.weight}"/>
+				   </p:column>
+				   <p:column headerText="Brand">
+				     <p:outputLabel value="#{salesDrug.brand}"/>
+				   </p:column>
+				   <p:column headerText="Dose">
+				     <p:outputLabel value="#{salesDrug.dose}"/>
+				   </p:column>
+				   <p:column headerText="Unti">
+				     <p:outputLabel value="#{salesDrug.unit}"/>
+				   </p:column>
+				   <p:column headerText="Sales Date">
+				     <p:outputLabel value="#{salesDrug.registrationdate}"/>
+				   </p:column>
+				   <p:column headerText="UPrice">
+				     <p:outputLabel value="#{salesDrug.unitPrice}"/>
+				   </p:column>
+				   <p:column headerText="Total Price">
+				    <p:outputLabel value="#{salesDrug.totalPrice}"/>
+				   </p:column>
+							  </p:dataTable>
+							  </ui:fragment>
+							  
+							
+					 <p:commandButton value="Download" ajax="false" styleClass="myButton" style="margin-top: 20px;margin-left: 200px;" 
+	                               update="@form" process="@form">
+					   <p:fileDownload value="#{medicineRegistrationBean.generatePDF()}"/>  
+					  <!-- <p:ajax event="click" />
+					 <p:printer target="saleTable" ></p:printer> -->	 			
+				</p:commandButton>
+				<p:button outcome="/secure/_common/sales_invoice.xhtml" value="Back to Report Form" styleClass="myButton" style="margin-top: 20px;margin-left: 2px;"/>
+							  </h:form>													
+					  </div>
+					</div>
+				<!-- </div> -->
+			</div>
+		</div>
+		
+		<style>
+.ui-datatable table {
+    font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.ui-datatable table td, .ui-datatable table th {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+.ui-datatable table tr:nth-child(even){background-color: #f2f2f2;}
+
+.ui-datatable table tr:hover {background-color: #ddd;}
+
+.ui-datatable table th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: #4CAF50;
+    color: white;
+}
+select{
+    padding-bottom: 0;
+    padding-top: 0;
+    -webkit-appearance: menulist;
+    box-sizing: border-box;
+    
+}
+</style> 
+
+	</ui:define>
+</ui:composition>

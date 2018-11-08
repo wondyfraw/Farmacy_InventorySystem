@@ -1,5 +1,7 @@
 package org.farm.entity.beans;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -16,6 +18,8 @@ import org.apache.commons.logging.LogFactory;
 import org.farm.fms.entity.ejb.ExpenseEJB;
 import org.farm.fms.etntity.Expense;
 import org.primefaces.event.FileUploadEvent;
+import org.primefaces.model.DefaultStreamedContent;
+import org.primefaces.model.StreamedContent;
 import org.primefaces.model.UploadedFile;
 
 @ManagedBean(name = "expenseBean")
@@ -50,7 +54,7 @@ public class ExpenseBean extends AbstructSessionBean {
 		sessionExpense = new Expense();
 		userName = loginAuthenticationBean.getEmail();
 		sessionExpenseList = new ArrayList<Expense>();
-		expenseListByDate = new ArrayList<Expense>();
+		// expenseListByDate = new ArrayList<Expense>();
 		this.total = 200.00;
 		List<Expense> totalExpenseList = new ArrayList<Expense>();
 		totalExpense = (double) 0;
@@ -133,6 +137,30 @@ public class ExpenseBean extends AbstructSessionBean {
 		fileUpload = event.getFile();
 		attachFileName = fileUpload.getFileName();
 		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Upload file correctly "));
+	}
+
+	/**
+	 * 
+	 * @param expenseId
+	 * @return attache pdf file
+	 */
+
+	public StreamedContent downloadAttachmentFile(Integer expenseId) {
+		Expense exp = new Expense();
+		exp = expenseEJB.findById(expenseId);
+		InputStream inputStream = new ByteArrayInputStream(exp.getDataFile());
+		StreamedContent content = new DefaultStreamedContent(inputStream, exp.getMimType(), exp.getFileName());
+		return content;
+
+	}
+
+	public boolean isFileDownload(Integer id) {
+		Expense exp = new Expense();
+		exp = expenseEJB.findById(id);
+		if (exp.getDataFile() != null) {
+			return true;
+		} else
+			return false;
 	}
 
 	public Expense getExpense() {
