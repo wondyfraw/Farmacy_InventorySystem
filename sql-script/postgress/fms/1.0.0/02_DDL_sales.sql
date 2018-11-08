@@ -1,9 +1,11 @@
+-- Table: myfms.sales
+
+-- DROP TABLE myfms.sales;
+
 CREATE TABLE myfms.sales
 (
   id_sales serial NOT NULL,
   id_dispensary integer NOT NULL,
-  id_user integer,
-  dosage integer,
   quantity integer NOT NULL,
   weight character varying(255),
   brand character varying(255),
@@ -11,17 +13,15 @@ CREATE TABLE myfms.sales
   registration_date date,
   unit_price double precision NOT NULL,
   total_price double precision NOT NULL,
-  CONSTRAINT id_sales_pk PRIMARY KEY (id_sales),
-  CONSTRAINT sales_id_dispensary_fk FOREIGN KEY (id_dispensary)
-      REFERENCES myfms.dispensary(id_dispensary) MATCH SIMPLE
-      ON UPDATE NO ACTION ON DELETE NO ACTION,
-  -- CONSTRAINT sales_id_user_fk FOREIGN KEY ( id_user)
-      --REFERENCES myfms.users( id_user) MATCH SIMPLE
-      --ON UPDATE NO ACTION ON DELETE NO ACTION
+  dose integer,
+  sales_person character varying(100),
+  drug_name character varying(100),
+  unit character varying(100),
+  pack_unit character varying(255),
+  CONSTRAINT id_sales_pk PRIMARY KEY (id_sales)
 )
 WITH (
   OIDS=FALSE
 );
-ALTER TABLE myfms.sales
-  OWNER TO postgres;
+ALTER TABLE myfms.sales OWNER TO postgres;
 GRANT ALL ON TABLE myfms.sales TO postgres;
