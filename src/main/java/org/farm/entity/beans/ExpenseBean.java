@@ -39,6 +39,7 @@ public class ExpenseBean extends AbstructSessionBean {
 	private List<Expense> expenseListByDate;
 	private Date fromExpenseDate;
 	private Date toExpenseDate;
+	private String description;
 	private UploadedFile fileUpload;
 	private String attachFileName;
 	private Double total;
@@ -114,10 +115,13 @@ public class ExpenseBean extends AbstructSessionBean {
 		}
 	}
 
-	// Fillter expense by range of date
+	/**
+	 * Fillter expense by give criateria
+	 */
+
 	public void filterExpenseByDate() {
 
-		expenseListByDate = expenseEJB.findExpenseByFilter(fromExpenseDate, toExpenseDate);
+		expenseListByDate = expenseEJB.findExpenseByFilter(fromExpenseDate, toExpenseDate, description);
 		if (expenseListByDate.size() > 0) {
 			showPanel = true;
 		}
@@ -131,7 +135,13 @@ public class ExpenseBean extends AbstructSessionBean {
 		}
 	}
 
-	/** Uoload attached file */
+	/**
+	 * 
+	 * @param event
+	 *            Uoload attached file
+	 * 
+	 */
+
 	public void uploadAttachFile(FileUploadEvent event) {
 
 		fileUpload = event.getFile();
@@ -273,6 +283,14 @@ public class ExpenseBean extends AbstructSessionBean {
 
 	public void setShowMessage(boolean showMessage) {
 		this.showMessage = showMessage;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 }

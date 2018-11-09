@@ -37,14 +37,14 @@ public class ExpenseEJB extends AbstructHome<Expense, Integer> {
 		return findById(Expense.class, id);
 	}
 
-	public List<Expense> findExpenseByFilter(Date from, Date to) {
+	public List<Expense> findExpenseByFilter(Date from, Date to, String description) {
 		List<Expense> searchResult = new ArrayList<Expense>();
 
 		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
 		CriteriaQuery<Expense> query = cb.createQuery(Expense.class);
 		Root<Expense> root = query.from(Expense.class);
 		query.select(root);
-		Predicate predicate = getFilterCriteria(cb, root, from, to);
+		Predicate predicate = getFilterCriteria(cb, root, from, to, description);
 		if (predicate != null)
 			query.where(predicate);
 		query.orderBy(cb.desc(root.get(Expense_.expenseDate)));
@@ -54,7 +54,7 @@ public class ExpenseEJB extends AbstructHome<Expense, Integer> {
 		return searchResult;
 	}
 
-	public Predicate getFilterCriteria(CriteriaBuilder cb, Root<Expense> root, Date from, Date to) {
+	public Predicate getFilterCriteria(CriteriaBuilder cb, Root<Expense> root, Date from, Date to, String description) {
 
 		Predicate predicate = null;
 
@@ -66,6 +66,9 @@ public class ExpenseEJB extends AbstructHome<Expense, Integer> {
 
 		if (to != null) {
 			wherePredicates.add(cb.lessThanOrEqualTo(root.get(Expense_.expenseDate), to));
+		}
+		if (description != null) {
+			wherePredicates.add(cb.like(root.get(Expense_.description), "%" + description.trim() + "%"));
 		}
 		if (wherePredicates.size() > 0) {
 			predicate = cb.and(wherePredicates.toArray(new Predicate[wherePredicates.size()]));

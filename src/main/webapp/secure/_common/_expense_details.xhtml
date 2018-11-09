@@ -17,11 +17,15 @@
 										<p:calendar id="to" label="To Date" navigator="true" size="30" value="#{expenseBean.toExpenseDate}">
 											<f:convertDateTime pattern="dd/MM/yyyy" />
 										</p:calendar>
+										
+								     <p:outputLabel value="Description" for="descriptionInput" styleClass="filter_date-label"/>
+								     <p:inputText id="descriptionInput" style="margin-left:28px" value="#{expenseBean.description}"></p:inputText><br/><br/>
+								 
 										<p:commandButton value="Search" process="@form" update="@form"
 											actionListener="#{expenseBean.filterExpenseByDate}" style="margin-left: 10px;padding: 0 30px;color:#fff"
 											styleClass="myButton" icon="ui-icon ui-icon-search" />
-									</p:column>
-								</div>
+									</p:column>									
+								</div>							
 							</p:row>
 
 						</p:panelGrid>

@@ -1,9 +1,19 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:h="http://java.sun.com/jsf/html">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:p="http://primefaces.org/ui"
+	xmlns:cc="http://java.sun.com/jsf/composite/components" template="/templates/main.xhtml">
 
-	<ui:composition template="">
-	</ui:composition>
-</html>
+	<ui:define name="content">
+	 <div id="app">
+	  <ui:include src="/secure/sidebar.xhtml" />
+	  <ui:include src="/secure/admin/include/header.xhtml" />
+	  <div class="main-content">
+	        <div class="wrap-content container">
+	         <div class="col-md-12 col-sm-12 col-lg-12">
+	          <h1>Expense Report From</h1>
+	    </div>
+	    </div>  
+	    </div>    
+	 </div>
+	</ui:define>
+</ui:composition>
