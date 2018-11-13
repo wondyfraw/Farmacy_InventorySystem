@@ -38,6 +38,7 @@ import org.farm.pojo.SalesFilterPOJO;
 import org.farm.pojo.SalesPOJO;
 import org.farm.utils.ConstantsSingleton;
 import org.farm.utils.ManageCart;
+import org.primefaces.context.RequestContext;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
 
@@ -385,10 +386,6 @@ public class MedicineRegistrationBean extends AbstructSessionBean {
 	/**
 	 * add drug to dispensary list
 	 */
-	public void info() {
-		FacesContext.getCurrentInstance().addMessage(null,
-				new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "PrimeFaces Rocks."));
-	}
 
 	public void addToDispensary() {
 
@@ -402,6 +399,10 @@ public class MedicineRegistrationBean extends AbstructSessionBean {
 						Integer newQuantity = element.getQuantityInBox() - quantity;
 						drugList.get(i).setQuantityInBox(newQuantity);
 						break;
+					} else {
+						showWarningDialog();// show warning dialog box if the requested quantity is greater than the
+											// existing quantity
+
 					}
 				}
 			}
@@ -467,6 +468,10 @@ public class MedicineRegistrationBean extends AbstructSessionBean {
 							mapperPOJOList.get(i).setTotalUnitPack(newUnitPackQuantity);
 						}
 						mapperPOJOList.get(i).setQuantityPerUnit(newQuantity);
+					} else {
+						showWarningDialog(); // show warning dialog box if the requested quantity is greater than the
+												// existing quantity
+
 					}
 				}
 			}
@@ -504,6 +509,11 @@ public class MedicineRegistrationBean extends AbstructSessionBean {
 				showDispensaryTable = true;
 			}
 		}
+	}
+
+	public void showWarningDialog() {
+		RequestContext context = RequestContext.getCurrentInstance();
+		context.execute("PF('excessQuantityWV').show();");
 	}
 
 	public void addToInvoiceSession(Sales salesInvoice) {
