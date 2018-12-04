@@ -123,6 +123,7 @@ public class StoreEJB extends AbstructHome<Store, Integer> {
 		if (expireDate != null) {
 			wherePredicates.add(cb.greaterThanOrEqualTo(root.get(Store_.expireDate), expireDate));
 		}
+		wherePredicates.add(cb.notLike(root.get(Store_.deletedStatus), "%" + "Yes" + "%"));
 		return wherePredicates;
 	}
 

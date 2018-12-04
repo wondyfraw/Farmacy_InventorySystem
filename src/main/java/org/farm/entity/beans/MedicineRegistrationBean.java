@@ -223,7 +223,8 @@ public class MedicineRegistrationBean extends AbstructSessionBean {
 	}
 
 	/**
-	 * Register new Medicin and save to store
+	 * Register new Medicin and save to store and purchase(used to store the total amount of drug we purchase) table The
+	 * sales table affected when we transfer drugs to dispensary i.e reduce the quantity
 	 */
 	public void registerMedicin() {
 		if (store == null)
@@ -231,6 +232,7 @@ public class MedicineRegistrationBean extends AbstructSessionBean {
 		Date date = Calendar.getInstance().getTime();
 		store.setRegistrationDate(date);
 		store.setPackUnit(unitPack);
+		store.setDeletedStatus(ConstantsSingleton.DELETE_STATUS_NO);
 		storeEJB.persistEntity(store);
 		purchase.setStore(store);
 		purchase.setQuantityInBox(store.getQuantityInBox());
@@ -242,6 +244,10 @@ public class MedicineRegistrationBean extends AbstructSessionBean {
 		showMessagePanel = true;
 		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Successfully save drug!!"));
 	}
+
+	/**
+	 * set showTABqUANTITY when select pack
+	 */
 
 	public void onPackUnitSelected() {
 		if (unitPack != null) {
@@ -261,6 +267,11 @@ public class MedicineRegistrationBean extends AbstructSessionBean {
 			showTabQuantityInStrip = true;
 	}
 
+	/**
+	 * 
+	 * @return list of drug pack type
+	 */
+
 	public List<String> selectDrugPackType() {
 		if (store.getPackType() != null) {
 			packUnit = ConstantsSingleton.boxPackElement(store.getPackType());
@@ -268,7 +279,10 @@ public class MedicineRegistrationBean extends AbstructSessionBean {
 		return packUnit;
 	}
 
-	//
+	/**
+	 * 
+	 * @return list of drugs inside the pack unit(total tab, capsul...)
+	 */
 	public List<String> selectDrugWithPackageUnit() {
 		if (unitPack != null) {
 			units = ConstantsSingleton.drugPackType(unitPack);
@@ -277,6 +291,9 @@ public class MedicineRegistrationBean extends AbstructSessionBean {
 		return units;
 	}
 
+	/**
+	 * @delete drug from store
+	 */
 	public void deleteDrugs() {
 
 		String storeId = null;
@@ -314,26 +331,31 @@ public class MedicineRegistrationBean extends AbstructSessionBean {
 			List<Dispensary> dispensaryList = new ArrayList<Dispensary>();
 			dispensaryList = dispensaryEJB.findDispensaryByStoreId(deleteDrug.getStoreId());
 			for (Dispensary dispensary : dispensaryList) {
-				dispensaryEJB.removeById(dispensary.getIdDispensary());
+				dispensary.setDeletedStatus(ConstantsSingleton.DELETED_STATUS);
+				dispensaryEJB.merge(dispensary);
+				// dispensaryEJB.removeById(dispensary.getIdDispensary());
 			}
-			storeEJB.removeById(deleteDrug.getStoreId());
+			deleteDrug.setDeletedStatus(ConstantsSingleton.DELETED_STATUS);
+			storeEJB.merge(deleteDrug);
+			// storeEJB.removeById(deleteDrug.getStoreId());
 		}
 	}
 
 	/**
-	 * delete drug from dispensary session
+	 * delete drug from temporary dispensary session cart
 	 */
 	public void deleteFromDispensaryCart() {
-
-		for (int i = 0; i < drugList.size(); i++) {
-			Store cartdrug = drugList.get(i);
-			if (cartdrug.getStoreId() != null && cartdrug.getStoreId().equals(dispensaryCart.getStoreId())) {
-				cartdrug.setQuantityInBox(dispensaryCart.getQuantityInBox() + cartdrug.getQuantityInBox());
+		if (dispensaryCart != null) {
+			for (int i = 0; i < drugList.size(); i++) {
+				Store cartdrug = drugList.get(i);
+				if (cartdrug.getStoreId() != null && cartdrug.getStoreId().equals(dispensaryCart.getStoreId())) {
+					cartdrug.setQuantityInBox(dispensaryCart.getQuantityInBox() + cartdrug.getQuantityInBox());
+				}
 			}
+			dispensary_drugList.remove(dispensaryCart);
+			if (dispensary_drugList.size() < 1)
+				showDispensaryTable = false;
 		}
-		dispensary_drugList.remove(dispensaryCart);
-		if (dispensary_drugList.size() < 1)
-			showDispensaryTable = false;
 
 	}
 
@@ -353,8 +375,8 @@ public class MedicineRegistrationBean extends AbstructSessionBean {
 	}
 
 	/**
-	 * Temporarily store selected drug in the dispenser cart session finally save to dispenser table and update store
-	 * table
+	 * Temporarily store selected drug in the dispenser cart session then finally save to dispenser table and update
+	 * store table
 	 */
 	public void saveDrugToDispensary() {
 
@@ -364,6 +386,7 @@ public class MedicineRegistrationBean extends AbstructSessionBean {
 			dispensary = dispensaryPOJO.mapDispensaryPOJO(element, email);
 
 			if (dispensary != null) {
+				dispensary.setDeletedStatus(ConstantsSingleton.DELETE_STATUS_NO);
 				dispensaryEJB.persistEntity(dispensary);
 				for (int j = 0; j < drugList.size(); j++) {
 					Store drugUpdate = drugList.get(j); // update drug quantity in the store
@@ -394,7 +417,7 @@ public class MedicineRegistrationBean extends AbstructSessionBean {
 			for (int i = 0; i < drugList.size(); i++) {
 				Store element = drugList.get(i);
 				if (element.getStoreId() != null && element.getStoreId().equals(dispensaryDrug.getStoreId())) {
-					if (quantity != null && element.getQuantityInBox() > this.quantity) {
+					if (quantity != null && element.getQuantityInBox() >= this.quantity) {
 						index = 1;
 						Integer newQuantity = element.getQuantityInBox() - quantity;
 						drugList.get(i).setQuantityInBox(newQuantity);
@@ -402,7 +425,6 @@ public class MedicineRegistrationBean extends AbstructSessionBean {
 					} else {
 						showWarningDialog();// show warning dialog box if the requested quantity is greater than the
 											// existing quantity
-
 					}
 				}
 			}
@@ -421,7 +443,7 @@ public class MedicineRegistrationBean extends AbstructSessionBean {
 					}
 				}
 
-				/** if the drug selected is found in the dispensary list */
+				/** if the drug selected is not found in the dispensary list */
 				if (dispensary_drugList.size() > 0 && found == false) {
 					dispensaryDrug.setQuantityInBox(quantity);
 					dispensary_drugList.add(dispensaryDrug);
@@ -458,20 +480,20 @@ public class MedicineRegistrationBean extends AbstructSessionBean {
 				MapperPOJO element = mapperPOJOList.get(i);
 				if (element.getDispensaryId() != null
 						&& element.getDispensaryId().equals(salesPOJO.getDispensaryId())) {
-					if (dose != null && element.getQuantityPerUnit() > (dosVal * quantityVal)) {
+					if (dose != null && element.getQuantityPerUnit() >= (dosVal * quantityVal)) {
 						index = 1;
 						Integer newQuantity = element.getQuantityPerUnit() - (dosVal * quantityVal);
 						if (element.getPackType().equals("Box")) {
 							Integer newUnitPackQuantity = element.getTotalUnitPack()
 									- (dosVal * quantityVal) / element.getQuantityPerUnitPack(); // quantity per pack
-																									// unit
-							mapperPOJOList.get(i).setTotalUnitPack(newUnitPackQuantity);
+																									// unit(new strip
+																									// qnt)
+							mapperPOJOList.get(i).setTotalUnitPack(newUnitPackQuantity); // total qnt in strip or other
 						}
-						mapperPOJOList.get(i).setQuantityPerUnit(newQuantity);
+						mapperPOJOList.get(i).setQuantityPerUnit(newQuantity); // total drugs in pieces
 					} else {
 						showWarningDialog(); // show warning dialog box if the requested quantity is greater than the
 												// existing quantity
-
 					}
 				}
 			}
@@ -570,7 +592,7 @@ public class MedicineRegistrationBean extends AbstructSessionBean {
 	}
 
 	/**
-	 * void sales drugs by removing drugs from sales table add to dispensery table
+	 * void sales drugs by removing drugs from sales table add to dispensery table(undo sales drugs)
 	 */
 	public void voidSales() {
 		// check invoice with sales id

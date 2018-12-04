@@ -53,11 +53,11 @@
 							<p:outputLabel value="#{drug.unit}" />
 						</p:column>
 						<p:column headerText="Action" rendered="#{medicineRegistrationBean.userType eq 'Administrator'}">
-							<p:commandButton id="deleteButtonD" update="salestable" process="@this" style="width:30px; height:25px;"
+							<!-- <p:commandButton id="deleteButtonD" update="salestable" process="@this" style="width:30px; height:25px;"
 								actionListener="#{medicineRegistrationBean.setVoidSalesDrug(drug)}" icon="ui-icon-trash" title="Delete"
 								onsuccess="PF('eleiminateSalesWV').show();"
 								oncomplete="$('.ui-datatable-data tr').find('span.ui-icon-close').each(function(){this.click()})">
-							</p:commandButton>
+							</p:commandButton> -->
 							<p:commandButton id="voidSales" update="salestable" process="@this" style="width:30px; height:25px;"
 							           actionListener="#{medicineRegistrationBean.setVoidSalesDrug(drug)}"
 							            icon="ui-icon-arrowrefresh-1-w" title="void" onsuccess="PF('voidDialogWV').show();"

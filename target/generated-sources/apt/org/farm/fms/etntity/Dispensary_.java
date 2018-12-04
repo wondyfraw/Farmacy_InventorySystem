@@ -19,6 +19,7 @@ public abstract class Dispensary_ {
 	public static volatile SingularAttribute<Dispensary, Integer> quantityPerUnit;
 	public static volatile SingularAttribute<Dispensary, Date> dispensaryDate;
 	public static volatile SingularAttribute<Dispensary, Integer> idDispensary;
+	public static volatile SingularAttribute<Dispensary, String> deletedStatus;
 
 }
 

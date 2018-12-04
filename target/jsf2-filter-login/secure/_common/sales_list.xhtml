@@ -65,6 +65,9 @@
 							           rendered="#{medicineRegistrationBean.userType eq 'Administrator'}">
 							
 							</p:commandButton>
+							<!--  
+							<p:commandButton icon="ui-icon-pencil" onsuccess="PF('eleiminateSalesWV').show();" update="@form" process="@this"
+							                actionListener="#{medicineRegistrationBean.setVoidSalesDrug(drug)}"/> -->
 
 						</p:column>
 
@@ -92,7 +95,9 @@
 	       
 	       <p:commandButton value="Yes" title="Void sales drug"  style="color: #fff;margin-left: 50px;margin-top: 30px;" actionListener="#{medicineRegistrationBean.voidSales}"
 	                    styleClass="dialogButton" onclick="PF('voidDialogWV').hide();" update=":salesList:salestable"/>
-	       <p:commandButton value="No" onclick="PF('voidDialogWV').hide();" actionListener="#{medicineRegistrationBean.voidSales}" styleClass="dialogButton" style="color:#fff;margin-top: 30px;"/>                                                                                  
+	       <p:commandButton value="No" onclick="PF('voidDialogWV').hide();" styleClass="dialogButton" style="color:#fff;margin-top: 30px;"/>                                                                                  
 	</p:dialog>
+
+
 	
 </ui:composition>

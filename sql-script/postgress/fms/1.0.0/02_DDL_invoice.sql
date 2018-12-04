@@ -28,3 +28,4 @@ CREATE INDEX invoice_sales
   USING btree
   (id_sales);
 
+

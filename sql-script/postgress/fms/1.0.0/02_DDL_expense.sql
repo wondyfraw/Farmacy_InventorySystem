@@ -20,3 +20,4 @@ WITH (
 );
 ALTER TABLE myfms.expense OWNER TO postgres;
 GRANT ALL ON TABLE myfms.expense TO postgres;
+

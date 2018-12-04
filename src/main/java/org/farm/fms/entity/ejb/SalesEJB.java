@@ -210,6 +210,7 @@ public class SalesEJB extends AbstructHome<Sales, Integer> {
 
 		// manage expire date of drugs
 		query.where(cb.greaterThan(storeJoin.get(Store_.expireDate), dateWithoutTime));
+		query.where(cb.notLike(root.get(Dispensary_.deletedStatus), "%" + "Yes" + "%"));
 		query.orderBy(cb.desc(storeJoin.get(Store_.expireDate)));
 		TypedQuery<Object[]> typedQuery = entityManager.createQuery(query);
 		List<Object[]> searchResults = typedQuery.getResultList();

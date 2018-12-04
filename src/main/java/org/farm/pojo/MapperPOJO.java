@@ -30,8 +30,8 @@ public class MapperPOJO implements Serializable {
 	private Integer quantityInBox; // quantity_in_box
 	private Integer quantityPerUnit; // total drug quantity
 	private Integer quantityPerUnitPack; // quantity_per_unit
-	private Integer quantityPerPack; // quantity_per_pack
-	private Integer totalUnitPack;
+	private Integer quantityPerPack; // quantity_per_pack , qnt inside the box
+	private Integer totalUnitPack; // total strip or quantity
 
 	// from inputbox
 	private Integer dose;

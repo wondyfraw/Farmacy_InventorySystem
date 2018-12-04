@@ -5,7 +5,7 @@
 	  
 	  <ui:define name="content">
 	    <div id="app"> 
-	      <ui:include src="/secure/sidebar.xhtml"/>
+	      <ui:include src="#{loginAuthenticationBean.userType eq 'Administrator'?'/secure/sidebar.xhtml' : '/secure/users/sidebar.xhtml'}"/>
 	      <ui:include src="/secure/admin/include/header.xhtml"/>
 	      <div class="main-content">
 	        <div class="wrap-content container">

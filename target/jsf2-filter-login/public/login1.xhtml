@@ -29,8 +29,12 @@
 						</div>
 						<div class="form-actions">
 						<p:commandButton value="Login" actionListener="#{loginAuthenticationBean.doLogin}">
-						 <i class="fa fa-arrow-circle-right"></i>
-						</p:commandButton>
+						 <i class="fa fa-arrow-circle-right"></i>						  
+						</p:commandButton>	
+						<a icon="ui-icon-home"  href="../index.xhtml">Home</a>					
+                      </div><br/>
+                      <div class="form-group">
+                         <p:button outcome="resetPassword.xhtml" value="Forgot Password" /> 
                       </div>
 						<div id="ajaxStatus_container">
 							<div id="ajaxStatus">

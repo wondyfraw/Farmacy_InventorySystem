@@ -38,6 +38,7 @@ public class Dispensary implements Serializable {
 	private Date dispensaryDate;
 	private String adminName;
 	private Date modifiedDate;
+	private String deletedStatus;
 
 	public Dispensary() {
 		// defualt constructor
@@ -99,6 +100,11 @@ public class Dispensary implements Serializable {
 		return modifiedDate;
 	}
 
+	@Column(name = "deleted_status")
+	public String getDeletedStatus() {
+		return deletedStatus;
+	}
+
 	public void setModifiedDate(Date modifiedDate) {
 		this.modifiedDate = modifiedDate;
 	}
@@ -137,6 +143,10 @@ public class Dispensary implements Serializable {
 
 	public void setTotalUnitPack(Integer totalUnitPack) {
 		this.totalUnitPack = totalUnitPack;
+	}
+
+	public void setDeletedStatus(String deletedStatus) {
+		this.deletedStatus = deletedStatus;
 	}
 
 }

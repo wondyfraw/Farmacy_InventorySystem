@@ -68,7 +68,7 @@
 								<p:column headerText="Send To">
 									<p:commandButton value="Add" icon="ui-icon ui-icon-plus"
 										actionListener="#{medicineRegistrationBean.setSalesPOJO(drug)}" title="Add" process="@form"
-										update="dispensarytable" onsuccess="PF('salesDialogWV').show();" style="width:60px" />
+										 onsuccess="PF('salesDialogWV').show();" style="width:60px" />
 								</p:column>
 								
 							</p:dataTable>
@@ -131,7 +131,7 @@
 								  <p:outputLabel value="#{drugDis.unit}"/>
 								</p:column>
 								<p:column headerText="Action">
-									<p:commandButton id="deleteButtonD" update="salestable" process="@this" style="width:30px; height:25px;"
+									<p:commandButton id="deleteButtonD"  process="@this" style="width:30px; height:25px;"
 										actionListener="#{medicineRegistrationBean.setSessionCart(drugDis)}" icon="ui-icon-trash" title="Delete"
 										onsuccess="PF('eleiminateSalesCartWV').show();"
 										oncomplete="$('.ui-datatable-data tr').find('span.ui-icon-close').each(function(){this.click()})">

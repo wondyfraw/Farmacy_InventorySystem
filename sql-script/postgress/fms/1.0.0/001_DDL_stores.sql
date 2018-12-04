@@ -22,6 +22,7 @@ CREATE TABLE myfms.store
   sales_price integer NOT NULL,
   tatal_price integer NOT NULL,
   modify_date date,
+  deleted_status character varying(100),
   CONSTRAINT id_store_pk PRIMARY KEY (id_store)
 )
 WITH (

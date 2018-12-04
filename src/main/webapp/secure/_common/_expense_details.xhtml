@@ -69,7 +69,7 @@
 										<p:column headerText="Invoice Number" sortBy="#{expense.invoiceNumber}">
 											<p:outputLabel value="#{expense.invoiceNumber}" />
 										</p:column>
-										<p:column headerText="Action">
+										<p:column headerText="Download">
 										   <ui:fragment rendered ="#{expenseBean.isFileDownload(expense.expenseCode)}">
 										     <p:commandButton immediate="true" ajax="false" id="download" icon="ui-icon-arrowthickstop-1-s" 
 							                                  process="@this">
@@ -78,6 +78,13 @@
 				                           <p:tooltip for="download" value="Download File" />
 				                           </ui:fragment>				                          
 										</p:column>
+										
+										<p:column headerText="Action">
+										  <p:commandButton id="deletExpense" process="@this" update="expensetable" style="width:30px; height:25px;"
+										         icon="ui-icon-trash" title="delete" 
+										         oncomplete="$('.ui-datatable-data tr').find('span.ui-icon-close').each(function(){this.click()})"></p:commandButton>
+										</p:column>
+										
 										<!-- <p:summaryRow>
             <p:column  style="text-align:right">
                 <p:outputLabel value="Total:"/>

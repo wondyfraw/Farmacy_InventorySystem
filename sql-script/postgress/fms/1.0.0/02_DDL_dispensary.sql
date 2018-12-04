@@ -19,6 +19,7 @@ CREATE TABLE myfms.dispensary
   admin_name character varying(100),
   total_strip integer,
   modified_date date DEFAULT '2000-01-01'::date,
+  deleted_status character varying(100),
   CONSTRAINT id_convenzione_pk PRIMARY KEY (id_dispensary),
   CONSTRAINT dispensary_myfms_store_fk FOREIGN KEY (id_store)
       REFERENCES myfms.store (id_store) MATCH SIMPLE
@@ -40,7 +41,8 @@ CREATE INDEX dispensary_store
   (id_store);
 
 
-
 ///////////////////////////////////
 
 ALTER TABLE myfms.dispensary ADD COLUMN total_strip INT;
+ALTER TABLE myfms.store ADD COLUMN deleted_status character varying(100);
+ALTER TABLE myfms.dispensary ADD COLUMN deleted_status character varying(100);

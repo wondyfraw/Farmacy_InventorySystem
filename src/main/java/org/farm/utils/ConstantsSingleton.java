@@ -17,6 +17,8 @@ public class ConstantsSingleton {
 
 	public static final String BASE_DOMIAN = "http://localhost:20000/";
 	public static final String CONTENT_APP = "Test";
+	public static final String DELETED_STATUS = "Yes";
+	public static final String DELETE_STATUS_NO = "No";
 	/**
 	 *
 	 * Define date formate in primefaces

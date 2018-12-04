@@ -34,9 +34,10 @@ public class DispensaryPOJO {
 																												// ready
 																												// for
 																												// sale(dispensary)
-				} else {
-					dispensary.setQuantityPerUnit(store.getQuantityInBox() * store.getQuantityperBoxperUnit());
-				}
+				} /*
+					 * else { dispensary.setQuantityPerUnit(store.getQuantityInBox() *
+					 * store.getQuantityperBoxperUnit()); }
+					 */
 			}
 			if (store.getPackType().equals("Cup")) {
 				dispensary.setQuantityPerUnit(store.getQuantityInBox() * store.getQuantityperBoxperUnit());

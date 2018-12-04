@@ -42,6 +42,7 @@ public class Store implements Serializable {
 	private String packType;
 	private String packUnit;
 	private Date modifyDate;
+	private String deletedStatus;
 
 	public Store() {
 		// required by JPA
@@ -143,6 +144,11 @@ public class Store implements Serializable {
 		return modifyDate;
 	}
 
+	@Column(name = "deleted_status")
+	public String getDeletedStatus() {
+		return deletedStatus;
+	}
+
 	public void setStoreId(Integer storeId) {
 		this.storeId = storeId;
 	}
@@ -213,6 +219,10 @@ public class Store implements Serializable {
 
 	public void setModifyDate(Date modifyDate) {
 		this.modifyDate = modifyDate;
+	}
+
+	public void setDeletedStatus(String deletedStatus) {
+		this.deletedStatus = deletedStatus;
 	}
 
 }

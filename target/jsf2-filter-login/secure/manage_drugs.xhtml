@@ -13,19 +13,24 @@
 				<h1 style="background-color:#ddd">Store Found Drug List</h1>
 					<h:form id="editForm">
 						<h:panelGrid columns="2" class="form">
-							<p:dataTable var="drug" value="#{medicineRegistrationBean.drugList}" id="storetable"
+							<p:dataTable var="drug" value="#{medicineRegistrationBean.drugList}" id="storetable" widgetVar="drugWV"
 								emptyMessage="There is no registered drug in the database" 
 								style="width:100%;font-size:13px;font-family: PT Sans, sans-serif ; padding:4px;color:#515151;"
 								 paginator="true" rows="10" rowsPerPageTemplate="5,10,15" selectionMode="single"
 								paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
-								rowKey="#{drug.storeId}">
-								<!-- <f:facet name="header">
-                   Drugs List
-                </f:facet> -->
-								<p:column headerText="Name">
+								rowKey="#{drug.storeId}"  filteredValue="#{medicineRegistrationBean.filterStoreDrug}">
+								
+                                <f:facet name="header">
+                                  <p:outputPanel style="margin-left:10px"> 
+                                     <h:outputText value="Search all fields:"/>
+                                     <p:inputText id="globalFilter" onkeyup="PF('drugWV').filter()" style="width:150px" placeholder="Enter keyword"/>
+                                  </p:outputPanel>
+                                </f:facet>
+                                
+								<p:column headerText="Name" filterBy="#{drug.drugName}" filterMatchMode="contains">
 									<p:outputLabel value="#{drug.drugName}" />
 								</p:column>
-								<p:column headerText="Brand">
+								<p:column headerText="Brand" filterBy="#{drug.brand}" filterMatchMode="contains">
 									<p:outputLabel value="#{drug.brand}" />
 								</p:column>
 								<p:column headerText="Batch Number">
@@ -210,6 +215,12 @@
 								onclick="PF('dispensaryDialogWV').hide();"  style="color: #fff;margin-left: 160px;" styleClass="dialogButton"/>
 							<p:commandButton value="Cancel" title="Cancel" onclick="PF('dispensaryDialogWV').hide();" styleClass="dialogButton" style="color: #fff"/>
 						</h:form>
+					</p:dialog>
+					<p:dialog id="excessQuantity" widgetVar="excessQuantityWV" header="Warning" modal="true" width="50%"
+					          height="200" left="300.5px" showEffect="explode" responsive="true">
+					    <span class="fa fas fa-exclamation-triangle fa-5x text-warning" style="margin-left: 190px;color:red"/><br/><br/>        
+					   <p:outputLabel value="Excessive request(you do not have sufficient quantity)" styleClass="okLabel" style="font-size: 18px;"/>
+					   <p:commandButton value="Ok" onclick="PF('excessQuantityWV').hide();"  style="color: #fff;margin-left: 150px;width: 25%; margin-top:5%" styleClass="dialogButton"/>
 					</p:dialog>
 
 				</div>

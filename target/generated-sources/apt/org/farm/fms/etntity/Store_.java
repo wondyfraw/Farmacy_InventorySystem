@@ -27,6 +27,7 @@ public abstract class Store_ {
 	public static volatile SingularAttribute<Store, String> bathcNumber;
 	public static volatile SingularAttribute<Store, Date> expireDate;
 	public static volatile SingularAttribute<Store, String> brand;
+	public static volatile SingularAttribute<Store, String> deletedStatus;
 
 }
 
