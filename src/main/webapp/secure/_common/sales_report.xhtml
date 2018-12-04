@@ -85,6 +85,11 @@
 				   </p:column>
 				</p:dataTable>
 				</ui:fragment>
+				 
+				 <ui:fragment id="totalPrice">
+							   <p:outputLabel value="Total Sales = #{medicineRegistrationBean.totalPrice}"/>
+							   <p:outputLabel />
+							</ui:fragment>
 				
 				<!-- <p:commandButton value="Generate Report" ajax="false" styleClass="myButton" style="margin-top: 20px;margin-left: 200px;" 
 	                               update="@form" process="@form" rendered="#{medicineRegistrationBean.showDispensaryTable}"/> -->

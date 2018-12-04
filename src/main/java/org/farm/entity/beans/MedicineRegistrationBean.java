@@ -658,6 +658,14 @@ public class MedicineRegistrationBean extends AbstructSessionBean {
 		return price;
 	}
 
+	public Double calculateTotalSales(List<Sales> salesList) {
+		Double sales = 0.0;
+		for (Sales sale : salesList) {
+			sales = sales + sale.getTotalPrice();
+		}
+		return sales;
+	}
+
 	// filter drug based on the key
 	public void searchSalesDrugByFilterKy() {
 		if (this.filter == null || this.filter.length() < 2)
@@ -670,6 +678,7 @@ public class MedicineRegistrationBean extends AbstructSessionBean {
 	// search sales by filter criteria for generating report
 	public void searchSalesByFilterCriateria() {
 		searchSalesList = salesEJB.filterDrugsByCriteria(searchParmes);
+		totalPrice = calculateTotalSales(searchSalesList);
 		httpSession.setAttribute("searchParmes", searchParmes);
 		showDispensaryTable = true;
 	}
