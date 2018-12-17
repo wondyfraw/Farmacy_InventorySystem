@@ -130,6 +130,7 @@ public class UserRegistrationBean extends AbstructSessionBean {
 		usersEJB.mergeEntity(users);
 
 		log.info("Successfully update the password!!");
+		RequestContext.getCurrentInstance().execute("PF('saveDialogWV').show();");
 		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Successfully Update the password"));
 		this.showMessage = true;
 
